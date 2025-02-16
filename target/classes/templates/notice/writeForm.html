@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 글쓰기</title>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- 부트스트랩 CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CKEditor 5 CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+
+    <!-- Popper.js & Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/resources/js/notice/notice.js"></script>
+
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="mb-4">공지사항 글쓰기</h2>
+
+    <!-- 글쓰기 폼 -->
+    <div class="form-group">
+        <label for="notice_sb">제목</label>
+        <input type="text" class="form-control" id="notice_sb" name="notice_sb" placeholder="제목을 입력하세요" required>
+    </div>
+    
+    
+
+    <!-- 공개 여부 선택 -->
+    <div class="form-group">
+        <label for="visibility_yn">공개 여부</label>
+        <select class="form-control" id="visibility_yn" name="visibility_yn" style="width: 10%;" required>
+            <option value="Y">공개</option>
+            <option value="N">비공개</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="notice_con">내용</label>
+        <textarea class="form-control" id="notice_con" name="notice_con" rows="4" placeholder="내용을 입력하세요"></textarea>
+    </div>
+    
+	<button class="btn btn-secondary" onclick="window.history.back()" style="float: right; margin-left: 10px;">취소</button>
+    <button type="submit" class="btn btn-primary" id="saveBtn" style="float: right; ">저장</button>
+
+</div>
+
+<!-- CKEditor 초기화 스크립트 -->
+<script>
+let editorInstance;  // 전역 변수 선언
+
+$(document).ready(function() {
+    ClassicEditor
+        .create(document.querySelector('#notice_con'), {
+            ckfinder: {
+                uploadUrl: "/image/upload"  // 이미지 업로드 경로
+            },
+            toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', 'undo', 'redo' ]
+        })
+        .then(editor => {
+            editorInstance = editor; // CKEditor 인스턴스를 전역 변수에 저장
+        })
+        .catch(function(error) {
+            console.error(error);
+        });
+
+    // 저장 버튼 클릭 시 CKEditor 데이터를 폼에 포함하여 전송
+    $("#saveBtn").on("click", function(e) {
+        e.preventDefault();
+
+        // CKEditor가 초기화되었는지 확인
+        if (!editorInstance) {
+            alert("CKEditor가 아직 초기화되지 않았습니다. 잠시 후 다시 시도하세요."); // 알림창 표시
+            return;
+        }
+
+        // CKEditor에서 입력된 데이터 가져오기
+        var editorData = editorInstance.getData(); 
+
+        // 데이터가 비어있는지 확인
+        if (editorData.trim() === '') {
+            alert("내용을 입력하세요.");
+            return false;
+        }
+
+        // 폼 데이터를 수집하여 전송
+        var noticeData = {
+        	operator_nm: $("#operator_nm").val(),
+            notice_sb: $("#notice_sb").val(),
+            notice_con: editorData,  // 에디터의 데이터를 포함
+            visibility_yn: $("#visibility_yn").val(),
+            notice_to: $("#notice_to").val()
+        };
+
+        // AJAX로 서버에 전송
+        $.ajax({
+            url: "/notice/regnotice",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify(noticeData),
+            success: function(response) {
+                if (response.success_yn == "success") {
+                    alert(response.message);
+                    location.href = "/notice/list";
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("서버 전송 중 오류 발생: ", error);
+            }
+        });
+    });
+});
+
+</script>
+
+
+</body>
+<style>
+    .ck-editor__editable_inline {
+        min-height: 300px;  /* 최소 높이를 500px로 설정 */
+    }
+</style>
+
+</html>

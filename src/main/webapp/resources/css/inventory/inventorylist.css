@@ -1,0 +1,113 @@
+@charset "EUC-KR";
+/* 목차 표시 기본적인 얇은 밑줄 설정 */
+.menu {
+    height: 30px;
+    border-bottom: 1px solid black;
+}
+.menu-item {
+    padding: 7px;
+    cursor: pointer;
+    position: relative;
+}
+.menu-item a {
+    padding: 7px;
+    cursor: pointer;
+    position: relative;
+    color: black; /* 글자 색을 검정색으로 설정 */
+    text-decoration: none; /* 링크의 기본 밑줄 제거 */    
+}
+
+/* 기본 상태에서 밑줄은 보이지 않도록 설정 */
+.menu-item a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 5px;
+    background: black;
+    position: absolute;
+    left: 0;
+    bottom: -5px; /* 밑줄 위치를 더 아래로 조정 */
+    /*transition: width 0.3s ease;*/
+}
+
+/* 선택된 항목에 더 진한 선 추가 */
+.menu-item a.active::after {
+    width: 100%; /* 클릭 시 밑줄이 전체 너비로 확장 */
+}
+
+.menu-item a:hover::after {
+    width: 100%; /* 마우스를 올렸을 때 밑줄 확장 */
+}
+
+/* 링크에 기본 밑줄 제거 */
+.menu-item a:hover {
+    text-decoration: none; /* 링크 특성의 밑줄 제거 */
+}
+/* 텍스트 밑에 굵은 밑줄 추가 */
+.title-with-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px; /* 얇은 줄과 살짝 겹치도록 위치 설정 */
+    width: 60px; /* 굵은 선의 길이 */
+    height: 4px; /* 굵은 선의 두께 */
+    background-color: black; /* 굵은 선 색상 */
+}
+
+/* 테이블을 감싸는 컨테이너에 스크롤을 적용 */
+.table-scrollable {
+    max-height: 400px; /* 테이블 높이를 고정 */
+    overflow-y: auto;
+    position: relative;
+}
+
+/* thead 고정 스타일 */
+.custom-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: rgb(130, 210, 213); /* thead 배경색 */
+}
+
+/* tbody 스크롤에 맞춰 테이블 레이아웃 고정 */
+.custom-table tbody {
+    display: block;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.custom-table thead tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.custom-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* 열 너비를 고정 */
+}
+
+        /* 팝업 창 내부 스타일링 */
+        .modal-body {
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-control-sm {
+            width: 90%;
+        }
+        .form-inline input {
+            margin-right: 10px;
+        }
+        .form-check-inline {
+            margin-right: 20px;
+        }
+        .modal-footer button {
+            padding: 8px 20px;
+            border-radius: 20px;
+        }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.return_repo">
+
+<insert id="return_enroll">
+insert into return_request (return_cd, return_id, vendor_nm, return_st, outgoing_cd, product_cd, product_nm, return_qty, return_price, return_type, return_type2, requested_dt)
+values (#{return_cd}, #{return_id}, #{vendor_nm}, '대기', #{outgoing_cd}, #{product_cd}, #{product_nm}, #{return_qty}, #{return_price}, #{return_type}, #{return_type2}, now())
+</insert>
+
+<select id="outgoing_cd_search" resultType="kr.co.pikpak.dto.outgoing_cd_dto">
+select product_cd, product_nm, supplier_nm, outgoing_dt, total_qty, purchase_pr from outgoingcd_check_view where outenroll_cd=#{outgoing_cd}
+</select>
+
+<select id="outgoing_cd_check" resultType="Integer">
+select * from return_request where outgoing_cd=#{outgoing_cd}
+</select>
+
+<select id="return_list" resultType="kr.co.pikpak.dto.return_list_dto">
+select * from return_check_view where user_company=#{user_company} order by return_idx desc
+</select>
+
+<select id="return_list_all" resultType="kr.co.pikpak.dto.return_list_dto">
+select * from return_check_view order by return_idx desc
+</select>
+
+<update id="return_approval">
+update return_request set return_st=#{return_dto.return_st},
+	<choose>
+		<when test="type == 1">
+			 reprocess_log=#{return_dto.reprocess_log}
+		</when>
+		<when test="type == 2">
+			 reprocess_wk=#{return_dto.reprocess_wk}, processing_dt=now()
+		</when>
+	</choose>
+ where return_cd=#{return_dto.return_cd}
+</update>
+
+<select id="supplier_cd_search" resultType="String">
+select supplier_cd from supplier_info where supplier_nm=#{supplier_nm}
+</select>
+
+<insert id="return_restock">
+insert into ex_receiving (return_cd, supplier_cd, exreceiving_cd, product_cd, exreceiving_qty, exreceiving_st, exreceiving_size, make_dt, exreceiving_type, operator_id, processing_dt)
+values (#{return_cd}, #{supplier_cd}, #{exreceiving_cd}, #{product_cd}, #{exreceiving_qty}, '대기', #{exreceiving_size}, now(), '반품', #{operator_id}, now())
+</insert>
+
+<delete id="return_delete">
+delete from return_request where return_idx=#{return_idx}
+</delete>
+
+</mapper>

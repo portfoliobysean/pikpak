@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<title>PikPak</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/resources/assets/external/bootstrap/css/bootstrap.css">
+<link rel="apple-touch-icon" sizes="76x76" href="/resources/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/resources/assets/img/favicon.png">
+
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="jumbotron">
+			<h1 class="display-4">로그인이 필요합니다</h1>
+			<p class="lead">이 페이지에 접근하려면 로그인하셔야 합니다. 로그인하거나 다른 페이지로 이동해 주세요.</p>
+			<hr class="my-4">
+			<div class="mt-4">
+                <button class="btn btn-secondary me-3" onclick="history.back()">이전 페이지로</button>
+                <a href="/login" class="btn btn-primary">로그인 페이지로</a>
+            </div>
+		</div>
+	
+		
+		<footer th:replace="~{/shared/components.html :: footer}"></footer>
+	</div>
+</body>
+<script src="/resources/assets/external/jquery/jquery.min.js"></script>
+<script src="/resources/assets/external/bootstrap/js/bootstrap.min.js"></script>
+</html>

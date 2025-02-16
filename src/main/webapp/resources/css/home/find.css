@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+.form_find {
+	background: var(--background-default-default, #ffffff);
+	border-radius: var(--radius-200, 8px);
+	border-style: solid;
+	border-color: var(--border-default-secondary, #757575);
+	border-width: 1px;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 600px;
+	height: 450px;
+	min-width: 320px;
+	position: relative;
+	overflow: hidden;
+}
+
+.cancel {
+	background: rgb(211, 211, 211);
+	color: grey;
+}
+
+.smaller {
+	width : 271px;
+}

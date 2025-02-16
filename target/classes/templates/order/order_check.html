@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>주문 상세</title>
+
+<link rel="stylesheet"
+	href="../resources/css/order/order_styles.css?v=6">
+<link rel="stylesheet" href="../resources/css/order/vars.css">
+
+</head>
+<body>
+
+	<nav th:fragment="order_check">
+
+		<div th:each="order_cklist : ${order_cklist}">
+			<button class="openPopupBtn2">상세</button>
+
+			<!-- Popup Container -->
+			<div class="popup-container">
+				<div class="popup">
+					<button class="close-btn">&times;</button>
+					<div class="popup-content">
+						<p class="popup-title">주문 상세</p>
+						<hr class="popup-divider">
+						<!-- 주문 상태, 코드 -->
+						<div class="order-container">
+							<span style="font-size: 13px;">주문 상태 : <c
+								th:text="${order_cklist.process_st}"></c></span> <span
+								style="font-size: 13px;">주문 코드 : <c
+								th:text="${order_cklist.order_cd}"></c></span>
+						</div>
+						<!-- Box for content -->
+						<div class="popup-box">
+							<!-- 주문자 정보 Section -->
+							<h2 class="box-title">주문자 정보(최초 주문자)</h2>
+							<div class="box-content">
+								<div class="input-row">
+									<div class="input-group">
+										<label for="customerName">이름:</label> <c
+											th:text="${order_cklist.user_nm}"></c>
+									</div>
+									<div class="input-group">
+										<label for="customerId">아이디:</label> <c
+											th:text="${order_cklist.order_id}"></c>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="customerAffiliation">소속:</label>
+										<!-- 수정 필요함 -->
+										<c th:text="${order_cklist.user_company}"></c>
+									</div>
+									<div class="input-group">
+										<label for="customerPhone">전화번호:</label> <c
+											th:text="${order_cklist.user_tel}"></c>
+									</div>
+								</div>
+							</div>
+
+							<!-- 상품 Section -->
+							<h2 class="box-title">내용</h2>
+							<!-- 주문 상태 대기 -->
+							<div th:if="${order_cklist.process_st == '대기'}">
+								<div class="box-content">
+
+									<div class="input-row">
+										<div class="input-group">
+											<label for="productCode">상품코드:</label> <input type="text"
+												th:data-index="${order_cklist.order_idx}"
+												class="productCode" th:value="${order_cklist.product_cd}" />
+										</div>
+										<div class="button-2"
+											th:data-index="${order_cklist.order_idx}">
+											<div class="divbutton">조회</div>
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="productName">상품명:</label> <input type="text"
+												th:data-index="${order_cklist.order_idx}"
+												class="productName" th:value="${order_cklist.product_nm}"
+												readonly />
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="productManufacturer">제조사:</label>
+											<!-- 제조사 ~ 입고가격 상품코드 view 테이블로 가져오기 -->
+											<input type="text" th:data-index="${order_cklist.order_idx}"
+												class="productManufacturer"
+												th:value="${order_cklist.supplier_nm}" readonly />
+										</div>
+										<div class="input-group">
+											<label for="productSize">크기:</label> <input type="text"
+												th:data-index="${order_cklist.order_idx}"
+												class="productSize" th:value="${order_cklist.product_sz}"
+												readonly />
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="productWeight">무게:</label> <input type="text"
+												th:data-index="${order_cklist.order_idx}"
+												class="productWeight" th:value="${order_cklist.product_wt}"
+												readonly />
+										</div>
+										<div class="input-group">
+											<label for="productPrice">입고 가격:</label> <input type="text"
+												th:data-index="${order_cklist.order_idx}"
+												class="v_productPrice" th:value="${#numbers.formatInteger(order_cklist.purchase_pr, 3, 'COMMA')}"
+												readonly />원
+												<input type="hidden" th:data-index="${order_cklist.order_idx}"
+												class="productPrice" th:value="${order_cklist.purchase_pr}">
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="productQuantity">상품 수량:</label> <input
+												type="text" th:data-index="${order_cklist.order_idx}"
+												class="productQuantity" th:value="${order_cklist.order_qty}" />
+										</div>
+										<div class="input-group">
+											<label for="totalPrice">총 가격:</label> <input type="text"
+												th:data-index="${order_cklist.order_idx}" class="v_totalPrice"
+												th:value="${#numbers.formatInteger(order_cklist.order_price, 3, 'COMMA')}" readonly />원
+												<input type="hidden" th:data-index="${order_cklist.order_idx}" class="totalPrice"
+												th:value="${order_cklist.order_price}">
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="startDate">착수일:</label> <input type="date"
+												th:data-index="${order_cklist.order_idx}" class="startDate"
+												th:value="${order_cklist.start_dt}" />
+										</div>
+										<div class="input-group">
+											<label for="endDate">납기일:</label> <input type="date"
+												th:data-index="${order_cklist.order_idx}" class="endDate"
+												th:value="${order_cklist.due_dt}" />
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="orderDate">주문 날짜:</label> <c
+												th:text="${order_cklist.order_dt}"></c>
+										</div>
+									</div>
+									<!-- 수정 내역 존재 -->
+									<div class="input-row" th:if="${order_cklist.order_dt != order_cklist.update_dt}">
+										<div class="input-group">
+											<label for="modifyDate">수정 날짜:</label> <c
+												th:text="${order_cklist.update_dt}"></c>
+										</div>
+										<div class="input-group">
+											<label for="modifyName">수정자:</label> <c
+												th:text="${order_cklist.update_by}"></c>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- 끝 -->
+
+							<!-- 주문 상태 대기아님 -->
+							<div th:if="${order_cklist.process_st != '대기'}">
+								<div class="box-content">
+									<div class="input-row">
+										<div class="input-group">
+											<label for="productCode">상품코드:</label> <c
+												th:text="${order_cklist.product_cd}"></c>
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="productName">상품명:</label> <c
+												th:text="${order_cklist.product_nm}"></c>
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="productManufacturer">제조사:</label> <c
+												th:text="${order_cklist.supplier_nm}"></c>
+										</div>
+										<div class="input-group">
+											<label for="productSize">크기:</label> <c
+												th:text="${order_cklist.product_sz}"></c>
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="productWeight">무게:</label> <c
+												th:text="${order_cklist.product_wt}"></c>
+										</div>
+										<div class="input-group">
+											<label for="productPrice">입고 가격:</label> <span
+												th:text="${#numbers.formatInteger(order_cklist.purchase_pr, 3, 'COMMA')}"></span>
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="productQuantity">상품 수량:</label> <c
+												th:text="${order_cklist.order_qty}"></c>
+										</div>
+										<div class="input-group">
+											<label for="totalPrice">총 가격:</label> <span
+												th:text="${#numbers.formatInteger(order_cklist.order_price, 3, 'COMMA')}"></span>
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="startDate">착수일:</label> <c
+												th:text="${order_cklist.start_dt}"></c>
+										</div>
+										<div class="input-group">
+											<label for="endDate">납기일:</label> <c
+												th:text="${order_cklist.due_dt}"></c>
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group">
+											<label for="orderDate">주문 날짜:</label> <c
+												th:text="${order_cklist.order_dt}"></c>
+										</div>
+									</div>
+									<!-- 수정 내역 존재 -->
+									<div class="input-row" th:if="${order_cklist.order_dt != order_cklist.update_dt}">
+										<div class="input-group">
+											<label for="modifyDate">수정 날짜:</label> <c
+												th:text="${order_cklist.update_dt}"></c>
+										</div>
+										<div class="input-group">
+											<label for="modifyName">수정자:</label> <c
+												th:text="${order_cklist.update_by}"></c>
+										</div>
+									</div>
+									<div class="input-row">
+										<div class="input-group-text">
+											<label for="approval_log">비고란: </label>
+											<div th:if="${order_cklist.approval_log != ''}">
+												<c th:text="${order_cklist.approval_log}"></c>
+											</div>
+											<div th:if="${order_cklist.approval_log == '' || order_cklist.approval_log == null}">
+												없음
+											</div>
+										</div>
+									</div>
+									<div class="input-row" th:if="${order_cklist.process_st == '완료'}">
+										<div class="input-group-text">
+											<label for="approval_dt">완료일자: </label> <c
+												th:text="${order_cklist.approval_dt}"></c>
+										</div>
+									</div>
+								</div>
+								<!-- 끝 -->
+							</div>
+						</div>
+					</div>
+					<!-- 주문 상태가 대기 -->
+					<div th:if="${order_cklist.process_st == '대기'}">
+						<div class="button-group">
+							<div class="button-1" th:data-index="${order_cklist.order_idx}">
+								<div class="divbutton">수정</div>
+							</div>
+							<div class="button-4" th:data-index="${order_cklist.order_idx}" style="background-color: #808080 !important;">
+								<div class="divbutton" style="font-size: 10px !important;">주문 취소</div>
+							</div>
+							<div class="button-3">
+								<div class="divbutton">취소</div>
+							</div>
+						</div>
+					</div>
+					<div th:if="${order_cklist.process_st != '대기'}">
+						<div class="button-group">
+							<div class="button-3">
+								<div class="divbutton">취소</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- 타임리프 반복문 끝 -->
+
+	</nav>
+
+	<script src="../resources/js/order/order_ck_script.js?v=8"></script>
+</body>
+</html>

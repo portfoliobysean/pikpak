@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<title>PikPak</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/resources/assets/external/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/home/vars.css">
+<link rel="stylesheet" href="/resources/css/home/login.css">
+<link rel="stylesheet" href="/resources/css/home/cred_change.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+<link rel="apple-touch-icon" sizes="76x76" href="/resources/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/resources/assets/img/favicon.png">
+</head>
+
+<body>
+<div class="container-fluid">
+
+	<div class="container-fluid">
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="brand-custom" onclick="location.href='/home';">
+				<img src="/resources/assets/img/apple-icon.png" class="brand-logo">
+				<span class="brand-title">PikPak</span>
+			</div>
+		</div>
+	</div>
+		
+	<div class="page_display">
+		<form id="credChangeForm">
+			<div class="form_cred_change">
+				<div class="input-field">
+					<div class="label">현재 비밀번호</div>
+					<div class="button-area">
+						<input type="password" 
+							name="user_pw" 
+							class="input"
+							style="width: 425px;">
+						<input type="button" class="button cancel" value="확인" onclick="checkPassword()" id="verifyPwButton">
+					</div>
+				</div>
+				
+				<div class="input-field">
+					<div class="label">새 비밀번호</div>
+					<input type="password" 
+						name="new_user_pw" 
+						class="input">
+				</div>
+				
+				<div class="input-field">
+					<div class="label">새 비밀번호 확인</div>
+					<input type="password" 
+						name="user_pw_check" 
+						class="input">
+				</div>
+				
+				<input type="hidden" id="verifiedStatus" value="N">
+				
+				<div class="message-area" id="response"></div>
+				
+				<div class="button-area">
+					<input type="button" class="button" value="비밀번호 변경" onclick="sendCredChangeForm()">
+					<input type="button" class="button cancel" value="변경 취소" onclick="location.href='/home';">
+				</div>
+				
+				<input type="hidden" th:value="${activeUserType}" name="user_type">
+			</div>
+		</form>
+		<footer th:replace="~{/shared/components.html :: footer}"></footer>
+	</div>
+</div>
+	
+</body>
+<script src="/resources/js/home/cred_change.js"></script>
+<script src="/resources/assets/external/jquery/jquery.min.js"></script>
+<script src="/resources/assets/external/bootstrap/js/bootstrap.min.js"></script>
+</html>

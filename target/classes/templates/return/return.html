@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>반품 신청</title>
+
+<link rel="stylesheet"
+	href="../resources/css/return/return_styles.css?v=2">
+<link rel="stylesheet" href="../resources/css/return/vars.css">
+
+</head>
+<body>
+
+	<nav th:fragment="return">
+
+		<button id="openPopupBtn">반품 등록</button>
+
+		<!-- Popup Container -->
+		<div id="popupContainer" class="popup-container">
+			<div class="popup">
+				<button id="closePopupBtn" class="close-btn">&times;</button>
+				<div class="popup-content">
+					<p class="popup-title">반품 신청</p>
+					<hr class="popup-divider">
+					<!-- Box for content -->
+					<div class="popup-box">
+						<form id="return_frm">
+							<a style="font-size: 13px; text-align: center;">*한 출고 코드에 한해 한 번의 반품 신청만 가능하며, 반품 신청 등록시
+								수정이 불가합니다.</a>
+							<!-- 반품자 정보 Section -->
+							<h2 class="box-title">반품자 정보</h2>
+							<div class="box-content">
+								<div class="input-row">
+									<div class="input-group">
+										<label for="customerName">이름:</label>
+										<c th:text="${member_list[0].user_nm}"></c>
+									</div>
+									<div class="input-group">
+										<label for="customerId">아이디:</label>
+										<c th:text="${activeUserID}"></c> 
+										<input type="hidden" name="return_id" th:value="${activeUserID}">
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="customerAffiliation">소속:</label>
+										<c th:text="${member_list[0].user_company}"></c>
+										<input type="hidden" name="vendor_nm" th:value="${member_list[0].user_company}">
+									</div>
+									<div class="input-group">
+										<label for="customerPhone">전화번호:</label>
+										<c th:text="${member_list[0].user_tel}"></c>
+									</div>
+								</div>
+							</div>
+
+							<!-- 내용 Section -->
+							<h2 class="box-title">내용</h2>
+							<div class="box-content">
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productCode">출고 코드:</label> <input type="text"
+											id="outgoingCode" name="outgoing_cd" value="" />
+									</div>
+									<div class="button-2" id="outgoing_cd_search">
+										<div class="div">조회</div>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productCode">상품 코드:</label> <input type="text"
+											id="product_cd" name="product_cd" value="" readonly />
+									</div>
+									<div class="input-group">
+										<label for="productName">상품명:</label> <input type="text"
+											id="product_nm" name="product_nm" value="" readonly />
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productManufacturer">제조사:</label> <input
+											type="text" id="productManufacturer" value="" readonly />
+									</div>
+									<div class="input-group">
+										<label for="outDate">출고날짜:</label> <input type="text"
+											id="outgoingDate" value="" readonly />
+									</div>
+								</div>
+
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productWeight">주문 개수:</label> <input type="text"
+											id="productQuantity" value="" readonly />
+									</div>
+									<div class="input-group">
+										<label for="productPrice">출고 가격:</label> <input type="text"
+											id="v_productPrice" value="" readonly />원
+											<input type="hidden" id="productPrice" value="">
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productQuantity">반품 개수:</label> <input type="text"
+											id="returnQuantity" name="return_qty" value="" />
+									</div>
+									<div class="input-group">
+										<label for="totalPrice">반품 가격:</label> <input type="text"
+											id="v_totalPrice" value="" readonly />원
+											<input type="hidden" id="totalPrice" name="return_price" value="">
+									</div>
+								</div>
+								<br>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="returnReason">반품 사유:</label> <select
+											id="returnReason" name="return_type">
+											<option value="단순변심">단순변심</option>
+											<option value="상품불량">상품불량</option>
+											<option value="상품정보와 상이">상품정보와 상이</option>
+											<option value="배송지연">배송지연</option>
+											<option value="기타">기타</option>
+										</select>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group-text">
+										<label for="approval_log">기타 사유: </label>
+										<textarea name="return_type2"></textarea>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="button-group">
+					<div class="button-1" id="enrollBtn">
+						<div class="div">등록</div>
+					</div>
+					<div class="button-3" id="closePopupBtn2">
+						<div class="div">취소</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<script src="../resources/js/return/return_script.js?v=3"></script>
+
+</body>
+</html>

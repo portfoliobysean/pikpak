@@ -1,0 +1,170 @@
+@charset "EUC-KR";
+        body {
+            background-color: #f7f7f7;
+        }
+
+        h2 {
+            margin: 0px 0;
+            font-size: 24px;
+            text-align: center;
+        }
+        .wms-title {
+            margin: 20px 0;
+            font-size: 24px;
+            text-align: center;
+        }
+        .wms-rack-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 20px;
+            padding: 10px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .wms-rack {
+           background-color: #f1f1f1;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .wms-rack-level {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+
+        .wms-part {
+            width: 75px;
+            height: 60px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 16px;
+            position: relative;
+        }
+
+/* 공간 없음 */
+.wms-rack .wms-rack-level .wms-part.no-space {
+    background-color: #ff6b6b; /* 재고 있음 */
+    color: white;
+}
+/* 일부 공간 있음 */
+.wms-rack .wms-rack-level .wms-part.partial-space {
+     background-color: #2196f3;
+    color: white;
+}
+/* 지정된 회사 있지만 재고 없음 */
+.wms-rack .wms-rack-level .wms-part.assigned-no-stock{
+	background-color: #48d1cc;
+	color: white;
+}
+/* 회사 미지정 */
+.wms-rack .wms-rack-level .wms-part.no-stock{
+	background-color: #4caf50;
+	color: white;
+}
+
+
+
+.wms-part:hover {
+    background-color: #ced6e0; /* 밝은 그레이 */
+    color: #2f3542; /* 어두운 텍스트 */
+}
+
+        /* Footer Style */
+        .wms-footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        /* Popover 스타일 */
+        .wms-popover {
+            max-width: 200px;
+        }
+
+        .wms-popover-body {
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .wms-popover-header {
+            background-color: #f7f7f7;
+            font-weight: bold;
+            font-size: 16px;
+        } 
+
+/* 구역 탭 버튼 스타일 */
+
+.warehouse-tabs button {
+    color: rgb(128, 128, 128);
+    font-size: 16px;
+    padding: 10px 15px;
+    border: none;
+    background: none;
+    transition: color 0.3s ease-in-out;
+    margin-right: 10px;
+}
+
+.btn-location-assign {
+    margin-left: auto; /* 오른쪽 정렬 */
+    background-color: #007bff; /* 기본 부트스트랩 색상 */
+}
+
+/* 탭 버튼 활성화 스타일 */
+.warehouse-tabs button.active {
+    font-weight: bold;
+    border-bottom: 2px solid #007bff;
+}
+
+/* 마우스 호버 시 탭 버튼 스타일 */
+.warehouse-tabs button:hover {
+    color: rgb(0, 128, 255); /* hover 색상 */
+    text-decoration: none;
+}
+
+/* 위치 지정 버튼 스타일 */
+.btn-primary {
+    padding: 8px 16px;
+    font-size: 16px;
+}
+
+/* 전체 div 스타일 */
+.warehouse-header {
+	display: flex;
+	flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    margin-top: -60px;
+}
+
+/* 탭 전환 시 부드러운 전환 */
+.tab-pane {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.tab-pane.active {
+    opacity: 1;
+}           
+
+/* 팝오버 스타일*/
+.popover-content {
+    max-height: 200px; /* 원하는 높이로 설정 */
+    overflow-y: auto;  /* 세로 스크롤 추가 */
+}

@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+.tooltip-target {
+  position: relative;
+}
+
+.tooltip-target:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%; /* 요소의 아래쪽에 툴팁을 표시 */
+  left: 12%; /* 요소의 가로 위치 맞추기 */
+  transform: translateX(-50%); /* 중앙 정렬을 위한 조정 */
+  white-space: nowrap;
+  background-color: rgb(128, 128, 128);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 2px;
+  z-index: 1000;
+  display: block;
+}

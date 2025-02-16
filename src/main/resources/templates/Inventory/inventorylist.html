@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<title>PikPak</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/resources/assets/vendor/linearicons/style.css">
+	<link rel="stylesheet" href="/resources/assets/vendor/chartist/css/chartist-custom.css">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="/resources/assets/css/main.css">
+	<link rel="stylesheet" href="/resources/assets/css/demo.css">
+	<link rel="stylesheet" href="/resources/css/inventory/inventorylist.css">
+	<link rel="stylesheet" href="/resources/css/inventory/pd_search.css">
+	<link rel="stylesheet" href="/resources/css/inventory/cp_search.css">
+
+	<!-- nav 두 개 추가 -->
+	<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+	<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">	
+	
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="/resources/assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/resources/assets/img/favicon.png">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- 최상단 시작-->
+		<nav th:replace="~{/shared/components.html :: top}"></nav>
+		<!-- 최상단 끝 -->
+
+		<!-- 왼쪽 SIDEBAR 시작-->
+		<div th:replace="~{/shared/components.html :: sidebar}"></div>
+		<!-- 왼쪽 SIDEBAR 끝-->
+		<!-- MAIN -->
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- MAIN DATA VIEW -->
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<p class="panel-subtitle">홈 > 재고 > <span style="color: black;">재고현황</span></p>
+						</div>
+						<div class="panel-body">
+							<p class = "menu" style="border-bottom: 1px solid black; height: 30px;">
+								<span class="menu-item active">
+									<a href="./inventorylist" class="active">재고 현황</a>
+								</span>
+							</p>
+							<section>
+								<span style="float: right; height: 40px;">
+								<button type="button" class="btn btn-success"onclick="location.reload();" >초기화</button>
+								<button type="submit" class="btn btn-warning" id="searchButton">조회</button>
+								</span>
+								
+								<!-- 검색  -->
+								<p style="font-size: 12px; height: 25px; line-height: 30px;">※ 조회옵션</p>
+								<form id="searchForm">
+								<table class="table table-bordered">
+									<tbody>
+										<tr>
+											<td style="width: 10%; height: 34px; line-height: 34px;">구역 코드</td>
+											<td>
+											<select class="form-control" name="area_cd">
+												<option value="">구역코드 선택</option>
+												<option value="A">A</option>
+												<option value="B">B</option>
+												<option value="C">C</option>
+												<option value="D">D</option>
+											</select>
+											</td>
+											<td style="height: 34px; line-height: 34px;">렉번호</td>
+											<td>
+											<select class="form-control" style="width: 100%;" name="rack_number">
+												<option value="">렉번호 선택</option>
+												<option value="01">01</option>
+												<option value="02">02</option>
+												<option value="03">03</option>
+												<option value="04">04</option>
+												<option value="05">05</option>
+												<option value="06">06</option>
+												<option value="07">07</option>
+												<option value="08">08</option>
+											</select>
+											</td>
+											<td style="width: 10%; height: 34px; line-height: 34px;">Level(단) / 열 번호</td>
+											<td>
+												<select class="form-control" style="width: 49%; float: left; margin-right: 5px;" name="level">
+													<option value="">단번호 선택</option>
+													<option value="L1">1단(L)</option>
+													<option value="L2">2단(L)</option>
+													<option value="L3">3단(L)</option>
+													<option value="L4">4단(L)</option>
+												</select>
+												<select class="form-control" style="width: 49%; float: left;" name="part">
+													<option value="">열번호 선택</option>
+													<option value="P1">1열(P)</option>
+													<option value="P2">2열(P)</option>
+													<option value="P3">3열(P)</option>
+												</select>
+											</td>
+										</tr>
+										<tr>
+										<!-- 입고 날짜 -->
+<!-- 											<td style="height: 34px; line-height: 34px;">입고 날짜</td> -->
+<!-- 											<td style="display: flex; flex-direction: row; line-height: 34px;"> -->
+<!-- 												<input type="date" name="start_date" class="form-control" style="width: 45%;">&nbsp;&nbsp; ~ &nbsp;&nbsp; -->
+<!-- 												<input type="date" name="end_date" class="form-control" style="width: 45%;"> -->
+<!-- 											</td> -->
+										<!-- 상품 코드 / 상품 명 선택-->	
+											<td></td>
+											<td></td>
+											<td style="width: 10%; height: 34px; line-height: 34px;">상품코드 / 상품명</td>
+											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
+												<!-- 상품 코드 -->
+												<select class="form-control" id="product_cd" name="product_cd" onchange="fetchProductData(this.value,1)" style="flex: 4; margin-right: 5px; min-width: 100px;">
+													<option value="">상품코드 선택</option>
+													<option th:each="code : ${product_cd}" th:value="${code}" th:text="${code}"></option>
+												</select>
+												<!-- 상품명 -->
+												<select class="form-control" id="product_nm" name="product_nm" onchange="fetchProductData(this.value,2)" style="flex: 4; margin-right: 5px; min-width: 100px;">
+													<option value="">상품명 선택</option>
+													<option th:each="name : ${product_nm}" th:value="${name}" th:text="${name}"></option>
+												</select>
+												<!-- <span class="input-group-btn" style="flex: 2; min-width: 80px;"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#productModal">검 색</button></span> -->
+											</td>
+										<!-- 회사 선택 -->	
+										
+											<td style="width: 10%; height: 34px; line-height: 34px;">회사명</td>
+											<td style="display: flex; flex-direction: row; align-items: center; width: 100%;">
+												<!-- 회사명 -->
+												<select class="form-control" id="supplier_cd" name="supplier_cd" onchange="fetchCompanyData(this.value, 2)" style="width: 100%;">
+													<option value="">회사코드 선택</option>
+													<option th:each="Code : ${getAllsupplier_cd}" th:value="${Code.supplier_cd}" th:text="${Code.supplier_cd}"></option>
+												</select>
+												<select class="form-control" id="supplier_nm" name="supplier_nm" onchange="fetchCompanyData(this.value, 1)"style="width: 100%;">
+													<option value="">회사명 선택</option>
+													<option th:each="name : ${supplier_nm}" th:value="${name.supplier_nm}" th:text="${name.supplier_nm}"></option>
+												</select>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								</form>
+								
+								<!-- 결과 출력 -->
+								<p style="font-size: 12px; height: 25px; line-height: 30px;">※ 조회결과</p>
+								<div class="panel-body" style="height: 400px; overflow-y: auto;">
+									<table class="table table-hover">
+										<thead style="background-color: rgb(130, 210, 213);">
+											<tr>
+												<th>
+												<input type="checkbox" style="border: 1px solid #ccc;">
+												</th>
+												<th>위치 코드</th>
+												<th>상품 코드</th>
+												<th>회사명</th>
+												<th>상품명</th>
+												<th style="text-align: center;">안전 재고 수량</th>
+												<th style="text-align: center;">재고수량(단위)</th>
+												<th style="text-align: center;">재고(상품 유형) 유형</th>
+												<th style="text-align: center;">상품 가격</th>
+												<th style="text-align: center;">관리</th>
+											</tr>
+										</thead>
+										<tbody id="results">
+											<tr onclick="toggleCheckbox(this)" th:each="info : ${inventoryData}">
+												<td><input type="checkbox" onclick="event.stopPropagation();"></td>
+												<td th:text="${info.location_cd}"></td>
+												<td th:text="${info.product_cd}"></td>
+												<td th:text="${info.company_name}"></td>
+												<td th:text="${info.product_nm}"></td>
+												<td th:text="${info['safetyinventory_qty']}"></td>
+												<td th:text="${info.product_qty}">-</td>
+												<td style="text-align: center;"th:text="${info['product_type']}"></td>
+												<td style="text-align: center;" th:text="${info['product_price']}"></td>
+												<td style="text-align: center;">
+													<button class="btn btn-info"
+													 th:onclick="event.stopPropagation(); openModal([[${info.wh_warehouse_idx}]])"
+													data-toggle="modal"
+													data-target="#inventoryModal">관리</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</section>
+						</div>	
+					</div>
+					<!-- MAIN DATAVIEW -->
+					<!-- test -->
+				</div>
+			</div>
+			<!-- MAIN -->
+		</div>
+		<div th:replace="~{./Inventory/product_search.html :: product_search_popup}">
+		</div>
+		<div th:replace="~{./Inventory/corp_search.html :: corp_search_popup}">
+		</div>
+		<div th:replace="~{./Inventory/inventory_popup.html :: inventory_popup}"></div>
+		<div class="clearfix"></div>
+	<!-- footer 시작 -->
+	<footer th:replace="~{/shared/components.html :: footer}"></footer>
+	<!-- footer 끝 -->
+	</div>
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+	<script src="../resources/js/inventory/inventory_list.js"></script>
+</body>
+
+</html>

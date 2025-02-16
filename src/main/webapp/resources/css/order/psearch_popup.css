@@ -1,0 +1,258 @@
+@charset "UTF-8";
+
+#ps_table tbody tr {
+    cursor: pointer; /* 마우스 포인터가 올라갔을 때 클릭 가능한 모양으로 변경 */
+}
+
+#ps_table tbody tr:hover {
+    background-color: #d9d9d9; /* 호버 시 배경색 변경 (선택 사항) */
+}
+
+
+/* Popup container - initially hidden */
+.ps_popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Gray background with opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Popup styling */
+.ps_popup {
+    width: 580px;
+    height: 800px; /* Increased height */
+    background-color: white;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* Ensure content and buttons are spaced */
+    text-align: center;
+}
+
+/* Close button styling */
+.ps_close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Content container to center the title and divider */
+.ps_popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align children horizontally */
+    width: 100%; /* Full width of the popup */
+    height: calc(100% - 60px); /* Adjust height to fit within popup */
+    justify-content: space-between; /* Spread content */
+}
+
+/* Title styling */
+.ps_popup-title {
+    font-size: 24px; /* Adjust font size as needed */
+    margin: 0;
+    padding: 10px 0; /* Space above and below the title */
+}
+
+/* Divider styling */
+.ps_popup-divider {
+    border: none;
+    height: 1px;
+    background-color: #ccc; /* Color of the line */
+    width: 100%; /* Full width of the container */
+    margin-top: 5px; /* Space above the line */
+}
+
+/* Box styling */
+.ps_popup-box {
+    border: 2px solid black; /* Black border */
+    padding: 20px; /* Increase padding */
+    width: 100%; /* Full width of the container */
+    max-width: 550px; /* Maximum width adjusted */
+    height: 650px; /* Adjusted height for scrollable area */
+    margin-bottom: 10px; /* Space below the box */
+    background-color: #f9f9f9; /* Light background color for the box */
+    overflow: hidden; /* Allow vertical scrolling */
+}
+
+/* List container styling */
+.ps_list-container {
+    max-height: 510px; /* Maximum height for the list container */
+    overflow-y: auto; /* Allow vertical scrolling */
+    margin-top: 10px; /* Space above the list */
+    display: flex; /* Enable flexbox for centering */
+    flex-direction: column; /* Align children in a column */
+    align-items: center; /* Center align children */
+}
+
+/* Box title styling */
+.ps_box-title {
+    font-size: 20px; /* Adjust font size as needed */
+    margin-bottom: 15px; /* Space below the box title */
+    text-align: center; /* Center align title */
+}
+
+/* Box content styling */
+.ps_box-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가운데 정렬로 수정 */
+    width: 100%; /* 전체 너비 사용 */
+    box-sizing: border-box; /* Include padding in width */
+    height: 510px; /* 높이를 510px로 수정 */
+}
+
+/* Input row styling */
+.ps_input-row {
+    display: flex;
+    justify-content: center; /* Center align items */
+    margin-bottom: 15px; /* Space below each row */
+    width: 100%; /* Use full width */
+    gap: 10px; /* Space between elements within the row */
+}
+
+/* Input group styling */
+.ps_input-group {
+    display: flex;
+    flex-direction: row; /* Horizontal alignment */
+    align-items: center; /* Center vertically */
+    margin: 0 10px; /* Space between input groups */
+}
+
+/* Label styling */
+.ps_input-group label {
+    font-weight: bold; /* Bold text for labels */
+    margin-right: 10px; /* Space to the right of the label */
+    text-align: left; /* Left align text */
+    margin-bottom: 0; /* No bottom margin */
+    min-width: 80px; /* Minimum width for alignment */
+}
+
+/* Input field styling for most fields */
+.ps_input-group input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Full width of the input group */
+    max-width: 150px; /* Reduced maximum width */
+    box-sizing: border-box; /* Include padding and border in width */
+}
+
+/* CSS */
+#ps_table {
+    width: 100% !important; /* 전체 너비를 100%로 설정 */
+    max-width: 450px !important; /* 최대 너비를 800px로 설정 */
+    border-collapse: collapse !important; /* 테두리 병합 */
+}
+
+#ps_table th, #ps_table td {
+    border: 1px solid #ccc !important; /* 테두리 설정 */
+    padding: 10px !important; /* 패딩 설정 */
+    text-align: center !important; /* 텍스트 가운데 정렬 */
+}
+
+/* Button group styling */
+.ps_button-group {
+    display: flex;
+    justify-content: center; /* Center align buttons horizontally */
+    gap: 10px; /* Space between buttons */
+    margin-top: 10px; /* Space above the button group */
+    margin-bottom: 20px; /* Space below the button group */
+    width: 100%;
+}
+
+/* Button styling */
+.ps_button-group button {
+    padding: 10px 10px;
+    font-size: 16px;
+}
+
+.divbutton {
+  color: var(--var-sds-color-text-brand-on-brand, #f5f5f5);
+  text-align: left;
+  font-family: var(
+    --single-line-body-base-font-family,
+    "Inter-Regular",
+    sans-serif
+  );
+  font-size: var(--single-line-body-base-font-size, 16px);
+  line-height: var(--single-line-body-base-line-height, 100%);
+  font-weight: var(--single-line-body-base-font-weight, 400);
+  position: relative;
+}
+
+.ps_search_btn,
+.ps_search_btn * {
+  box-sizing: border-box;
+}
+.ps_search_btn {
+  background: var(--var-sds-color-background-neutral-default, #2c2c2c);
+  border-radius: var(--var-sds-size-radius-200, 8px);
+  padding: var(--var-sds-size-space-300, 12px);
+  display: flex;
+  flex-direction: row;
+  gap: var(--var-sds-size-space-200, 8px);
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 70px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+
+.ps_close-btn2,
+.ps_close-btn2 * {
+  box-sizing: border-box;
+}
+.ps_close-btn2 {
+  background: var(--var-sds-color-background-neutral-default, #5a5a5a);
+  border-radius: var(--var-sds-size-radius-200, 8px);
+  padding: var(--var-sds-size-space-300, 12px);
+  display: flex;
+  flex-direction: row;
+  gap: var(--var-sds-size-space-200, 8px);
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 70px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.ps_reset_btn,
+.ps_reset_btn * {
+  box-sizing: border-box;
+}
+.ps_reset_btn {
+  background: var(--var-sds-color-background-neutral-default, #5a5a5a);
+  border-radius: var(--var-sds-size-radius-200, 8px);
+  padding: var(--var-sds-size-space-300, 12px);
+  display: flex;
+  flex-direction: row;
+  gap: var(--var-sds-size-space-200, 8px);
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 70px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<title>반품 리스트</title>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!-- VENDOR CSS -->
+<link rel="stylesheet"
+	href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/linearicons/style.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/chartist/css/chartist-custom.css">
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet"
+	href="/resources/css/shared/custom_components_style.css">
+<!-- GOOGLE FONTS -->
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
+	rel="stylesheet">
+<!-- ICONS -->
+<link rel="apple-touch-icon" sizes="76x76"
+	href="/resources/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96"
+	href="/resources/assets/img/favicon.png">
+
+<link rel="stylesheet"
+	href="/resources/css/return/return_styles.css?v=2">
+<link rel="stylesheet" href="/resources/css/return/vars.css">
+
+<link rel="stylesheet" href="/resources/css/order/psearch_popup.css?v=2">
+
+</head>
+
+<body>
+
+	<form id="return_ck_frm">
+		<input type="hidden" name="return_idx" id="ck_return_idx" value="">
+	</form>
+
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- 최상단 -->
+		<nav th:replace="~{/shared/components.html :: top}"></nav>
+		<!-- 최상단 끝 -->
+		<!-- 왼쪽 SIDEBAR -->
+		<div th:replace="~{/shared/components.html :: sidebar}"></div>
+		<!-- 왼쪽 SIDEBAR 끝 -->
+		<!-- MAIN -->
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- MAIN DATA VIEW -->
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<p class="panel-subtitle">
+								홈 > 주문/반품 > <span style="color: black;">반품 관리</span>
+							</p>
+						</div>
+						<div class="panel-body">
+							<p style="border-bottom: 1px solid black; height: 30px;">
+								<a href="/return/return_list"
+									style="cursor: pointer; text-decoration: none; font-weight: bold; color: black !important;">반품
+									현황</a> | <a href="/return/return_aplist"
+									style="cursor: pointer; text-decoration: none; color: black !important;"
+									th:if="${member_list[0].user_company == 'PikPak'}">반품 승인</a>
+							</p>
+							<section>
+								<span style="float: right; height: 40px;">
+									<button type="button" class="btn btn-success" id="rl_reset_btn">초기화</button>
+									<button type="button" class="btn btn-warning"
+										id="rl_search_btn">조회</button>
+								</span>
+								<p style="font-size: 12px; height: 25px; line-height: 30px;">※
+									조회옵션</p>
+								<table class="table table-bordered">
+									<tbody>
+										<tr>
+											<td style="height: 34px; line-height: 34px;">반품 상태</td>
+											<td><select class="form-control" id="rl_return_st">
+													<option value="">전체</option>
+													<option value="대기">대기</option>
+													<option value="승인">승인</option>
+													<option value="거절">거절</option>
+													<option value="완료">완료</option>
+											</select></td>
+											<td style="height: 34px; line-height: 34px;">신청 날짜</td>
+											<td
+												style="display: flex; flex-direction: row; line-height: 34px;">
+												<input type="date" class="form-control" style="width: 35%;"
+												id="rl_start_dt">&nbsp;&nbsp; ~ &nbsp;&nbsp;<input
+												type="date" class="form-control" style="width: 35%;"
+												id="rl_end_dt">
+											</td>
+											<td style="width: 10%; height: 34px; line-height: 34px;">상품코드
+												/ 명</td>
+											<td
+												style="display: flex; flex-direction: row; line-height: 34px;">
+												<input type="text" class="form-control" style="width: 25%;"
+												id="rl_product_cd" placeholder="상품코드" value="" readonly>&nbsp;&nbsp;
+												<input type="text" class="form-control" style="width: 25%;"
+												id="rl_product_nm" placeholder="상품명" value="" readonly>&nbsp;&nbsp;
+												<nav
+													th:replace="~{/order/psearch_popup.html :: psearch_popup}"></nav>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<div
+									style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+									<p style="font-size: 12px; height: 25px; line-height: 30px;">※
+										조회결과</p>
+									<div style="display: flex;">
+										<nav th:replace="~{/return/return.html :: return}"></nav>
+									</div>
+								</div>
+								<div class="panel-body" style="padding-bottom: 0px !important;">
+									<table class="table" style="margin-bottom: 0px !important;">
+										<thead style="background-color: rgb(130, 210, 213);">
+											<tr>
+												<th style="text-align: center; width: 5%;">NO.</th>
+												<th style="text-align: center; width: 12%;">반품 코드</th>
+												<th style="text-align: center; width: 12%;">상품 코드</th>
+												<th style="text-align: center; width: 12%;">상품명</th>
+												<th style="text-align: right; width: 12%;">반품 수량</th>
+												<th style="text-align: right; width: 15%;">출고 가격(총 가격)</th>
+												<th style="text-align: center; width: 15%;">신청 날짜</th>
+												<th style="text-align: center; width: 8%;">반품 상태</th>
+												<th style="text-align: center; width: 9%;">관리</th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+								<div class="panel-body" style="height: 400px; overflow-y: auto;">
+									<table class="table table-hover" id="rl_table">
+										<tbody>
+											<tr th:if="${#lists.isEmpty(return_cklist)}">
+												<td colspan="9" style="text-align: center;">등록된 반품이
+													없습니다.</td>
+											</tr>
+											<tr th:each="return_cklist, no : ${return_cklist}">
+												<td style="text-align: center; width: 5%;"
+													th:text="${no.index+1}"></td>
+												<td style="text-align: center; width: 12%;"><c
+														th:text="${return_cklist.return_cd}"></c></td>
+												<td style="text-align: center; width: 12%;"><c
+														th:text="${return_cklist.product_cd}"></c></td>
+												<td style="text-align: left; width: 12%;"><c
+														th:text="${return_cklist.product_nm}"></c></td>
+												<td style="text-align: right; width: 12%;"><c
+														th:text="${return_cklist.return_qty}"></c></td>
+												<td style="text-align: right; width: 15%;"><c
+														class="c_purchase_pr"
+														th:text="${return_cklist.purchase_pr}"></c>원(<c
+														class="c_return_price"
+														th:text="${return_cklist.return_price}"></c>원)</td>
+												<td style="text-align: center; width: 15%;"><c
+														th:text="${return_cklist.requested_dt}"></c></td>
+												<td style="text-align: center; width: 8%;"><c
+														th:text="${return_cklist.return_st}"></c></td>
+												<td style="text-align: center; width: 9%;"><nav
+														th:replace="~{/return/return_check.html :: return_check}"></nav></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</section>
+						</div>
+					</div>
+					<!-- MAIN DATAVIEW 끝 -->
+				</div>
+			</div>
+		</div>
+		</div>
+		<!-- MAIN 끝 -->
+		<!-- FOOTER -->
+		<footer th:replace="~{/shared/components.html :: footer}"></footer>
+		<!-- FOOTER 끝 -->
+		<!-- END WRAPPER -->
+		<!-- Javascript -->
+		<script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
+		<script src="/resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script
+			src="/resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+		<script
+			src="/resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+		<script src="/resources/assets/vendor/chartist/js/chartist.min.js"></script>
+		<script src="/resources/assets/scripts/klorofil-common.js"></script>
+
+		<script src="/resources/js/return/return_script.js?v=3"></script>
+		<script src="/resources/js/return/return_ck_script.js?v=1"></script>
+		<script src="/resources/js/return/return_list_script.js?v=1"></script>
+		<script src="/resources/js/order/psearch_popup_script.js?v=1"></script>
+</body>
+
+</html>

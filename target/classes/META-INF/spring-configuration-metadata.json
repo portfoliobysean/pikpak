@@ -1,0 +1,12 @@
+{
+  "groups": [
+    {
+      "name": "spring.datasource",
+      "type": "javax.sql.DataSource",
+      "sourceType": "kr.co.pikpak.dbinfos",
+      "sourceMethod": "public javax.sql.DataSource datasource() "
+    }
+  ],
+  "properties": [],
+  "hints": []
+}

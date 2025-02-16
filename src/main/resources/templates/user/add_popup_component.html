@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회원 등록 팝업</title>
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<!-- 모달 -->
+	<section th:fragment="add_user_popup">
+	<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" insert>
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header" style="display: flex; flex-direction: row;">
+					<h5 class="modal-title" id="addUserModalLabel" style="width:100%;">회원 등록</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="addUserForm">
+						<!-- 검색 바 -->
+						<div class="form-group">
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+									<tr>
+										<td class="form-title-custom custom-width-20">사용자 유형</td>
+										<td>
+											<select class="form-control select2" name="user_type" id="user_type" style="width:40%" onchange="checkUserType()">
+													<option value="">유형 선택</option>
+													<option value="admin">관리자</option>
+													<option value="operator">운영</option>
+													<option value="supplier">공급</option>
+													<option value="vendor">판매</option>
+											</select> 
+										</td>
+									</tr>
+									<tr>
+										<td class="form-title-custom">아이디</td>
+										<td class="custom-flex-row">
+											<input type="hidden" id="id-checked-status" value="N">
+											<input type="text" class="form-control dark-border custom-width-40" id="user_id" name="user_id">&nbsp;&nbsp;
+											<button type="button" class="btn btn-default btn-sm" onclick="checkUserId()">중복 확인</button>
+											<div class="custom-center-all custom-width-40">
+												<span id="id-check-response" class="response-text"></span>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td class="form-title-custom">이름</td>
+										<td>
+											<input type="text" class="form-control dark-border custom-width-40" name="user_nm">
+										</td>
+									</tr>
+									<tr>
+										<td class="form-title-custom">비밀번호</td>
+										<td class="custom-flex-row">
+											<input type="password" class="form-control dark-border custom-width-40" name="user_pw" onchange="checkPassword()">
+											<div style="width:20%; align-content: center; text-align: center;">
+												비밀번호 확인
+											</div>
+											<input type="password" class="form-control dark-border custom-width-40" name="pw_check" onchange="checkPassword()">
+										</td>
+									</tr>
+									<tr>
+										<td class="form-title-custom">연락처</td>
+										<td class="custom-flex-row">
+											<input type="hidden" id="tel-checked-status" value="N">
+											<input type="text" 
+												class="form-control dark-border custom-width-40" 
+												name="user_tel" id="user_tel"
+												oninput="this.value = this.value.replace(/[^0-9]/g,'')">&nbsp;&nbsp;
+											<button type="button" class="btn btn-default btn-sm" onclick="checkUserTel()">중복 확인</button>
+											<div class="custom-center-all custom-width-40">
+												<span id="tel-check-response" class="response-text"></span>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td class="form-title-custom">이메일</td>
+										<td>
+											<input type="text" class="form-control dark-border  custom-width-40" name="user_mail">
+										</td>
+									</tr>
+									<tr id="user_co_row" class="visibility-hide">
+										<td class="form-title-custom">소속</td>
+										<td>
+											<input type="hidden" name="company_cd">
+											<div id="user_co_pikpak" class="display-none">
+												<input type="text" class="form-control dark-border custom-width-40" id="user_co_fixed" readonly="readonly" value="PikPak">
+											</div>
+											
+											<!-- 상품코드 Select2 적용 --> <!-- Map도 받아지네 -->
+											<!-- 
+s											<div id="user_co_select_area" class="display-none">
+												<select class="form-control select2 dark-border" style="width: 40%;" id="user_co_select">
+													<option value="">회사 선택</option>
+													<option th:each="company : ${companyList}"
+														th:value="${company.trader_nm}" 
+														th:data-trader-cd="${company.trader_cd}" 
+														th:text="${company.trader_nm}"
+														th:attr="id=${#strings.startsWith(company.trader_cd, 'C') ? 'co_option_supplier' : 'co_option_vendor'}">
+													</option>
+												</select> 
+											</div>
+											 -->
+											
+											<div id="supplier_select_area" class="display-none">
+												<select class="form-control select2 dark-border" style="width: 40%;" id="supplier_select">
+													<option value="">회사 선택</option>
+													<option th:each="supplier : ${supplierList}"
+														th:value="${supplier.trader_nm}" 
+														th:data-trader-cd="${supplier.trader_cd}" 
+														th:text="${supplier.trader_nm}">
+													</option>
+												</select> 
+											</div>
+											
+											<div id="vendor_select_area" class="display-none">
+												<select class="form-control select2 dark-border" style="width: 40%;" id="vendor_select">
+													<option value="">회사 선택</option>
+													<option th:each="vendor : ${vendorList}"
+														th:value="${vendor.trader_nm}" 
+														th:data-trader-cd="${vendor.trader_cd}" 
+														th:text="${vendor.trader_nm}">
+													</option>
+												</select> 
+											</div>
+										</td>
+									</tr>
+									<tr class="visibility-hide" id="user_lv_row">
+										<td class="form-title-custom">권한 등급</td>
+										<td>
+											<select class="form-control select2" name="user_lv" style="width:40%">
+													<option value="">등급 선택</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+											</select> 
+										</td>
+									</tr>
+									
+								</tbody>
+							</table>
+						</div>
+						<div class="custom-center-all custom-width-100">
+							<span id="send-check-response" class="response-text visibility-hide"></span>
+						</div>
+						<nav style="text-align: center; padding: 15px;">
+							<span>
+								<button type="button" class="btn btn-dark" onclick="sendAddUserForm()">등록</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">취소</button> 
+							</span>
+						</nav>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	</section>
+</body>
+
+</html>

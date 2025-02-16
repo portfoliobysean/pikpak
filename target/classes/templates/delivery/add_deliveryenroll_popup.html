@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>납품등록 팝업</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<!-- 모달 -->
+	<div class="modal fade" th:fragment="add_delivery_popup" id="deleverModal"
+		tabindex="-1" aria-labelledby="deleverModalLabel" insert>
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleverModalLabel">납품 등록</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					
+						<!-- 검색 바 -->
+						<div class="form-group">
+							<span style="font-size:12px; color:grey;">※ 입고요청 정보</span>
+							<form id="frm_del_modal">
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+									<tr>
+										<td style="width: 20%;">상품코드</td>
+										<td>
+										<input type="hidden" id="request_cd_del" name="request_cd">
+										<input type="hidden" id="supplier_cd_del" name="supplier_cd">
+										<input type="text"  id="product_cd_del" name="product_cd" readonly="readonly"></td>
+										<td style="width: 20%;">상품명</td>
+										<td><input type="text"  id="product_nm_del" name="product_nm" readonly="readonly"></td>
+									</tr>
+									<tr>
+									<td style="width: 20%;">요청수량</td>
+										<td><input type="text"  id="product_qty_del" readonly="readonly"></td>	
+										<td style="width: 20%;">희망납기일자</td>
+										<td><input type="text"  id="hope_dt_del" readonly="readonly"></td>
+										
+									</tr>
+									<tr>
+									<td style="width: 20%">추가요청사항</td>
+									<td colspan="3">
+									<input type="text"  style="width:100%;" id="add_req_del" readonly="readonly"></td>	
+									</tr>
+								</tbody>
+							</table>
+							<br><br>
+							
+							<span style="font-size:12px; color:grey;">※ 납품 등록</span>
+							
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+									<tr>
+									<td style="width: 30%; font-weight:bold;">상품수량</td>
+										<td><input type="text"  name="deliver_qty">
+										
+										</td>			
+									</tr>
+									<tr>
+									<td style="width: 30%; font-weight:bold;">상품제조일자</td>
+									<td><div style="display: flex; align-items: center;">
+											<input type="date" class="form-control" style="width: 40%;" name="make_dt">&nbsp;&nbsp;
+									</div></td>
+									</tr>
+									<tr>
+									<td style="width: 30%; font-weight:bold;">납기예정일자</td>
+									<td><div style="display: flex; align-items: center;">
+											<input type="date" class="form-control" style="width: 40%;" name="expect_dt">&nbsp;&nbsp;
+									</div></td>
+									</tr>
+									<tr>
+									<tr>
+									<td style="width: 30%; font-weight:bold;">크기</td>
+									<td>
+										<select class="form-control"  name="deliver_size" style="width:40%">
+												<option value="">크기 선택</option>
+												<option>1유형</option>
+												<option>2유형</option>
+												<option>3유형</option>
+										</select> 
+									</tr>
+								</tbody>
+							</table>
+							</form>
+						</div>
+						<nav style="text-align: center; padding: 15px;">
+							<span>
+								<button type="button" class="btn btn-dark" id="del_enroll">등록</button> 
+							</span>
+
+						</nav>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JavaScript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<title>PikPak</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!-- VENDOR CSS -->
+<link rel="stylesheet" href="/resources/assets/external/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/resources/assets/external/linearicons/style.css">
+<link rel="stylesheet" href="/resources/assets/external/chartist/css/chartist-custom.css">
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+<!-- GOOGLE FONTS -->
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+<!-- ICONS -->
+<link rel="apple-touch-icon" sizes="76x76" href="/resources/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/resources/assets/img/favicon.png">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- TOP -->
+		<nav th:replace="~{/shared/components.html :: top}"></nav>
+		<!-- TOP END -->
+		
+		<!-- 왼쪽 SIDEBAR -->
+		<div th:replace="~{/shared/components.html :: sidebar}"></div>
+		<!-- 왼쪽 SIDEBAR END -->
+		
+		<!-- MAIN -->
+		<!-- class="main" 필수입니다 -->
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- MAIN DATA VIEW -->
+					<div class="panel panel-headline">
+						<!-- 사이트 경로 -->
+						<div class="panel-heading">
+							<p class="panel-subtitle">
+								<!-- 페이지 경로 각 페이지마다 수정! -->
+								홈 > [대매뉴] > <span style="color: black;">[페이지]</span>
+							</p>
+						</div>
+						
+						<!-- 페이지 내용 -->
+						<div class="panel-body">
+							<!-- 여기에 각 페이지 소스 복사! -->
+							[INSERT CONTENT HERE]
+						</div>
+						
+					</div>
+					<!-- MAIN DATA VIEW END -->
+				</div>
+			</div>
+			<!-- MAIN CONTENT END -->
+		</div>
+		
+		<div class="clearfix"></div>
+		<!-- MAIN END -->
+		
+		<!-- FOOTER -->
+		<footer th:replace="~{/shared/components.html :: footer}"></footer>
+		<!-- FOOTER END -->
+	</div>
+	<!-- WRAPPER END -->
+	
+	<!-- JS -->
+	<script src="/resources/assets/external/jquery/jquery.min.js"></script>
+	<script src="/resources/assets/external/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="/resources/assets/external/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="/resources/assets/external/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="/resources/assets/scripts/klorofil-common.js"></script>
+	<!-- JS END -->
+</body>
+
+</html>

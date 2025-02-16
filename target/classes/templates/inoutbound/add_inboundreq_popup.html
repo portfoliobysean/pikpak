@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>입고요청 팝업</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<!-- 모달 -->
+	<div class="modal fade" th:fragment="add_inreq_popup" id="inreqModal"
+		tabindex="-1" aria-labelledby="inreqModalLabel" insert>
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="inreqModalLabel">입고요청 등록</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="frm_inreq_modal">
+						<!-- 검색 바 -->
+						<div class="form-group">
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+									<tr>
+										<td style="width: 30%;">상품코드</td>
+										<td>
+											<!-- 상품코드 Select2 적용 --> <!-- Map도 받아지네 -->
+											<select class="form-control select2" id="pd" name="product_cd" style="width:40%">
+												<option value="">상품코드 선택</option>
+												<option th:each="product : ${pdlist}"
+													th:value="${product.product_cd}"
+													th:data-product-name="${product.product_nm}"
+													th:data-supplier-code="${product.supplier_cd}"
+													th:data-supplier-name="${product.supplier_nm}"
+													th:text="${product.product_cd}"></option>
+										</select> 
+									
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">상품명</td>
+										<td><input type="text"  readonly="readonly"
+											name="product_nm"></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">회사명</td>
+										<td><input type="text"  readonly="readonly"
+											name="supplier_nm">
+											<input type="hidden" name="supplier_cd"></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">상품수량</td>
+										<td><input type="text"  maxlength="3" name="product_qty"></td>
+									</tr>
+									<tr>
+
+										<td style="width: 30%;">희망 납기일자</td>
+										<td><div style="display: flex; align-items: center;">
+												<input type="date" class="form-control" style="width: 40%;"
+												name="hope_dt">&nbsp;&nbsp;
+
+											</div></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">추가 요청사항</td>
+										<td><textarea rows="3" cols="60" maxlength="30"  
+												placeholder="30자까지 입력 가능합니다."
+												name="add_req"></textarea></td>
+									</tr>
+
+
+								</tbody>
+							</table>
+						</div>
+						<nav style="text-align: center; padding: 15px;">
+							<span>
+								<button type="button" class="btn btn-dark" id="req_enroll">등록</button> 
+							</span>
+
+						</nav>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JavaScript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+</body>
+</html>

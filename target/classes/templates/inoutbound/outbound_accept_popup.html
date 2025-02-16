@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>출고확정 팝업</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<!-- 모달 -->
+	<div class="modal fade" th:fragment="out_accept_popup"
+		id="outacceptModal" tabindex="-1"
+		aria-labelledby="outacceptModalLabel" insert>
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="outacceptModalLabel">출고 확정</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- 검색 바 -->
+					<form id="frm_out_accept">
+						<div class="form-group">
+							<span>※출고등록정보</span>
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+									<tr>
+										<td style="width: 15%;">주문번호</td>
+										<td colspan="5"><input type="text" id="order_cd_ac"
+											readonly="readonly" name="order_cd">
+											<input type="hidden" id="outenroll_cd_ac" name="outenroll_cd">
+											</td>
+									</tr>
+									<tr>
+										<td style="width: 15%;">상품코드</td>
+										<td colspan="5"><input type="text" id="product_cd_ac"
+											 readonly="readonly"></td>
+									</tr>
+									<tr>
+										<td style="width: 15%;">상품명</td>
+										<td colspan="5"><input type="text" id="product_nm_ac"
+											 readonly="readonly"></td>
+									</tr>
+									<tr>
+										<td style="width: 15%;">출고예정수량</td>
+										<td colspan="5"><input type="text" id="total_qty_ac"
+											readonly="readonly"></td>
+									</tr>
+									<tr>
+										<td style="width: 15%;">출고예정일자</td>
+										<td colspan="5">
+											<div style="display: flex; align-items: center;">
+												<input type="date" class="form-control" style="width: 40%;"
+													id="expect_dt_ac" readonly="readonly">&nbsp;&nbsp;
+											</div>
+
+										</td>
+									</tr>
+									
+								</tbody>
+								
+								<tbody style="border:10px;" id="modal_tbody">
+								<tr> <!-- 여기서 pickings 개수만큼 반복 -->
+										
+									</tr>
+								
+								</tbody>
+							</table>
+						</div>
+					</form>
+					<nav style="text-align: center; padding: 15px;">
+						<span>
+							<button type="button" class="btn btn-dark" id="out_enroll">확정</button>
+						</span>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JavaScript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+</body>
+</html>

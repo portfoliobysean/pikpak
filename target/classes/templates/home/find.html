@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<title>PikPak</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/resources/assets/external/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/home/vars.css">
+<link rel="stylesheet" href="/resources/css/home/login.css">
+<link rel="stylesheet" href="/resources/css/home/find.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+<link rel="apple-touch-icon" sizes="76x76" href="/resources/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/resources/assets/img/favicon.png">
+</head>
+
+<body>
+<div class="container-fluid">
+
+	<div class="container-fluid">
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="brand-custom" onclick="location.href='/login';">
+				<img src="/resources/assets/img/apple-icon.png" class="brand-logo">
+				<span class="brand-title">PikPak</span>
+			</div>
+		</div>
+	</div>
+		
+	<div class="page_display">
+		<form id="credResetForm">
+			<div class="form_find">
+				<div class="input-field">
+					<div class="label">회원 유형</div>
+					<select class="input smaller" name="user_type">
+						<option value="">유형을 선택해주세요</option>
+						<option value="admin">관리자</option>
+						<option value="operator">운영</option>
+						<option value="supplier">공급</option>
+						<option value="vendor">판매</option>
+					</select>
+				</div>
+			
+				<div class="input-field">
+					<div class="label">아이디</div>
+					<input type="text" 
+						name="user_id" 
+						class="input"
+						placeholder="아이디를 입력해주세요">
+				</div>
+				
+				<div class="input-field">
+					<div class="label">이메일</div>
+					<input type="text" 
+						name="user_mail" 
+						class="input"
+						placeholder="이메일를 입력해주세요">
+				</div>
+				<!-- 
+				<input type="hidden" id="verifiedStatus" value="N">
+				 -->
+				
+				<div class="message-area" id="response"></div>
+				
+				<div class="button-area">
+					<input type="button" class="button" value="인증" onclick="verifyUser()">
+					<input type="button" class="button cancel" value="취소" onclick="location.href='/login';">
+				</div>
+			</div>
+		</form>
+		<footer th:replace="~{/shared/components.html :: footer}"></footer>
+	</div>
+</div>
+	
+</body>
+<script src="/resources/js/home/find.js"></script>
+<script src="/resources/assets/external/jquery/jquery.min.js"></script>
+<script src="/resources/assets/external/bootstrap/js/bootstrap.min.js"></script>
+</html>

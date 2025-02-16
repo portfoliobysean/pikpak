@@ -1,0 +1,172 @@
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<title>PikPak Home Page Components</title>
+<meta charset="utf-8">
+</head>
+
+<body>
+	<!-- 업데이트 할 예정 (사용자 정보 출력, 대메뉴 표시, 로그아웃) -->
+	
+	<!-- TOP -->
+	<nav th:fragment="top" class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid custom-flex-row">
+			<div class="custom-flex custom-fixed-width-150">
+				<a href="/home" class="brand-custom">
+					<img src="/resources/assets/img/apple-icon.png" class="brand-logo">
+					<span class="brand-title" onclick="location.href='/home';">PikPak</span>
+				</a>
+			</div>
+			
+			<div class="navbar-btn">
+				<button type="button" class="btn-toggle-fullwidth">
+					<i class="lnr lnr-arrow-left-circle"></i>
+				</button>
+			</div>
+			
+			<div class="custom-width-100"></div>
+			
+			<div th:replace="~{/shared/components.html :: timer}"></div>
+			
+			<div class="custom-flex-row-reverse custom-width-40">
+				<div class="custom-center-all custom-hide custom-fixed-width-200"> 
+					
+					<span>
+						<span th:text="${activeUserName}"></span>님 환영합니다.
+					</span>
+				</div> 
+			</div>
+
+			<div class="btn-group custom-center-all">
+				<button type="button" 
+					class="btn btn-primary dropdown-toggle custom-fixed-width-75"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<div class="custom-justify-between">
+						<i class="lnr lnr-user"></i>
+						<span class="caret"></span>
+					</div>
+				</button>
+				<ul class="dropdown-menu dropdown-menu-right custom-ul-menu">
+					<li><a href="/home/user/cred" class="custom-rounded custom-ani-bc custom-margin-bt-10">비밀번호 변경</a></li>
+					<li><a href="/logout" class="custom-rounded custom-ani-bc">로그아웃</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- TOP END -->
+	
+	<!-- TIMER -->
+	<div class="custom-fixed-width-300 custom-flex-row" th:fragment="timer">
+		<div class="custom-center-all custom-fixed-width-100" id="expiration_timer"></div>
+		<div class="custom-center-all">
+			<input type="button" class="btn btn-dark btn-sm" value="세션 연장" onclick="refreshSession()">
+		</div>
+		
+		<script src="/resources/js/shared/timer_component.js"></script>
+	</div>
+	<!-- TIMER END -->
+	
+	<!-- SIDEBAR -->
+	<div th:fragment="sidebar" id="sidebar-nav" class="sidebar">
+		<div class="sidebar-scroll" style="height: 100%;">
+			<nav>
+				<ul class="nav">
+					<li>
+						<a href="#subPages" data-toggle="collapse" class="collapsed"> 
+							<i class="lnr lnr-file-empty"></i>
+							<span>기준정보 관리</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
+						<div id="subPages" class="collapse ">
+							<ul class="nav">
+								<li><a href="/client/list" class="">거래처 관리</a></li>
+								<li><a href="/product/list" class="">품목 관리</a></li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="#subPages2" data-toggle="collapse" class="collapsed"> 
+							<i class="lnr lnr-dice"></i> 
+							<span>주문 | 반품</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
+						<div id="subPages2" class="collapse ">
+							<ul class="nav">
+								<li><a href="/order/order_list" class="">주문 관리</a></li>
+								<li><a href="/return/return_list" class="">반품 관리</a></li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="#subPages3" data-toggle="collapse" class="collapsed"> 
+							<i class="lnr lnr-inbox"></i> 
+							<span>재고</span>
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
+						<div id="subPages3" class="collapse ">
+							<ul class="nav">
+								<li><a href="/inventory/inventorylist" class="">재고 현황</a></li>
+								<li><a href="/inventory/warehouse_inventory" class="">창고 관리</a></li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="#subPages4" data-toggle="collapse" class="collapsed"> 
+							<i class="lnr lnr-download"></i> 
+							<span>입고 | 출고</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
+						<div id="subPages4" class="collapse ">
+							<ul class="nav">
+								<li><a href="/inoutbound/inboundreq" class="">입고 관리</a></li>
+								<li><a href="/inoutbound/outenroll" class="">출고 관리</a></li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						<a href="#subPages5" data-toggle="collapse" class="collapsed"> 
+							<i class="lnr lnr-chart-bars"></i> 
+							<span>납품</span>
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
+						<div id="subPages5" class="collapse ">
+							<ul class="nav">
+								<li><a href="/delivery/inreqstate" class="">납품 관리</a></li>
+							</ul>
+						</div>
+					</li>
+					<li th:if="${activeUserType=='admin'}">
+						<a href="#subPages6" data-toggle="collapse" class="collapsed"> 
+							<i class="lnr lnr-cog"></i> 
+							<span>사이트 설정</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+						</a>
+						<div id="subPages6" class="collapse ">
+							<ul class="nav">
+								<li><a href="/stocklogrecord/list" class="">재고기록 관리</a></li>
+								<li><a href="/notice/list" class="">공지사항</a></li>
+								<li><a href="/admin/users" class="">인사 관리</a></li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	<!-- SIDEBAR END -->
+	
+	<!-- FOOTER -->
+	<footer th:fragment="footer">
+		<div class="container-fluid">
+			<p class="copyright">
+				Copyright ⓒ 2024 <a href="/home">pikpak.com</a>
+				All rights Reserved.
+			</p>
+		</div>
+	</footer>
+	<!-- FOOTER END -->
+	
+	
+
+</body>
+
+</html>

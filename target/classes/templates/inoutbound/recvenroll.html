@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<title>PikPak-입고관리</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!-- VENDOR CSS -->
+<link rel="stylesheet"
+	href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/linearicons/style.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/chartist/css/chartist-custom.css">
+	
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/inboundreq_main.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/pd_search.css">
+<link href="/resources/css/inoutbound/add_popup.css" rel="stylesheet">
+
+<!-- nav -->
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+
+<!-- GOOGLE FONTS -->
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
+	rel="stylesheet">
+<!-- ICONS -->
+<link rel="apple-touch-icon" sizes="76x76"
+	href="/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96"
+	href="/assets/img/favicon.png">
+	
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- 최상단 -->
+		<nav th:replace="~{/shared/components.html :: top}"></nav>
+		<!-- 최상단 끝 -->
+		
+		<!-- 왼쪽 SIDEBAR -->
+		<div th:replace="~{/shared/components.html :: sidebar}"></div>
+		<!-- 왼쪽 SIDEBAR -->
+		
+		<!-- MAIN -->
+		<!--  <section th:replace="~{inoutbound/inboundreq_main :: main_inoutmenu}"></section> -->
+		<section th:replace="~{inoutbound/recvenroll_main :: main_recvenroll}"></section>
+		
+		<!-- 모달 -->
+		<section th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		<section th:replace="~{inoutbound/company_search :: company_search_popup}"></section>
+		<section th:replace="~{inoutbound/decide_recvenroll_popup:: decide_recv_popup}"></section>
+		<section th:replace="~{inoutbound/decide_return_popup:: decide_rt_popup}"></section>
+		<!-- MAIN 끝-->
+		
+		</div>
+		<div class="clearfix"></div>
+		
+		<!-- footer 시작 -->
+		<footer th:replace="~{/shared/components.html :: footer}"></footer>
+		<!-- footer 끝 -->
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>	
+
+</body>
+<script>
+$(document).ready(function() {
+		
+	// 상품코드/상품명 모달 닫힐 때
+    $('#productModal').on('hide.bs.modal', function () {
+        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+    });
+
+    // 매입처 회사명 모달 닫힐 때
+    $('#companyModal').on('hide.bs.modal', function () {
+        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+    });
+	
+	
+		// 상품코드/상품명 모달 검색 버튼 클릭 시
+		$("#pd_search_recv").on("click", function() {
+			$("#productModal").modal('show');
+
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#productModal').on('shown.bs.modal', function() {
+				new product_search_modal().pd_paging(1); // 페이지 1을 로드
+			});
+		});
+
+		//매입처 회사명 모달 검색 버튼 클릭 시 (새로 추가)
+		$("#cp_search_recv").on("click", function() {
+			$("#companyModal").modal('show');
+
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#companyModal').on('shown.bs.modal', function() {
+				new company_search_modal().paging(1); // 페이지 1을 로드
+			});
+		});
+	
+		
+	
+	    $('#decideReturnModal').on('hide.bs.modal', function () {
+	        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화  
+	        $(this).find('textarea:not([readonly])').val(''); 
+	    });
+		
+	    $('#decideRecvModal').on('hide.bs.modal', function () {
+	        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화  
+	        $(this).find('textarea:not([readonly])').val('');
+	        $(this).find('select:not([readonly])').val('');
+	    });
+	
+	//반송 버튼 클릭시
+	$(document).on("click", ".decide_return", function(event) {
+		event.preventDefault();  // 기본 동작 중단
+		
+		var product_cd = $(this).data("product-cd");
+		var product_nm = $(this).data("product-nm");
+		var supplier_nm = $(this).data("supplier-nm");
+		var supplier_cd = $(this).data("supplier-cd");
+		var product_qty = $(this).data("product-qty");
+		
+		var exrecv_dt = $(this).data("exrecv-dt");
+		var deliver_cd = $(this).data("deliver_cd");
+		var exrecv_cd = $(this).data("exrecv-cd");
+		
+		// 입력 필드에 값 설정
+		$("#product_cd_return").val(product_cd);
+		$("#product_nm_return").val(product_nm);
+		$("#supplier_nm_return").val(supplier_nm);
+		$("#product_qty_return").val(product_qty);
+		
+		$("#exrecv_dt_return").val(exrecv_dt.substring(0,10));
+		$("#deliver_cd_return").val(deliver_cd);
+		$("#exrecv_cd_return").val(exrecv_cd);
+		
+		// 모달 보여주기
+		$("#decideReturnModal").modal('show');
+		
+	});
+	
+	//입고 버튼 클릭시
+	// 문서 전체에 대해 이벤트 위임 설정
+	$(document).on("click", ".decide_inbound", function(event) {
+		event.preventDefault();  // 기본 동작 중단
+		
+		var product_cd = $(this).data("product-cd");
+		var product_nm = $(this).data("product-nm");
+		var supplier_nm = $(this).data("supplier-nm");		
+		var product_qty = $(this).data("product-qty").toString().trim();
+		
+		var exrecv_size = $(this).data("exrecv-size");
+		var exrecv_dt = $(this).data("exrecv-dt");
+		
+		/* hidden */
+		var deliver_cd = $(this).data("deliver-cd");
+		var exrecv_cd = $(this).data("exrecv-cd");
+		var supplier_cd = $(this).data("supplier-cd");
+		var return_qty = $(this).data("return-qty");
+		var make_dt = $(this).data("make-dt");
+		var exrecv_type = $(this).data("exrecv-type");
+	
+		if (parseInt(product_qty) == parseInt(return_qty)) {
+		   alert("모두 반송 처리된 데이터입니다.");
+		   return; // 반송 수량과 납품 수량이 같다면 모달을 띄우지 않음
+		}
+		
+		// 입력 필드에 값 설정
+		$("#product_cd_recv").val(product_cd);
+		$("#product_nm_recv").val(product_nm);
+		$("#supplier_cd_recv").val(supplier_cd);
+		$("#supplier_nm_recv").val(supplier_nm);
+		$("#product_qty_recv").val(product_qty);
+		
+		$("#exrecv_dt").val(exrecv_dt.substring(0,10));
+		$("#deliver_cd_recv").val(deliver_cd);
+		$("#exrecv_cd").val(exrecv_cd);
+		$("#exrecv_size").val(exrecv_size);
+		$("#return_qty").val(return_qty);
+		$("#make_dt_recv").val(make_dt);
+		$("#exrecv_type_recv").val(exrecv_type);
+		
+		// 모달 보여주기
+		$("#decideRecvModal").modal('show');
+		
+	});
+
+ 	
+  //등록버튼 클릭 시
+    $("#add_recv").on("click", function() {
+        $("#recvModal").modal('show');
+    });
+});
+</script>
+ <script type="module">
+    import {page_move, receiving_enroll, product_search_modal, company_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=4";
+	/* 페이지 처음 로드 */ 
+	document.addEventListener('DOMContentLoaded', function() {
+		const today = new Date();
+		const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 10);
+		const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 10);
+
+		const formatDate = (date) => {
+    	let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    	if (month.length < 2) 
+        month = '0' + month;
+    	if (day.length < 2) 
+        day = '0' + day;
+
+    	return [year, month, day].join('-');
+		};
+
+		document.getElementById("recv_start_date").value = formatDate(lastWeek);
+		document.getElementById("recv_end_date").value = formatDate(nextWeek); // end_dt에 7일 후 날짜 할당
+		document.getElementById("type_select").value = '납품';
+		new receiving_enroll().recv_enroll_list(); //페이지 리스트를 위한 ajax
+	});	
+
+	//초기화 버튼 클릭시
+	document.querySelector("#recv_reset").addEventListener("click",function(){
+	location.reload();
+	});
+
+	//조회버튼 클릭시
+	document.querySelector("#recv_search").addEventListener("click",function(){
+	new receiving_enroll().recv_enroll_list(); //페이지 리스트를 위한 ajax
+	});
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+	/* 매입처 찾기 모달 */	
+	window.company_search_modal = company_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_cp_search").addEventListener("click",function(){
+		new company_search_modal().paging(1);
+	});
+
+
+
+
+	//개별 입고등록 -> 동적생성해서 이벤트 위임을 따로 해줘야함
+document.getElementById('rv_tbody').addEventListener('click', function(event) {
+    // 클릭한 요소가 decide_inbound 클래스를 가진 버튼인지 확인
+    if (event.target.classList.contains('decide_inbound')) {
+        const supplierCd = event.target.dataset.supplierCd;
+        
+        // receiving_enroll 객체의 bring_locations 메서드 호출
+        new receiving_enroll().bring_locations(supplierCd);
+    }
+});
+
+/*
+    //가입고 리스트 입고등록시, 입고 등록버튼 decide_inbound	
+	document.querySelectorAll('.decide_inbound').forEach(function(button) {
+    	button.addEventListener('click', function(event) {
+			new receiving_enroll().bring_locations(button.dataset.supplierCd);
+		});
+	});
+*/
+	//가입고 리스트 입고등록하기 go_recv_enroll
+	document.querySelector("#recv_enroll").addEventListener("click",function(){
+		new receiving_enroll().go_recv_enroll();
+	});
+
+	//가입고 리스트 반송등록
+	document.querySelector("#return_enroll").addEventListener("click",function(){
+		new receiving_enroll().go_return_enroll();
+	});
+	
+
+	//입고요청 이동
+	document.querySelector("#go_inoutreq").addEventListener("click",function(){
+		new page_move().go_inboundreq();
+	});
+	
+	//입고 등록 이동
+	document.querySelector("#go_recvenroll").addEventListener("click",function(){
+		new page_move().go_recvenroll();
+	});
+
+    </script>
+</html>

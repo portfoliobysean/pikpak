@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>재고 관리 팝업</title>
+</head>
+<body>
+<!-- 모달 창 구조 -->
+<div class="modal fade" id="inventoryModal" th:fragment="inventory_popup" tabindex="-1" role="dialog" aria-labelledby="inventoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inventoryModalLabel">재고 관리</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <!-- 왼쪽 섹션 -->
+                            <div class="form-group">
+                                <label for="productCode">상품코드</label>
+                                <input type="text" class="form-control form-control-sm" id="productCode" placeholder="상품코드 입력">
+                            </div>
+                            <div class="form-group">
+                                <label for="productName">상품명</label>
+                                <input type="text" class="form-control form-control-sm" id="productName" placeholder="상품명 입력">
+                            </div>
+<!--                             <div class="form-group"> -->
+<!--                                 <label>재고 위치</label> -->
+<!--                                 <div class="form-inline"> -->
+<!--                                     <input type="text" id="ModalZone" class="form-control form-control-sm" placeholder="구역"> -->
+<!--                                     <input type="text" id="ModalRack" class="form-control form-control-sm" placeholder="번 랙"> -->
+<!--                                     <input type="text" id="ModalLP" class="form-control form-control-sm" placeholder="단"> -->
+<!--                                     <button type="button" class="btn btn-sm btn-secondary">위치 변경</button> -->
+<!--                                     <button type="button" class="btn btn-sm btn-danger">취소</button> -->
+<!--                                 </div> -->
+<!--                             </div> -->
+                            <div class="form-group">
+                                <label for="locationCode">위치코드</label>
+                                <input type="text" class="form-control form-control-sm" id="locationCode" placeholder="위치코드 입력">
+                            </div>
+                            <div class="form-group">
+                                <label for="currentStock">현 재고량</label>
+                                <div class="form-inline">
+                                    <input type="text" class="form-control form-control-sm" id="currentStock" placeholder="재고량 입력">
+                                    <span>단위</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="incomingStock">입고 예정 수량</label>
+                                <input type="text" class="form-control form-control-sm" id="incomingStock" placeholder="입고 예정 수량 입력">
+                            </div>
+                            <div class="form-group">
+                                <label for="outgoingStock">출고 예약 수량</label>
+                                <input type="text" class="form-control form-control-sm" id="outgoingStock" placeholder="출고 예약 수량 입력">
+                            </div>
+                            <div class="form-group">
+                                <label for="safetyStock">안전 재고</label>
+                                <input type="text" class="form-control form-control-sm" id="safetyStock" placeholder="안전 재고 입력">
+                            </div>
+                            <div class="form-group">
+                                <label>상품 상태</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="statusNormal" value="normal">
+                                    <label class="form-check-label" for="statusNormal">정상</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="statusHidden" value="hidden">
+                                    <label class="form-check-label" for="statusHidden">숨김</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="statusDefective" value="defective">
+                                    <label class="form-check-label" for="statusDefective">품절</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 오른쪽 섹션 -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="referenceImage">참고 이미지</label>
+                                <textarea class="form-control" id="referenceImage" rows="4" placeholder="참고 이미지"></textarea>
+                                <button class="btn btn-sm btn-secondary mt-2">첨부 파일</button>
+                            </div>
+                            <div class="form-group">
+                                <label for="notes">비고란</label>
+                                <textarea class="form-control" id="notes" rows="4" placeholder="비고 입력"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">수정</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">폐기</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

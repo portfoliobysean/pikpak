@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>입고요청 메인</title>
+</head>
+<body>
+	<section class="main" th:fragment="main_outstate">
+		<!-- MAIN CONTENT -->
+		<div class="main-content">
+			<div class="container-fluid">
+
+				<!-- MAIN DATA VIEW -->
+				<div class="panel panel-headline">
+
+					<div class="panel-heading">
+						<p class="panel-subtitle">
+							홈 > 입고|출고 > <span style="color: black;">출고관리</span>
+						</p>
+					</div>
+					<div class="panel-body">
+						<p class="menu"
+							style="border-bottom: 1px solid black; height: 30px;">
+							<span class="menu-item" id="go_outenroll">출고등록</span> <span
+								class="menu-item active" id="go_outstate">출고현황</span>
+						</p>
+						<span style="float: right; height: 40px;">
+							<button type="button" class="btn btn-success" id="os_list_reset">초기화</button>
+							<button type="button" class="btn btn-warning" id="os_list_search">조회</button>
+						</span>
+						<p style="font-size: 12px; height: 25px; line-height: 30px;">※
+							조회옵션</p>
+
+						<!-- 검색 옵션 테이블 시작 -->
+						<table class="table table-bordered">
+							<tbody>
+								<tr>
+									<td style="width: 10%; height: 34px; line-height: 34px;">출고예정일자</td>
+									<td style="width: 20%; line-height: 34px;">
+										<div style="display: flex; align-items: center;">
+											<input type="date" class="form-control" style="width: 40%;"
+												id="outdec_start_dt">&nbsp;&nbsp; ~ &nbsp;&nbsp; <input
+												type="date" class="form-control" style="width: 40%;"
+												id="outdec_end_dt">
+										</div>
+									</td>
+									<td style="width: 10%; height: 34px; line-height: 34px;">상품코드
+										/ 명</td>
+									<td style="width: 30%; line-height: 34px;">
+										<div style="display: flex; align-items: center;">
+											<input type="text" class="form-control" style="width: 40%;"
+												id="search_pd_cd" readonly="readonly">&nbsp;&nbsp; <input
+												type="text" class="form-control" style="width: 40%;"
+												id="search_pd_nm" readonly="readonly">&nbsp;&nbsp;
+											<button class="btn btn-primary" type="button" id="pd_search_os">검색</button>
+										</div>
+									</td>
+									
+									<td style="width: 10%; height: 34px; line-height: 34px;">
+									상태
+									</td>
+								
+									<td style="width: 20%; line-height: 34px;">
+										<select class="form-control"
+										style="width: 90%; float: left; margin-right: 5px;" id="outdc_state">
+											<option value="">상태 선택</option>
+											<option value="대기">대기</option>
+											<option value="확정">확정</option>
+									</select>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+						<!-- 검색 옵션 테이블 끝 -->
+
+						<!-- 조회 결과 테이블 시작 -->
+						<form id="frm_out_list">
+							<p
+								style="font-size: 12px; height: 25px; line-height: 30px; padding-top: 20px;">※
+								조회결과</p>
+							<div class="panel-body panel-thead">
+							<span style="float: right; height: 40px; margin-top:20px;">
+							<button type="button" class="btn btn-outline-danger" id="del_out">삭제</button>
+							
+						</span>	
+								<table class="table">
+									<thead style="background-color: rgb(130, 210, 213);">
+										<tr>
+											<th style="text-align: center; width: 5%;"><input
+												type="checkbox" id="all_ck_out"
+												style="border: 1px solid #ccc;"></th>
+											<th style="text-align: center; width: 12%;">주문번호</th>
+											<th style="text-align: center; width: 12%;">상품코드</th>
+											<th style="text-align: center; width: 12%;">상품명</th>
+											<th style="text-align: center; width: 10%;">출고예정수량</th>
+											<th style="text-align: center; width: 8%;">상태</th>
+											<th style="text-align: center; width: 21%;">비고</th>
+											<th style="text-align: center; width: 13%;">출고예정일자</th>
+
+											<th style="text-align: center; width: 7%;">승인</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+							<div class="panel-body" style="height: 400px; overflow-y: auto;">
+								<table class="table table-hover">
+									<tbody id="os_tbody">
+										<!--  
+										<tr>
+											<td colspan="7" style="text-align: center;">조회된 정보가
+												없습니다.</td>
+										</tr>
+									
+										<tr th:each="outgoing : ${out_info}">
+											<td style="text-align: center; width: 5%;">
+											<input
+												type="checkbox" name="each_ck_out" 
+												th:value="${outgoing.getOutenroll_cd()}"
+												style="border: 1px solid #ccc;">
+											<input type="hidden" name="order_cd" th:value="${outgoing.getOrder_cd()}">	
+												</td>
+											
+											<td style="text-align: center; width: 12%;"
+												th:text="${outgoing.getOrder_cd()}"></td>
+											<td style="text-align: center; width: 12%;"
+												th:text="${outgoing.getProduct_cd()}">상품코드</td>
+											<td style="text-align: center; width: 12%;"
+												th:text="${outgoing.getProduct_nm()}">상품명</td>
+											<td style="text-align: center; width: 10%;"
+												th:text="${outgoing.getTotal_qty()}">출고예정수량</td>
+											
+											<td style="text-align: center; width: 8%;"
+												th:text="${outgoing.getOutenroll_st()}">상태</td>
+											<td style="text-align: center; width: 21%;"
+												th:text="${outgoing.getOutenroll_log()}">비고</td>
+											<td style="text-align: center; width: 13%;"
+												th:text="${outgoing.getExpect_dt()}">출고예정일자</td>
+
+											<td style="text-align: center; width: 7%;">
+												<button class="btn btn-primary outbound_decide"
+													th:data-order-cd="${outgoing.getOrder_cd()}"
+													th:data-product-cd="${outgoing.getProduct_cd()}"
+													th:data-product-nm="${outgoing.getProduct_nm()}"
+													th:data-total-qty="${outgoing.getTotal_qty()}"
+													th:data-exoutgoing-area="${outgoing.getExoutgoing_area()}"
+													th:data-outenroll-st="${outgoing.getOutenroll_st()}"
+													th:data-outenroll-log="${outgoing.getOutenroll_log()}"
+													th:data-expect-dt="${outgoing.getExpect_dt()}"
+													th:data-pickings-json="${outgoing.pickings_json}"
+													th:data-outenroll-cd="${outgoing.getOutenroll_cd()}"
+													style="padding-right: 10px; padding-left: 10px;"
+													type="button">승인</button>
+										</tr>
+-->
+									</tbody>
+								</table>
+							</div>
+						<input type="hidden" name="outenroll_cd"> <!-- 삭제 데이터 묶어 보내기 -->
+						</form>
+					</div>
+					<!-- panel body , 이 안에 두개의 테이블이 같이 들어감-->
+				</div>
+				<!-- panel-heading -->
+			</div>
+			<!-- panel panel-headline -->
+			<!-- MAIN DATAVIEW -->
+
+		</div>
+	</section>
+</body>
+
+</html>

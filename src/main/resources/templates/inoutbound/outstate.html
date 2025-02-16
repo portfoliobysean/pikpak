@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<title>PikPak-출고관리</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!-- VENDOR CSS -->
+<link rel="stylesheet"
+	href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/linearicons/style.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/chartist/css/chartist-custom.css">
+	
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/inboundreq_main.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/pd_search.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/add_popup.css">
+
+<!-- nav 두 개 추가 -->
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+<!-- 팝업창 css도 여기로 -->
+<!-- Select2 CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+	rel="stylesheet" />
+
+<!-- GOOGLE FONTS -->
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
+	rel="stylesheet">
+<!-- ICONS -->
+<link rel="apple-touch-icon" sizes="76x76"
+	href="/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96"
+	href="/assets/img/favicon.png">
+
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- 최상단 -->
+		<nav th:replace="~{/shared/components.html :: top}"></nav>
+		<!-- 최상단 끝 -->
+
+		<!-- 왼쪽 SIDEBAR -->
+		<div th:replace="~{/shared/components.html :: sidebar}"></div>
+		<!-- 왼쪽 SIDEBAR -->
+
+		<!-- MAIN -->
+		<!--  <section th:replace="~{inoutbound/inboundreq_main :: main_inoutmenu}"></section> -->
+		<section th:replace="~{inoutbound/outstate_main :: main_outstate}"></section>
+		<!-- MAIN 끝-->
+
+		
+		<!-- 모달 -->
+		<section th:replace="~{inoutbound/outbound_accept_popup :: out_accept_popup}"></section> 
+		
+		<section
+			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+<!--
+		<section
+			th:replace="~{inoutbound/company_search :: company_search_popup}"></section>
+		
+		<section
+			th:replace="~{inoutbound/inreq_manage_popup :: inreq_manage_popup}"></section>
+		-->
+	</div>
+	<div class="clearfix"></div>
+
+	<!-- footer 시작 -->
+	<footer th:replace="~{/shared/components.html :: footer}"></footer>
+	<!-- footer 끝 -->
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+	<!-- Select2 JavaScript -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+	<script>
+	$(document).ready(function() {
+		
+		// 상품코드/상품명 모달 닫힐 때
+	    $('#productModal').on('hide.bs.modal', function () {
+	        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+	    });
+		
+		// 상품코드/상품명 모달 검색 버튼 클릭 시
+		$("#pd_search_os").on("click", function() {
+			$("#productModal").modal('show');
+
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#productModal').on('shown.bs.modal', function() {
+				new product_search_modal().pd_paging(1); // 페이지 1을 로드
+			});
+		});
+		
+		
+	    $('#outacceptModal').on('hide.bs.modal', function () {
+	        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+	    });
+		
+		
+		//출고 버튼 클릭시
+		// 문서 전체에 대해 이벤트 위임 설정
+		$(document).on("click", ".outbound_decide", function(event) {
+			event.preventDefault();  // 기본 동작 중단
+			
+			var order_cd = $(this).data("order-cd");
+            var product_cd = $(this).data("product-cd");
+            var product_nm = $(this).data("product-nm");
+            var total_qty = $(this).data("total-qty");
+            var outenroll_st = $(this).data("outenroll-st");
+            var outenroll_log = $(this).data("outenroll-log");
+            var expect_dt = $(this).data("expect-dt");
+            var outenroll_cd = $(this).data("outenroll-cd");
+            
+			// 입력 필드에 값 설정
+			$("#order_cd_ac").val(order_cd);
+			$("#product_cd_ac").val(product_cd);
+			$("#product_nm_ac").val(product_nm);
+			$("#total_qty_ac").val(total_qty);
+			$("#expect_dt_ac").val(expect_dt);
+			$("#outenroll_cd_ac").val(outenroll_cd); 
+            
+			 // 배열 가져오기 (문자열을 객체로 파싱)
+	        var pickings_json = JSON.parse($(this).attr("data-pickings-json"));
+	     
+            //로트번호, 수량 개수
+            var $detail_info_size = pickings_json.length;
+          
+            var $tbody = $('#modal_tbody');
+            $tbody.empty();
+            var $w = 0;
+            while($w < $detail_info_size){
+            	$tbody.append(
+            			  '<tr>' +
+            			    '<td style="width: 10%;">위치</td>' +
+            			    '<td style="width: 20%;"><input type="text" style="width:100%;" value="' + pickings_json[$w].location_cd + '" readonly="readonly"></td>' +
+            			    '<td style="width: 15%;">로트번호</td>' +
+            			    '<td style="width: 45%;"><input type="text" style="width:100%;" value="' + pickings_json[$w].lot_no + '" readonly="readonly"></td>' +  // 로트번호의 너비 증가
+            			    '<td style="width: 5%;">수량</td>' +  
+            			    '<td style="width: 5%;"><input type="text" style="width:50px;" value="' + pickings_json[$w].outpick_qty + '" readonly="readonly">' + // 수량 입력의 너비 줄이기
+            			    '<input type="hidden" name="wh_warehouse_idx_datas" value=' + pickings_json[$w].wh_warehouse_idx + "&" + pickings_json[$w].is_deleted + 
+            			    '></td></tr>'
+            	);
+            
+            	$w++;
+            }
+        
+            // 모달 보여주기
+			$("#outacceptModal").modal('show');
+			
+		});
+	});
+	</script>
+
+	<script type="module">
+   import {page_move_outbound, outaccept_modal, outbound_decide} from "../resources/js/inoutbound/outbound_main.js?v=4";
+import {product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
+
+
+window.active_ck_out = 0;
+/* 페이지 처음 로드 */
+
+document.addEventListener('DOMContentLoaded', function() {
+  
+	// 페이지 로드 시 기본 날짜 설정
+       const today = new Date();
+		const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 10);
+		const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 10);
+
+		const formatDate = (date) => {
+    	let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    	if (month.length < 2) 
+        month = '0' + month;
+    	if (day.length < 2) 
+        day = '0' + day;
+
+    	return [year, month, day].join('-');
+		};
+
+		document.getElementById("outdec_start_dt").value = formatDate(lastWeek);
+		document.getElementById("outdec_end_dt").value = formatDate(nextWeek); // end_dt에 7일 후 날짜 할당
+	
+
+		new outbound_decide().outdecide_search(); //ajax 검색 리스트 불러오기
+});	
+
+//초기화
+document.querySelector("#os_list_reset").addEventListener("click",function(){
+		location.reload();
+	});
+
+
+//조회
+document.querySelector("#os_list_search").addEventListener("click",function(){
+		new outbound_decide().outdecide_search(); //ajax 검색 리스트 불러오기
+});
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+
+//전체 체크박스를 클릭했을 때
+	document.querySelector("#all_ck_out").addEventListener("click",function(){
+		new outbound_decide().out_all_ckbox();
+	});
+
+
+//개별 체크박스 이벤트 위임
+document.querySelector("#os_tbody").addEventListener('click', function(event) {
+    // 이벤트가 발생한 요소가 체크박스인지 확인
+    if (event.target.name === 'each_ck_out') {
+        new outbound_decide().out_each_ckbox();
+    }
+});
+  
+	//삭제 버튼 클릭했을 때
+	document.querySelector("#del_out").addEventListener("click",function(){
+		new outbound_decide().out_delete_data();
+	});
+
+
+	//출고 확정 등록 버튼 
+	document.querySelector("#out_enroll").addEventListener("click",function(){
+		new outaccept_modal().decide_outgoing();
+	});
+
+
+	/* 메뉴 */
+	//출고현황 이동
+	document.querySelector("#go_outstate").addEventListener("click",function(){
+		new page_move_outbound().go_outboudstate();
+	});
+	
+	//출고등록 이동
+	document.querySelector("#go_outenroll").addEventListener("click",function(){
+		new page_move_outbound().go_outboundenroll();
+	});
+    </script>
+</body>
+</html>

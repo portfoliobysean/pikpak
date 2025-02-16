@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.InoutBoundRepo">
+
+<!-- 출고등록 삭제 동시에 피킹정보 삭제 -->
+<delete id="delete_outpiking">
+delete from outgoing_picking where FIND_IN_SET(outenroll_cd,#{outenroll_cd})
+</delete>
+
+<!-- 출고등록 삭제 동시에 주문승인 상태 '대기'로 다시 변경 -->
+<update id="update_accepted_back">
+update accepted_order_enroll set acceptedorder_st='대기' where FIND_IN_SET(order_cd, #{order_cd}) > 0;
+</update>
+
+<!-- 출고등록정보 삭제 -->
+<delete id="delete_outenroll">
+delete from outgoing_enroll where FIND_IN_SET(outenroll_cd,#{outenroll_cd})
+</delete>
+
+<!-- 출고 확정과 동시에 주문테이블 상태 완료로 변경 -->
+<update id="update_odstate_ended">
+update order_enroll set process_st='완료' where order_cd=#{order_cd}
+</update>
+
+<!-- warehouse 해당 idx 전체 수량 차감 경우 삭제 -->
+<delete id="delete_warehouse_out">
+delete from warehouse where wh_warehouse_idx=#{wh_warehouse_idx}
+</delete>
+
+<!-- 출고 확정 -->
+<update id="update_outenroll_decide">
+update outgoing_enroll set outenroll_st='확정', update_id=#{update_id} where outenroll_cd=#{outenroll_cd}
+</update>
+
+<!-- 재고로그기록 테이블에서 '출고'로 타입지정 업데이트 -->
+<update id="update_stock_log_out">
+update stock_log_record set  action_type='출고' where wh_warehouse_idx=#{wh_warehouse_idx} order by log_dt desc limit 1
+</update>
+
+
+<!-- 상태 업데이트와 동시에 재고 차감 -->
+<update id="update_warehouse_out">
+update warehouse set product_qty = product_qty - #{subtractive_qty}, update_by=#{update_by} where wh_warehouse_idx=#{wh_warehouse_idx}
+</update>
+
+<!-- 출고등록테이블 상태 업데이트 -->
+<update id="update_outenroll">
+update outgoing_enroll set outenroll_st='확정' where outenroll_cd=#{outenroll_cd}
+</update>
+
+
+<!-- 출고 승인을 위한 상세 정보 가져오기 --> 
+ <!-- 새로운 ResultMap for OutgoingEnrollViewDTO -->
+    <resultMap id="OutgoingEnrollViewResultMap" type="kr.co.pikpak.dto.outgoing_info_joined_dto">
+        <id property="outenroll_cd" column="outenroll_cd"/>
+        <result property="order_cd" column="order_cd"/>
+        <result property="product_cd" column="product_cd"/>
+        <result property="product_nm" column="product_nm"/>
+        <result property="total_qty" column="total_qty"/>
+        <result property="expect_dt" column="expect_dt"/>
+        <result property="exoutgoing_area" column="exoutgoing_area"/>
+        <result property="outenroll_log" column="outenroll_log"/>
+        <result property="outenroll_st" column="outenroll_st"/>
+        <collection property="pickings" ofType="java.util.HashMap">
+            <result property="wh_warehouse_idx" column="wh_warehouse_idx"/>
+            <result property="lot_no" column="lot_no"/>
+            <result property="outpick_qty" column="outpick_qty"/>
+            <result property="is_deleted" column="is_deleted"/>
+            <result property="location_cd" column="location_cd"/>
+        </collection>
+    </resultMap>
+
+  <!-- 새로운 Select 쿼리 정의 -->
+   <select id="select_outgoing_view" resultMap="OutgoingEnrollViewResultMap" parameterType="Map">
+    SELECT 
+        a.outenroll_cd, 
+        a.order_cd, 
+        a.product_cd, 
+        a.product_nm, 
+        a.total_qty, 
+        a.expect_dt, 
+        a.exoutgoing_area, 
+        b.location_cd,
+        a.outenroll_log, 
+        a.outenroll_st,
+        b.wh_warehouse_idx, 
+        b.outpick_qty,
+        b.is_deleted,
+        c.lot_no 
+    FROM 
+        outgoing_enroll a 
+    LEFT JOIN 
+        outgoing_picking b ON a.outenroll_cd = b.outenroll_cd 
+    LEFT JOIN 
+        receiving c ON b.receiving_cd = c.receiving_cd
+    WHERE 1=1
+    <if test="product_cd != null and product_cd != ''">
+        AND a.product_cd = #{product_cd}
+    </if>
+    <if test="outenroll_st != null and outenroll_st != ''">
+        AND a.outenroll_st = #{outenroll_st}
+    </if>
+    <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+        AND a.expect_dt BETWEEN #{start_date} AND #{end_date}
+    </if>
+    ORDER BY a.outenroll_cd DESC
+</select>
+
+<!-- 
+ <select id="select_outgoing_view" resultMap="OutgoingEnrollViewResultMap">
+        SELECT 
+            a.outenroll_cd, 
+            a.order_cd, 
+            a.product_cd, 
+            a.product_nm, 
+            a.total_qty, 
+            a.expect_dt, 
+            a.exoutgoing_area, 
+            b.location_cd,
+            a.outenroll_log, 
+            a.outenroll_st,
+            b.wh_warehouse_idx, 
+            b.outpick_qty,
+            b.is_deleted,
+            c.lot_no 
+        FROM 
+            outgoing_enroll a 
+        LEFT JOIN 
+            outgoing_picking b ON a.outenroll_cd = b.outenroll_cd 
+        LEFT JOIN 
+            receiving c ON b.receiving_cd = c.receiving_cd
+        ORDER BY 
+            a.outenroll_cd DESC
+    </select>
+ -->
+
+<!-- 출고 정보 가져오기 -->
+<select id="select_outgoing" resultType="kr.co.pikpak.dto.outgoing_enroll_dto">
+select * from outgoing_enroll order by outgoing_idx desc
+</select>
+
+<!-- 출고 정보와 동시에 관련 위치코드 정보 등록하기 -->
+<insert id="insert_outgoing_picking" parameterType="list">
+insert into outgoing_picking values 
+ <foreach collection="list" item="item" separator=",">
+        ('0',
+        #{item.out_enroll_cd},
+         #{item.wh_warehouse_idx},
+         #{item.product_cd},
+         #{item.location_cd},
+         #{item.receiving_cd},
+         #{item.outpick_qty},
+         #{item.is_deleted})
+ </foreach>
+</insert>
+
+
+<!-- 출고 정보 등록과 동시에 acceptd_order 상태 업데이트 -->
+<update id="update_acceptedorder_st">
+update accepted_order_enroll set acceptedorder_st='등록', operator_id=#{operator_id} where order_cd=#{order_cd}
+</update>
+
+<!-- 출고 정보 등록하기 -->
+<insert id="insert_outgoing_enroll">
+insert into outgoing_enroll values ('0',#{outenroll_cd},#{order_cd},#{product_cd},#{product_nm},#{outenroll_st},#{total_qty},#{expect_dt}
+,#{exoutgoing_area},#{outenroll_log},now(),#{update_dt},#{operator_id},#{update_id})
+</insert>
+
+
+<!-- 출고 위치 선택을 위해 재고정보 끌고오기  -->
+<select id="select_stock" resultType="kr.co.pikpak.dto.outgoing_select_view_dto">
+select * from outgoing_select_view where product_cd=#{product_cd}
+</select>
+
+
+<!-- 입고와 동시에 warehouse_locations 업데이트 -->
+<update id="update_warehouse_locations">
+update warehouse_locations set current_capacity=current_capacity+1 where location_cd=#{location_cd}
+</update>
+
+<!-- 입고와 동시에 warehouse update = 필요없어짐 걍 무조건 insert
+<update id="update_wwarehouse" parameterType="Map">
+update warehouse set product_qty = product_qty + #{additional_qty}, update_by=#{update_by} where wh_warehouse_idx=#{wh_warehouse_idx}
+</update>
+ -->
+ 
+<!-- 입고와 동시에 warehouse insert -->
+<insert id="insert_warehouse" parameterType="Map">
+insert into warehouse (location_cd, product_cd, product_nm, supplier_nm, supplier_cd, product_qty, inventory_log, update_dt, update_by) values (#{location_cd},#{product_cd},#{product_nm},#{supplier_nm},#{supplier_cd},#{product_qty},#{inventory_log},#{update_dt},#{update_by})
+</insert>
+
+<!-- warehouse에 데이터가 있는 지 없는 지 확인 
+<select id="check_warehouse" resultType="String">
+select wh_warehouse_idx from warehouse where location_cd=#{location_cd} and product_cd=#{product_cd}
+</select>
+-->
+
+<!-- receiving 테이블 입고 등록 -->
+<insert id="insert_receiving">
+insert into receiving values ('0', #{deliver_cd}, #{exreceiving_cd}, #{receiving_cd}, #{lot_no},#{supplier_cd},
+#{product_cd},#{product_nm},#{receiving_qty},#{receiving_size},#{location_cd},#{operator_id},#{inventory_dt},now(),#{receiving_log})
+</insert>
+
+<!-- 입고 모달 위치 코드 정보 -->
+<select id="select_locations" resultType="kr.co.pikpak.dto.warehouse_locations_dto_lhwtemp">
+select * from warehouse_locations where supplier_cd=#{supplier_cd}
+</select>
+
+<!-- 주문현황 보여주기 -->
+<select id="select_order_enroll" resultType="kr.co.pikpak.dto.accepted_order_enroll_dto" parameterType="Map">
+select * from accepted_order_enroll
+  WHERE 1=1
+ 
+  <if test="product_cd != null and product_cd != ''">
+    AND product_cd = #{product_cd}
+  </if>
+  
+  <if test="acceptedorder_st != null and acceptedorder_st != ''">
+    AND acceptedorder_st = #{acceptedorder_st}
+  </if>
+ 
+  <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+    <choose>
+      <!-- date_type이 '착수일자'인 경우 -->
+      <when test="date_type == '착수일자'">
+        AND start_dt BETWEEN #{start_date} AND #{end_date}
+      </when>
+      <!-- date_type이 '납기일자'인 경우 -->
+      <when test="date_type == '납기일자'">
+        AND due_dt BETWEEN #{start_date} AND #{end_date}
+      </when>
+      <!-- 그 외의 경우 -->
+      <otherwise>
+        AND start_dt BETWEEN #{start_date} AND #{end_date} <!-- 기본적으로 start_dt 기준으로 검색 -->
+      </otherwise>
+    </choose>
+  </if>
+  order by acceptedorder_idx desc
+</select>
+
+<!-- 
+<select id="select_order_enroll" resultType="kr.co.pikpak.dto.accepted_order_enroll_dto">
+select * from accepted_order_enroll order by acceptedorder_idx desc
+</select>
+ -->
+
+
+<!-- 반송 등록할 때 가입고 테이블 반송수량 업데이트 -->
+<update id="update_exrecv_return">
+update ex_receiving set return_qty=#{return_qty} where exreceiving_cd=#{exreceiving_cd}
+</update>
+
+
+<!--가입고 반송 등록 -->
+<insert id="insert_deliver_return">
+insert into deliver_return values ('0',#{deliver_cd},#{exreceiving_cd},#{d_return_cd}, #{d_return_qty}, #{d_return_type},#{d_return_dt},
+now(),#{operator_id})
+</insert>
+
+<!-- 가입고 테이블 select -->
+<select id="select_ex_receiving" resultType="kr.co.pikpak.dto.ex_receiving_joined_dto" parameterType="Map">
+  select a.exreceiving_idx, a.deliver_cd, a.return_cd, a.exreceiving_cd, b.supplier_cd, 
+  b.supplier_nm, a.product_cd, c.product_nm, a.exreceiving_type, a.exreceiving_qty,
+  a.return_qty, a.exreceiving_size, a.departure_dt, a.processing_dt, a.exreceiving_st, a.update_dt, a.make_dt
+  from ex_receiving as a 
+
+  LEFT JOIN supplier_info b ON a.supplier_cd=b.supplier_cd
+  LEFT JOIN product c ON a.product_cd=c.product_cd
+    
+  WHERE 1=1
+  <if test="exreceiving_type != null and exreceiving_type != ''">
+    AND a.exreceiving_type = #{exreceiving_type}
+  </if>
+  <if test="supplier_cd != null and supplier_cd != ''">
+    AND b.supplier_cd = #{supplier_cd}
+  </if>
+  <if test="product_cd != null and product_cd != ''">
+    AND a.product_cd = #{product_cd}
+  </if>
+  <if test="exreceiving_st != null and exreceiving_st != ''">
+    AND a.exreceiving_st = #{exreceiving_st}
+  </if>
+  
+  <!-- 날짜 조건 -->
+  <if test="exreceiving_type == '납품'">
+    <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+      AND a.departure_dt BETWEEN #{start_date} AND #{end_date}
+    </if>
+  </if>
+  <if test="exreceiving_type == '반품'">
+    <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+      AND a.processing_dt BETWEEN #{start_date} AND #{end_date}
+    </if>
+  </if>
+  
+  ORDER BY a.exreceiving_idx DESC
+</select>
+
+<!-- 
+<select id="select_ex_receiving" resultType="kr.co.pikpak.dto.ex_receiving_joined_dto">
+select a.exreceiving_idx, a.deliver_cd, a.return_cd, a.exreceiving_cd, b.supplier_cd, 
+b.supplier_nm, a.product_cd, c.product_nm, a.exreceiving_type, a.exreceiving_qty,
+a.return_qty, a.exreceiving_size, a.departure_dt, a.processing_dt, a.exreceiving_st, a.update_id, a.make_dt
+from ex_receiving as a join supplier_info as b join product as c where a.supplier_cd=b.supplier_cd
+and a.product_cd=c.product_cd order by a.exreceiving_idx desc
+</select>
+ -->
+
+
+
+<!-- 입고요청의 상품명 모달 : 상품 리스트 페이징 + 검색 -->
+<select id="select_product_limit" resultType="kr.co.pikpak.dto.product_dto_lhwtemp"  parameterType="Map">
+select * from product where product_cd like concat ('%',#{pd_cd},'%') and
+product_nm like concat ('%',#{pd_nm},'%') order by product_idx desc limit #{startpg},#{page_size}
+</select>
+
+<!-- 입고요청의 상품명 모달 : 상품 리스트 개수 가져오기(검색 포함) -->
+<select id="select_product_total" resultType="Integer">
+select count(*) as total from product where product_cd like concat ('%',#{pd_cd},'%') and
+product_nm like concat ('%',#{pd_nm},'%')
+</select>
+
+
+<!-- 입고요청의 회사명 모달 : 회사 리스트 페이징 + 검색 -->
+<select id="select_supplier_limit" resultType="kr.co.pikpak.dto.supplier_info_dto_lhwtemp"  parameterType="Map">
+select * from supplier_info where supplier_cd like concat ('%',#{comp_cd},'%') and
+supplier_nm like concat ('%',#{comp_nm},'%') order by supplier_idx desc limit #{startpg},#{page_size}
+</select>
+
+
+<!-- 입고요청의 회사명 모달 : 회사정보 개수 가져오기(검색 포함)-->
+<select id="select_supplier_total" resultType="Integer">
+select count(*) as total from supplier_info where supplier_cd like concat ('%',#{comp_cd},'%') and
+supplier_nm like concat ('%',#{comp_nm},'%')
+</select>
+
+<!-- operator_id로 operator_nm 검색 (모든 리스트 출력용) -->
+<select id="search_one_id" resultType="String">
+select operator_nm from login_operator where operator_id=#{operator_id};
+</select>
+
+<!-- operator_nm으로 operaotr_id 검색(조회용) -->
+<select id="search_operator_nm" resultType="String">
+select operator_id, operator_nm from login_operator where operator_nm=#{operator_nm};
+</select>
+
+
+<!-- 입고요청 리스트 조회 -->
+<select id="select_inreq_search" resultType="kr.co.pikpak.dto.input_request_dto" parameterType="Map">
+   SELECT
+    a.*,
+    b.operator_nm AS operator_nm,
+    c.operator_nm AS update_nm
+  FROM
+    input_request a
+    LEFT JOIN login_operator b ON a.operator_id = b.operator_id
+    LEFT JOIN login_operator c ON a.update_id = c.operator_id
+  WHERE 1=1
+  <if test="supplier_cd != null and supplier_cd != ''">
+    AND a.supplier_cd = #{supplier_cd}
+  </if>
+  <if test="product_cd != null and product_cd != ''">
+    AND a.product_cd = #{product_cd}
+  </if>
+  <if test="request_st != null and request_st != ''">
+    AND a.request_st = #{request_st}
+  </if>
+  <if test="operator_id_list != null and operator_id_list.size() > 0">
+    AND a.operator_id IN 
+    <foreach item="id" collection="operator_id_list" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </if>
+  <if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+    AND a.request_dt BETWEEN #{start_date} AND #{end_date}
+  </if>
+  ORDER BY a.request_idx DESC
+</select>
+
+<!-- 입고요청 수정하기 -->
+<update id="update_inreq" parameterType="Map">
+update input_request set product_qty=#{product_qty}, add_req=#{add_req}, hope_dt=#{hope_dt}, update_id=#{update_id} where request_idx=#{request_idx}
+</update>
+
+<!-- 입고요청 삭제하기 -->
+<delete id="delete_inreq">
+delete from input_request where FIND_IN_SET(request_idx,#{request_idx})
+</delete>
+
+<!-- 입고요청 리스트 불러오기 -->
+<select id="select_inreq" resultType="kr.co.pikpak.dto.input_request_dto">
+SELECT 
+    a.*,
+    b.operator_nm AS operator_nm,
+    c.operator_nm AS update_nm
+FROM 
+    input_request AS a
+JOIN 
+    login_operator AS b ON a.operator_id = b.operator_id
+LEFT JOIN 
+    login_operator AS c ON a.update_id = c.operator_id
+ORDER BY 
+    a.request_idx DESC
+</select>
+
+<!-- 입고요청의 등록모달 : 상품정보 가져오기(join사용) -->
+<select id="select_product" resultType="Map">
+select a.supplier_cd, b.supplier_nm, a.product_cd, a.product_nm 
+from product as a join supplier_info as b where a.supplier_cd=b.supplier_cd
+</select>
+
+<!-- 입고요청 등록하기 -->
+<insert id="input_req_insert">
+insert into input_request values ('0',#{request_cd},#{supplier_cd},#{supplier_nm},#{product_cd},#{product_nm},
+#{product_qty},#{operator_id},#{request_st},#{add_req},#{hope_dt},now(),#{update_dt},#{update_id})
+</insert>
+
+<!-- 로트번호 중복방지 -->
+<select id="select_lot_count" resultType="String">
+SELECT COUNT(*) FROM receiving WHERE lot_no LIKE CONCAT(#{lot_no}, '%');
+</select>
+
+<!-- 데이터베이스 서버시간 가져오기 -->
+<select id="get_time" resultType="String">
+SELECT DATE_FORMAT(NOW(), '%y%m%d') AS server_time
+</select>
+</mapper>

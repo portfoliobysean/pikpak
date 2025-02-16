@@ -1,0 +1,23 @@
+ .modal-body {
+         /* 원하는 폰트 크기로 변경 */
+        vertical-align: middle;	
+    }
+  .list-sty{
+ 
+  text-align: center;
+  background-color: rgb(130, 210, 213);
+  }
+
+  .table-hover td, .table-hover th {
+    height: 30px;
+      text-align: center; /* 셀 높이 설정 */
+  }
+
+
+  thead {
+    position: sticky;
+    top: 0;
+    background-color: white; /* 테이블 헤더를 스크롤 시 배경색 유지 */
+    z-index: 10; /* 다른 요소보다 위에 위치 */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); /* 스크롤 시 그림자 추가 */
+}

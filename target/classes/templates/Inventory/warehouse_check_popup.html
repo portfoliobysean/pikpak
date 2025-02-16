@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>창고 관리 상세 팝업</title>
+</head>
+<body>
+
+<!-- 팝업 창 구조 -->
+<div class="modal fade"  id="wareck_enroll_Modal" th:fragment="warehouse_check_popup" tabindex="-1" role="dialog" aria-labelledby="inspectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- 모달 헤더 -->
+            <div class="modal-header bg-primary">
+		        <h5 class="modal-title" id="inspectionModalLabel" style="color: rgba(0,0,0,.5); font-weight: bold;">
+		            <i class="fas fa-clipboard-check"></i> 점검 등록
+		        </h5>
+            </div>
+            <!-- 모달 바디 -->
+            <div class="modal-body">  
+                <!-- 기본 정보 입력 섹션 -->
+                <h4 class="mb-3 text-primary" style="margin-bottom: 20px;">기본 정보 입력</h4>
+                <form id="frm_wareck_enroll">
+                    <!-- 구역 입력 -->
+                    <div class="form-group row">
+                        <label class="col-md-4 font-weight-bold">구역 :</label>
+                        <div class="col-md-8">
+                            <select class="form-control" id="StockCheckZone" name="area_cd">
+                                <option value="" disabled selected>구역을 선택하세요</option>
+                                <option value="A">A 구역</option>
+                                <option value="B">B 구역</option>
+                                <option value="C">C 구역</option>
+                                <option value="D">D 구역</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 점검 담당자 -->
+                    <div class="form-group row">
+                        <label class="col-md-4 font-weight-bold">점검 담당자 :</label>
+                        <div class="col-md-8">
+                            <input type="text" placeholder="담당자를 입력하세요." id="manager_nm" name="manager_nm" class="form-control">
+                        </div>
+                    </div>
+
+					<!-- 점검 시간 -->
+                    <div class="form-group row">
+                        <label class="col-md-4 font-weight-bold">점검 시작 시간 :</label>
+                        <div class="col-md-8">
+                            <input type="datetime-local" id="check_start" name="check_start_dt" class="form-control">
+                        </div>
+                        <label class="col-md-4 font-weight-bold">점검 종료 시간 :</label>
+                        <div class="col-md-8">
+                        <input type="datetime-local" id="check_end" name="check_end_dt" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- 구분선 (Divider) -->
+                    <hr class="my-4" style="margin-bottom : 10px;">
+
+                    <!-- 환경 정보 입력 섹션 -->
+                    <h4 class="mb-3 text-primary" style="margin-bottom: 20px;">환경 정보 입력</h4>
+                    <div class="form-group row">
+                        <label class="col-md-4 font-weight-bold">온도 :</label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" id="temperature" name="temperature" step="0.1" placeholder="온도를 입력하세요" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 font-weight-bold">습도 :</label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" id="humidity" name="humidity" step="0.1" placeholder="습도를 입력하세요" required>
+                        </div>
+                    </div>
+
+                    <!-- 구분선 (Divider) -->
+                    <hr class="my-4" style="margin-bottom : 10px;">
+
+                    <!-- 재고 상태 입력 섹션 -->
+                    <h4 class="mb-3 text-primary" style="margin-bottom: 20px;">재고 상태 입력</h4>
+                    <div class="form-group row">
+                        <label for="type1_stock" class="col-md-4 font-weight-bold">1유형 (대형) 재고 수량:</label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" id="type1_stock" name="type1_stock" placeholder="대형 재고 수량 입력" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="type2_stock" class="col-md-4 font-weight-bold">2유형 (중형) 재고 수량:</label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" id="type2_stock" name="type2_stock" placeholder="중형 재고 수량 입력" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="type3_stock" class="col-md-4 font-weight-bold">3유형 (소형) 재고 수량:</label>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" id="type3_stock" name="type3_stock" placeholder="소형 재고 수량 입력" required>
+                        </div>
+                    </div>
+		            <!-- 재고 수량 일치 여부 확인 -->
+		            <div class="clearfix">
+		            	<button type="button" class="btn btn-outline-secondary" style="margin-bottom :10px;float: right;" id="checkButton">일치 여부 확인</button>
+		            </div>
+		            <!-- 결과 메시지 -->
+		            <div id="resultMessage" class="mt-3"></div>
+ 
+                    <!-- 점검 상태 -->
+                    <div class="form-group row">
+                        <label class="col-md-4 font-weight-bold">점검 상태 :</label>
+                        <div class="col-md-8">
+                            <select class="form-control" id="statement" name="statement">
+                                <option value="양호">양호</option>
+                                <option value="이상 있음">이상 있음</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 점검 로그 -->
+                    <div class="form-group row">
+                        <label class="col-md-4 font-weight-bold">점검 로그 :</label>
+                        <div class="col-md-8">
+                            <textarea class="form-control" id="notes" name="check_log" rows="4" placeholder="점검 중 특이사항 기록"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 모달 푸터 -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-lg" id="wareck_enroll">제출</button>
+                <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

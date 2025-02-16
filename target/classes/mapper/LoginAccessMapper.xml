@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.LoginAccessRepo">
+	<insert id="addAccessLog" parameterType="kr.co.pikpak.dto.LoginAccessDTO">
+		insert into login_access_log 
+		(login_dt,jsession_id,user_id) 
+		values 
+		(now(),#{jsession_id},#{user_id})
+	</insert>
+	
+	<update id="updateAccessLog" parameterType="kr.co.pikpak.dto.LoginAccessDTO">
+		update login_access_log
+		set logout_dt = now()
+		where 
+		user_id = #{user_id}
+		and jsession_id = #{jsession_id}
+	</update>
+</mapper>

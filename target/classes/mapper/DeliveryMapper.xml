@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.DeliveryRepo">
+
+<!-- 납품반송현황 join해서 가져오기 -->
+<select id="select_return_joined" resultType="kr.co.pikpak.dto.deliver_return_joined_dto" parameterType="Map">
+SELECT 
+    a.d_return_idx,
+    b.deliver_cd, 
+    b.supplier_cd, 
+    b.product_cd, 
+    c.product_nm, 
+    b.exreceiving_qty, 
+    a.d_return_qty, 
+    a.d_return_type, 
+    b.departure_dt,
+    a.d_return_dt 
+FROM 
+    deliver_return AS a 
+JOIN 
+    ex_receiving AS b ON a.exreceiving_cd = b.exreceiving_cd 
+JOIN 
+    product AS c ON b.product_cd = c.product_cd 
+JOIN 
+    supplier_info AS d ON b.supplier_cd = d.supplier_cd 
+WHERE 1=1
+
+<if test="product_cd != null and product_cd != ''">
+and b.product_cd=#{product_cd} 
+</if>
+<if test="supplier_cd != null and supplier_cd != ''">
+and b.supplier_cd=#{supplier_cd} 
+</if>
+<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+and a.d_return_dt BETWEEN #{start_date} AND #{end_date}
+</if>
+ORDER BY
+    a.d_return_idx DESC;
+</select>
+
+
+<!-- 
+<select id="select_return_joined" resultType="kr.co.pikpak.dto.deliver_return_joined_dto">
+SELECT 
+    a.d_return_idx,
+    b.deliver_cd, 
+    b.supplier_cd, 
+    b.product_cd, 
+    c.product_nm, 
+    b.exreceiving_qty, 
+    a.d_return_qty, 
+    a.d_return_type, 
+    b.departure_dt,
+    a.d_return_dt 
+FROM 
+    deliver_return AS a 
+JOIN 
+    ex_receiving AS b ON a.exreceiving_cd = b.exreceiving_cd 
+JOIN 
+    product AS c ON b.product_cd = c.product_cd 
+JOIN 
+    supplier_info AS d ON b.supplier_cd = d.supplier_cd 
+WHERE 
+    b.supplier_cd = #{supplier_cd} 
+ORDER BY 
+    a.d_return_idx DESC;
+</select>
+ -->
+
+<!-- 납품 모두 완료된 입고요청 상태 '완료'변경 -->
+<update id="update_finished_inreq">
+update input_request set request_st='완료' where request_cd=#{request_cd}
+</update>
+
+<!-- 입고요청에 대한 납품이 배송까지 완료된 사항에 대해 request_cd 가져오기 -->
+<select id="select_delivered_finish" resultType="String">
+    SELECT 
+        a.request_cd
+    FROM input_request_state AS a
+    JOIN deliver_enroll AS b ON a.request_cd = b.request_cd
+    WHERE a.remaining_qty <![CDATA[<=]]> 0
+    GROUP BY a.request_cd
+    HAVING MIN(b.deliver_st) = '배송' AND MAX(b.deliver_st) = '배송'
+</select>
+
+
+<!-- 가입고 insert하기 전 로트번호 등록일자 같은 데이터 있는지 확인
+<select id="find_exrecvdt" resultType="Integer">
+select count(*) as lot_ea from ex_receiving where lot_no like concat ('%',#{exrecv_dt},'%')
+</select>
+ -->
+ 
+ <!-- 가입고 등록과 동시에 현재 배송누른 담당자 업데이트를 납품등록에 함 + 배송일자도 업데이트함-->
+ <update id="deliver_update_nm">
+ update deliver_enroll set deliver_st='배송', departure_dt=#{departure_dt}, update_id=#{update_id} where deliver_cd=#{deliver_cd}
+ </update>
+ 
+<!-- 배송 확정 시 가입고 등록 -->
+<insert id="insert_ex_receiving">
+insert into ex_receiving values ('0',#{request_cd},#{deliver_cd},#{return_cd},#{supplier_cd},#{exreceiving_cd},#{product_cd},
+#{exreceiving_qty},#{return_qty},#{exreceiving_st},#{exreceiving_area},#{exreceiving_size},#{make_dt},#{departure_dt},#{processing_dt},
+#{exreceiving_type},#{operator_id},#{update_dt},#{update_id}) 
+</insert>
+
+<!-- 입고요청 거절 시 상태변경 -->
+<update id="update_inreq_reject">
+update input_request set request_st='거절' where request_idx=#{request_idx}
+</update>
+
+
+<!-- 납품등록 삭제하기 -->
+<delete id="delete_deliver_enroll">
+delete from deliver_enroll where FIND_IN_SET(deliver_idx,#{deliver_idx})
+</delete>
+
+<!-- 납품등록 현황 -->
+<select id="select_deliver_enroll" resultType="kr.co.pikpak.dto.deliver_enroll_dto" parameterType="Map">
+select * from deliver_enroll
+where 1=1
+<if test="product_cd != null and product_cd != ''">
+and product_cd=#{product_cd} 
+</if>
+<if test="deliver_st != null and deliver_st != ''">
+and deliver_st=#{deliver_st} 
+</if>
+<if test="supplier_cd != null and supplier_cd != ''">
+and supplier_cd=#{supplier_cd} 
+</if>
+<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+ AND deliver_dt BETWEEN #{start_date} AND #{end_date}
+</if>
+ order by deliver_idx desc
+</select>
+
+<!-- 납품등록현황 전체에서 불러옴 
+<select id="select_deliver_enroll" resultType="kr.co.pikpak.dto.deliver_enroll_dto">
+select * from deliver_enroll where supplier_cd=#{supplier_cd} order by deliver_idx desc
+</select>
+-->
+
+
+<!-- 납품등록 -->
+<insert id="insert_deliver_enroll">
+insert into deliver_enroll values ('0',#{request_cd},#{supplier_cd},#{deliver_cd},#{product_cd},#{product_nm},
+#{deliver_qty},#{deliver_st},#{make_dt},#{expect_dt},#{deliver_size},#{deliver_area},#{operator_id},
+#{update_id},now(),#{departure_dt})
+</insert>
+
+<!-- 
+
+select * from input_request_state 
+where 1=1
+<if test="supplier_cd != null and supplier_cd != ''">
+supplier_cd=#{supplier_cd} 
+</if>
+<if test="supplier_cd != null and supplier_cd != ''">
+supplier_cd=#{supplier_cd} 
+</if>
+<if test="supplier_cd != null and supplier_cd != ''">
+supplier_cd=#{supplier_cd} 
+</if>
+<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+    AND a.request_dt BETWEEN #{start_date} AND #{end_date}
+</if>
+ order by request_idx desc
+ -->
+
+
+<!-- 입고요청 현황 (뷰테이블에서 불러온 것) -->
+<select id="select_inreq_deliv" resultType="kr.co.pikpak.dto.input_request_state_dto" parameterType="Map">
+select * from input_request_state 
+where 1=1
+<if test="product_cd != null and product_cd != ''">
+and product_cd=#{product_cd} 
+</if>
+<if test="request_st != null and request_st != ''">
+and request_st=#{request_st} 
+</if>
+<if test="supplier_cd != null and supplier_cd != ''">
+and supplier_cd=#{supplier_cd} 
+</if>
+<if test="start_date != null and start_date != '' and end_date != null and end_date != ''">
+    AND request_dt BETWEEN #{start_date} AND #{end_date}
+</if>
+ order by request_idx desc
+</select>
+
+<!-- 
+입고요청 현황 최초 찍을 떄
+<select id="select_inreq_deliv" resultType="kr.co.pikpak.dto.input_request_state_dto">
+select * from input_request_state where supplier_cd=#{supplier_cd} order by request_idx desc
+</select>
+ -->
+
+<!-- 입고요청 현황 (기본테이블에서 불러온 것)
+<select id="select_inreq_deliv" resultType="kr.co.pikpak.dto.input_request_dto">
+select * from input_request where supplier_cd=#{supplier_cd} order by request_idx desc
+</select>
+-->
+
+<!-- 해당 id supplier_cd 가져오기 -->
+<select id="select_current_supplier" resultType="String">
+select company_cd from login_trader where trader_id=#{trader_id}
+</select>
+
+<!-- 데이터베이스 서버시간 가져오기 -->
+<select id="get_time_deli" resultType="String">
+SELECT DATE_FORMAT(NOW(), '%y%m%d') AS server_time
+</select>
+</mapper>

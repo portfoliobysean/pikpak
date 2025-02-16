@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.order_repo">
+
+<insert id="order_enroll">
+insert into order_enroll (order_cd, order_id, vendor_nm, process_st, order_qty, order_price, start_dt, due_dt, order_dt, product_cd, product_nm)
+values (#{order_cd}, #{order_id}, #{vendor_nm}, '대기', #{order_qty}, #{order_price}, #{start_dt}, #{due_dt}, now(), #{product_cd}, #{product_nm})
+</insert>
+
+<select id="search_login" resultType="kr.co.pikpak.dto.order_list_dto">
+select user_nm, user_tel, user_company from login_view where user_id=#{activeUserID}
+</select>
+
+<select id="order_list" resultType="kr.co.pikpak.dto.order_list_dto">
+select * from order_check_view where user_company=#{user_company} order by order_idx desc
+</select>
+
+<select id="order_list_all" resultType="kr.co.pikpak.dto.order_list_dto">
+select * from order_check_view order by order_idx desc
+</select>
+
+<select id="product_cd_search" resultType="kr.co.pikpak.dto.product_cd_dto">
+select product_nm, supplier_nm, product_sz, product_wt, purchase_pr from product where product_cd=#{product_cd}
+</select>
+
+<update id="order_modify">
+update order_enroll set product_cd=#{order_dto.product_cd}, product_nm=#{order_dto.product_nm}, order_qty=#{order_dto.order_qty}, order_price=#{order_dto.order_price}, start_dt=#{order_dto.start_dt}, due_dt=#{order_dto.due_dt}, update_by=#{activeUserID}, update_dt=now() where order_idx=#{order_dto.order_idx}
+</update>
+
+<update id="order_approval">
+update order_enroll set process_st=#{process_st}, approval_log=#{approval_log}, approval_dt=now() where order_idx=#{order_idx}
+</update>
+
+<delete id="order_delete">
+delete from order_enroll where order_idx=#{order_idx}
+</delete>
+
+<select id="product_search" resultType="kr.co.pikpak.dto.order_list_dto">
+select product_cd, product_nm, supplier_nm from product
+</select>
+
+</mapper>

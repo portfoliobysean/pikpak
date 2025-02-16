@@ -1,0 +1,62 @@
+@charset "EUC-KR";
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+.modal-title {
+	font-size: 20px;
+    font-weight: bold;
+}
+.modal-body {
+    font-size: 14px;
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 5px;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group .row {
+    margin-bottom: 10px;
+}
+.form-group label {
+    font-weight: bold;
+}
+.form-control-plaintext {
+    display: inline-block;
+    width: calc(100% - 160px);
+}
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+}
+.modal-footer button {
+    border-radius: 20px;
+    padding: 6px 20px;
+}
+.close {
+    font-size: 24px;
+}
+/* 구분선 추가 */
+.divider {
+    border-bottom: 1px solid #dee2e6;
+    margin: 10px 0;
+}
+/* 구역, 점검 일시 등의 타이틀을 더 강조 */
+.form-group .row div:first-child {
+    color: #495057;
+    font-size: 15px;
+    padding-top: 5px;
+}
+/* 비고란 커스터마이징 */
+#notes {
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+        /* 입력 필드 꾸미기 */
+input, textarea {
+  width: 100%;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 8px;
+}

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>주문 승인</title>
+
+<link rel="stylesheet"
+	href="../resources/css/order/order_styles.css?v=6">
+<link rel="stylesheet" href="../resources/css/order/vars.css">
+
+</head>
+<body>
+
+	<nav th:fragment="order_approval">
+
+		<div th:each="order_aplist : ${order_aplist}">
+			<button class="openPopupBtn"
+				th:data-index_2="${order_aplist.order_idx}">상세</button>
+
+			<!-- Popup Container -->
+			<div id="popupContainer" class="popup-container">
+				<div class="popup">
+					<button id="closePopupBtn" class="close-btn">&times;</button>
+					<div class="popup-content">
+						<p class="popup-title">주문 승인</p>
+						<hr class="popup-divider">
+						<!-- 주문 상태, 코드 -->
+						<div class="order-container">
+							<span style="font-size: 13px;">주문 상태 : <c
+								th:text="${order_aplist.process_st}"></c></span> <span
+								style="font-size: 13px;">주문 코드 : <c
+								th:text="${order_aplist.order_cd}"></c></span> <input type="hidden"
+								class="apc_order_cd" th:value="${order_aplist.order_cd}"
+								th:data-index_2="${order_aplist.order_idx}">
+						</div>
+						<!-- Box for content -->
+						<div class="popup-box">
+							<!-- 주문자 정보 Section -->
+							<h2 class="box-title">주문자 정보(최초 주문자)</h2>
+							<div class="box-content">
+								<div class="input-row">
+									<div class="input-group">
+										<label for="modifyName">이름:</label> <c
+											th:text="${order_aplist.user_nm}"></c>
+									</div>
+									<div class="input-group">
+										<label for="modifyId">아이디:</label> <c
+											th:text="${order_aplist.order_id}"></c>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="modifyAffiliation">소속:</label>
+										<!-- 수정 필요함 -->
+										<c th:text="${order_aplist.user_company}"></c>
+									</div>
+									<div class="input-group">
+										<label for="modifyPhone">전화번호:</label> <c
+											th:text="${order_aplist.user_tel}"></c>
+									</div>
+								</div>
+							</div>
+
+							<!-- 상품 Section -->
+							<h2 class="box-title">내용</h2>
+							<div class="box-content">
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productCode">상품코드:</label> <c
+											th:text="${order_aplist.product_cd}"></c>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productName">상품명:</label> <c
+											th:text="${order_aplist.product_nm}"></c>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productManufacturer">제조사:</label> <c
+											th:text="${order_aplist.supplier_nm}"></c>
+									</div>
+									<div class="input-group">
+										<label for="productSize">크기:</label> <c
+											th:text="${order_aplist.product_sz}"></c>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productWeight">무게:</label> <c
+											th:text="${order_aplist.product_wt}"></c>
+									</div>
+									<div class="input-group">
+										<label for="productPrice">입고 가격:</label> <c
+											th:text="${#numbers.formatInteger(order_aplist.purchase_pr, 3, 'COMMA')}"></c>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="productQuantity">상품 수량:</label> <c
+											th:text="${order_aplist.order_qty}"></c>
+									</div>
+									<div class="input-group">
+										<label for="totalPrice">총 가격:</label> <c
+											th:text="${#numbers.formatInteger(order_aplist.order_price, 3, 'COMMA')}"></c>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="startDate">착수일:</label> <c
+											th:text="${order_aplist.start_dt}"></c>
+									</div>
+									<div class="input-group">
+										<label for="endDate">납기일:</label> <c
+											th:text="${order_aplist.due_dt}"></c>
+									</div>
+								</div>
+								<div class="input-row">
+									<div class="input-group">
+										<label for="orderDate">주문 날짜:</label> <c
+											th:text="${order_aplist.order_dt}"></c>
+									</div>
+								</div>
+								<!-- 수정 내역 존재시에만 -->
+								<div class="input-row" th:if="${order_aplist.order_dt != order_aplist.update_dt}">
+									<div class="input-group">
+										<label for="modifyDate">주문 수정자 : </label> <c
+											th:text="${order_aplist.update_by}"></c>
+									</div>
+									<div class="input-group">
+										<label for="modifyName">소속:</label> <c
+											th:text="${order_aplist.user_company}"></c>
+									</div>
+								</div>
+								<!-- 대기 상태 -->
+								<div class="input-row" th:if="${order_aplist.process_st == '대기'}">
+									<div class="input-group-text">
+										<label for="approval_log">비고란: </label>
+										<textarea class="approval_log"
+											th:data-index_2="${order_aplist.order_idx}"></textarea>
+									</div>
+								</div>
+								<div class="input-row" th:if="${order_aplist.process_st != '대기'}">
+									<div class="input-group-text">
+										<label for="approval_log">비고란: </label>
+										<div th:if="${order_aplist.approval_log != ''}">
+											<c th:text="${order_aplist.approval_log}"></c>
+										</div>
+										<div
+											th:if="${order_aplist.approval_log == '' || order_aplist.approval_log == null}">
+											없음</div>
+									</div>
+								</div>
+								<div class="input-row" th:if="${order_aplist.process_st == '완료'}">
+									<div class="input-group-text">
+										<label for="approval_dt">완료일자: </label> <c
+											th:text="${order_aplist.approval_dt}"></c>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 대기 상태 -->
+					<div th:if="${order_aplist.process_st == '대기'}">
+						<div class="button-group">
+							<div class="button-1" th:data-index_2="${order_aplist.order_idx}">
+								<div class="divbutton">승인</div>
+							</div>
+							<div class="button-2" th:data-index_2="${order_aplist.order_idx}">
+								<div class="divbutton">거절</div>
+							</div>
+							<div class="button-3">
+								<div class="divbutton">취소</div>
+							</div>
+						</div>
+					</div>
+					<!-- 승인 상태 -->
+					<div th:if="${order_aplist.process_st != '대기'}">
+						<div class="button-group">
+							<div class="button-3">
+								<div class="divbutton">취소</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- 타임리프 반복문 끝 -->
+
+	</nav>
+
+	<script src="../resources/js/order/order_ap_script.js?v=3"></script>
+
+</body>
+</html>

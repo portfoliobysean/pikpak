@@ -1,0 +1,313 @@
+/* Basic styling */
+body {
+    font-family: Arial, sans-serif;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+/* 주문 상태, 주문 코드 */
+.order-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    width: 100%;
+}
+
+/* Popup container - initially hidden */
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Gray background with opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Popup styling */
+.popup {
+    width: 685px;
+    height: 800px; /* Increased height */
+    background-color: white;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* Ensure content and buttons are spaced */
+    text-align: center;
+}
+
+/* Content container to center the title and divider */
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align children horizontally */
+    width: 100%; /* Full width of the popup */
+    height: calc(100% - 60px); /* Adjust height to fit within popup */
+    justify-content: space-between; /* Spread content */
+}
+
+/* Title styling */
+.popup-title {
+    font-size: 24px; /* Adjust font size as needed */
+    margin: 0;
+    padding: 10px 0; /* Space above and below the title */
+}
+
+/* Divider styling */
+.popup-divider {
+    border: none;
+    height: 1px;
+    background-color: #ccc; /* Color of the line */
+    width: 100%; /* Full width of the container */
+    margin-top: 5px; /* Space above the line */
+}
+
+/* Box styling */
+.popup-box {
+    border: 2px solid black; /* Black border */
+    padding: 20px; /* Increase padding */
+    width: 100%; /* Full width of the container */
+    max-width: 650px; /* Maximum width adjusted */
+    height: 650px; /* Increased height to avoid scroll */
+    margin-bottom: 10px; /* Space below the box */
+    background-color: #f9f9f9; /* Light background color for the box */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Box title styling */
+.box-title {
+    font-size: 20px; /* Adjust font size as needed */
+    margin-bottom: 15px; /* Space below the box title */
+    text-align: center; /* Center align title */
+}
+
+/* Box content styling */
+.box-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 왼쪽 정렬 */
+    width: 100%; /* 전체 너비 사용 */
+    padding-left: 30px; /* 왼쪽에 여백 추가 */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+/* Input row styling */
+.input-row {
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    margin-bottom: 15px; /* 각 행 아래에 여백 */
+    width: 100%; /* 전체 너비 사용 */
+    gap: 10px; /* 행 내부의 요소 사이에 여백 */
+}
+
+.productTypeGroup{
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    margin-bottom: 15px; /* 각 행 아래에 여백 */
+    width: 100%; /* 전체 너비 사용 */
+    gap: 10px; /* 행 내부의 요소 사이에 여백 */
+}
+
+
+/* Input group styling */
+.input-group {
+    display: flex;
+    flex-direction: row; /* 가로 정렬 */
+    align-items: center; /* 세로로 가운데 정렬 */
+    margin: 0 10px; /* 입력 그룹 간의 여백 */
+    width: 48%; /* 입력 그룹의 너비를 48%로 설정하여 양쪽에 맞춤 */
+}
+
+/* Label styling */
+.input-group label {
+    font-weight: bold; /* 레이블 텍스트를 굵게 */
+    margin-right: 10px; /* 레이블 오른쪽에 여백 */
+    text-align: left; /* 왼쪽 정렬 */
+    margin-bottom: 0; /* 하단 여백 제거 */
+    min-width: 80px; /* 레이블의 최소 너비를 설정하여 정렬 유지 */
+}
+
+/* Input field styling for most fields */
+.input-group input, select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Full width of the input group */
+    max-width: 150px; /* Reduced maximum width */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* 비고란 */
+.input-group-text{
+	display: flex;
+    flex-direction: row; /* 가로 정렬 */
+    align-items: center; /* 세로로 가운데 정렬 */
+    margin: 0 10px; /* 입력 그룹 간의 여백 */
+}
+
+.input-group-text label {
+    font-weight: bold; /* 레이블 텍스트를 굵게 */
+    margin-right: 10px; /* 레이블 오른쪽에 여백 */
+    text-align: left; /* 왼쪽 정렬 */
+    margin-bottom: 0; /* 하단 여백 제거 */
+    min-width: 80px; /* 레이블의 최소 너비를 설정하여 정렬 유지 */
+}
+
+.input-group-text textarea {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 450px;
+    height: 100px;
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* Specific input fields for product name and product code */
+#outgoingCode,
+#productName,
+#productCode,
+#orderDate {
+    max-width: 200px; /* Keep these fields wider */
+}
+
+/* Button group styling */
+.button-group {
+    display: flex;
+    justify-content: center; /* Center align buttons horizontally */
+    gap: 10px; /* Space between buttons */
+    margin-top: 10px; /* Space above the button group */
+    margin-bottom: 20px; /* Space below the button group */
+    width: 100%;
+}
+
+/* Button styling */
+.button-group button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+/* Close button styling */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.button-1,
+.button-1 * {
+  box-sizing: border-box;
+}
+.button-1 {
+  background: var(--var-sds-color-background-brand-default, #2c2c2c);
+  border-radius: var(--var-sds-size-radius-200, 8px);
+  border-style: solid;
+  border-color: var(--var-sds-color-border-brand-default, #2c2c2c);
+  border-width: 1px;
+  padding: var(--var-sds-size-space-300, 12px);
+  display: flex;
+  flex-direction: row;
+  gap: var(--var-sds-size-space-200, 8px);
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 70px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.div {
+  color: var(--var-sds-color-text-brand-on-brand, #f5f5f5);
+  text-align: left;
+  font-family: var(
+    --single-line-body-base-font-family,
+    "Inter-Regular",
+    sans-serif
+  );
+  font-size: var(--single-line-body-base-font-size, 16px);
+  line-height: var(--single-line-body-base-line-height, 100%);
+  font-weight: var(--single-line-body-base-font-weight, 400);
+  position: relative;
+}
+
+.button-2,
+.button-2 * {
+  box-sizing: border-box;
+}
+.button-2 {
+  background: var(--var-sds-color-background-neutral-default, #5a5a5a);
+  border-radius: var(--var-sds-size-radius-200, 8px);
+  padding: var(--var-sds-size-space-300, 12px);
+  display: flex;
+  flex-direction: row;
+  gap: var(--var-sds-size-space-200, 8px);
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 70px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.button-3,
+.button-3 * {
+  box-sizing: border-box;
+}
+.button-3 {
+  background: var(--var-sds-color-background-neutral-default, #5a5a5a);
+  border-radius: var(--var-sds-size-radius-200, 8px);
+  padding: var(--var-sds-size-space-300, 12px);
+  display: flex;
+  flex-direction: row;
+  gap: var(--var-sds-size-space-200, 8px);
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 70px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.button-4,
+.button-4 * {
+  box-sizing: border-box;
+}
+.button-4 {
+  background: var(--var-sds-color-background-brand-default, #2c2c2c);
+  border-radius: var(--var-sds-size-radius-200, 8px);
+  border-style: solid;
+  border-color: var(--var-sds-color-border-brand-default, #2c2c2c);
+  border-width: 1px;
+  padding: var(--var-sds-size-space-300, 12px);
+  display: flex;
+  flex-direction: row;
+  gap: var(--var-sds-size-space-200, 8px);
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 70px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}

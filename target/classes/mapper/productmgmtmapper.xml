@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.mapper.ProductMgmtMapper">
+
+<select id="searchcompanyname" resultType="hashmap">
+
+ 		SELECT
+           supplier_cd AS supplierCode,
+           supplier_nm AS supplierName,
+           supplier_regno AS businessNumber,
+           supplier_addr AS address
+        FROM supplier_info
+        WHERE supplier_nm LIKE CONCAT('%', #{companyName}, '%')
+
+</select>
+
+<insert id="insertProduct" parameterType="HashMap">
+
+		INSERT INTO product(
+			supplier_cd,
+			supplier_nm,
+			product_nm,
+			product_cd,
+			purchase_pr,
+			product_sz,
+			product_wt,
+			packaging_unit,
+			safetyinventory_qty,
+			product_log,
+			operator_nm,
+			registered_dt
+		)VALUES(
+			#{supplier_cd},
+			#{supplier_nm},
+			#{product_nm},
+			#{product_cd},
+			#{purchase_pr},
+			#{product_sz},
+			#{product_wt},
+			#{packaging_unit},
+			<if test="safetyinventory_qty != null and safetyinventory_qty != ''">
+			#{safetyinventory_qty}
+			</if>
+			<if test="safetyinventory_qty == null or safetyinventory_qty == ''">
+			0
+			</if>,
+			#{product_log},
+			#{operatorNm},
+			NOW()
+		)
+
+</insert>
+
+<select id="selectAllList" resultType="hashmap">
+	SELECT
+		supplier_cd,       
+		supplier_nm,          
+		product_nm,    
+		product_cd,      
+		purchase_pr,        
+		 CASE 
+        WHEN product_sz = 'L' THEN '대형'
+        WHEN product_sz = 'M' THEN '중형'
+        WHEN product_sz = 'S' THEN '소형'
+        ELSE product_sz
+    END AS product_sz,          
+		product_wt,         
+		packaging_unit,      
+		safetyinventory_qty,
+		operator_nm,          
+		registered_dt,        
+		visibility_yn,        
+		product_log
+	FROM product
+	ORDER BY registered_dt DESC	     
+
+</select>
+
+<select id ="selectProductInfo" resultType="hashmap">
+	SELECT
+		supplier_cd,
+		supplier_nm,          
+		product_nm,    
+		product_cd,      
+		purchase_pr,        
+		product_sz,          
+		product_wt,         
+		packaging_unit,      
+		safetyinventory_qty,
+		operator_nm,          
+		registered_dt,        
+		visibility_yn,
+		update_by,
+		lastmodified_at,        
+		product_log
+	FROM product
+	WHERE product_cd = #{product_cd}
+
+</select>
+
+<update id="updateProduct" parameterType="HashMap">
+    UPDATE product
+    SET
+        supplier_cd = #{supplier_cd},
+        supplier_nm = #{supplier_nm},
+        product_nm = #{product_nm},
+        purchase_pr = #{purchase_pr},
+        product_sz = #{product_sz},
+        product_wt = #{product_wt},
+        packaging_unit = #{packaging_unit},
+        safetyinventory_qty = IF(#{safetyinventory_qty} = '', 0, #{safetyinventory_qty}),
+        product_log = #{product_log},
+        visibility_yn = #{visibility_yn},
+        update_by = #{operatorNm},
+        lastmodified_at = NOW()
+    WHERE 
+        product_cd = #{product_cd}
+        AND (
+            supplier_cd != #{supplier_cd} OR
+            supplier_nm != #{supplier_nm} OR
+            product_nm != #{product_nm} OR
+            purchase_pr != #{purchase_pr} OR
+            product_sz != #{product_sz} OR
+            product_wt != #{product_wt} OR
+            packaging_unit != #{packaging_unit} OR
+            safetyinventory_qty != IF(#{safetyinventory_qty} = '', 0, #{safetyinventory_qty}) OR
+            product_log != #{product_log} OR
+            visibility_yn != #{visibility_yn}
+        )
+</update>
+
+<select id="selectSearchProduct" resultType="hashmap">
+	SELECT
+		supplier_nm AS supplier_nm,
+		supplier_cd AS supplier_cd,
+		product_cd AS product_cd,
+		product_nm AS product_nm,
+		purchase_pr AS purchase_pr,
+		product_sz AS product_sz,
+		product_wt AS product_wt,
+		packaging_unit AS packaging_unit,
+		safetyinventory_qty AS safetyinventory_qty,
+		product_log AS product_log,
+		operator_nm AS operator_nm,
+		registered_dt AS registered_dt,
+		visibility_yn AS visibility_yn
+	FROM product
+	WHERE 1=1
+	<choose>
+		<when test="fromDate != null and fromDate != ''">
+			AND DATE(registered_dt) BETWEEN #{fromDate} AND #{toDate}
+		</when>
+		<otherwise>
+			AND DATE(registered_dt) BETWEEN '1900-01-01' AND '9999-12-31'
+		</otherwise>
+	</choose>
+
+	<if test="searchKeyword != null and searchKeyword != ''">
+		AND product_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+		OR product_cd LIKE CONCAT('%', #{searchKeyword}, '%')
+		OR supplier_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+	</if>
+	<if test="productType != null and productType == 'product_cd'">
+		AND product_cd LIKE CONCAT('%', #{searchKeyword}, '%')
+	</if>
+	<if test="productType != null and productType == 'product_nm'">
+		AND product_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+	</if>
+	<if test="productType != null and productType == 'supplier_nm'">
+		AND supplier_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+	</if>
+	<if test="supplier_cd != null and supplier_cd != ''">
+		AND supplier_cd LIKE CONCAT('%', #{supplier_cd}, '%')
+	</if>
+	<if test="supplier_nm != null and supplier_nm != ''">
+		AND supplier_nm LIKE CONCAT('%', #{supplier_nm}, '%')
+	</if>
+	ORDER BY registered_dt DESC;
+	</select>
+
+	<select id="getSupplierInitial" parameterType="String" resultType="String">
+	    SELECT supplier_initial
+	    FROM supplier_info
+	    WHERE supplier_cd = #{supplier_cd}
+	</select>
+	
+	 <select id="getLastCodeBySupplier" parameterType="String" resultType="String">
+	    SELECT product_cd
+	    FROM product
+	    WHERE supplier_cd = #{supplier_cd}
+	    ORDER BY product_cd DESC
+	    LIMIT 1
+	</select>
+	
+	<select id="getOperatorNameByUserId" resultType="String" parameterType="String">
+    SELECT operator_nm
+    FROM login_operator
+    WHERE operator_id = #{userId}
+	</select>
+
+</mapper>

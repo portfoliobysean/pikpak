@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.mapper.StockLogRecordMapper">
+
+	<select id="selectList" resultType="HashMap">
+	SELECT
+        l.product_cd,
+        l.product_nm,
+        l.location_cd,
+        l.before_qty,
+        l.after_qty,
+        l.changed_qty,
+        l.before_location_cd,
+        l.after_location_cd,
+        l.before_product_nm,
+        l.after_product_nm,
+        l.action_type,
+        l.dispose_reason,
+        l.log_dt,
+        l.dispose_reason,
+        l.notes,
+        o.operator_nm
+    FROM stock_log_record l
+    JOIN login_operator o ON l.operator_nm = o.operator_id  <!-- 조인 -->
+    ORDER BY l.log_dt DESC
+	</select>
+	
+	<select id="selectLogSearch" resultType="hashmap">
+    SELECT
+        l.product_cd AS product_cd,
+        l.product_nm AS product_nm,
+        l.location_cd AS location_cd,
+        l.changed_qty AS changed_qty,
+        l.action_type AS action_type,
+        l.log_dt AS log_dt,
+        lo.operator_nm AS operator_nm
+    FROM stock_log_record l
+    JOIN login_operator lo ON l.operator_nm = lo.operator_id  <!-- login_operator 테이블과 조인 -->
+    WHERE 1=1
+    <!-- 날짜 필터 조건 (fromDate와 toDate가 있을 경우 적용) -->
+    <if test="fromDate != null and fromDate != '' and toDate != null and toDate != ''">
+        AND DATE(l.log_dt) BETWEEN #{fromDate} AND #{toDate}
+    </if>
+
+    <!-- 검색어 필터 조건 (searchKeyword가 있을 경우 적용) -->
+    <if test="searchKeyword != null and searchKeyword != ''">
+        <choose>
+            <!-- productType이 'product_nm'일 경우 -->
+            <when test="productType == 'product_nm'">
+                AND l.product_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+            </when>
+            <!-- productType이 'operator_nm'일 경우 -->
+            <when test="productType == 'operator_nm'">
+                AND lo.operator_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+            </when>
+            <!-- productType이 없을 경우, 두 필드를 모두 검색 -->
+            <otherwise>
+                AND (l.product_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+                     OR lo.operator_nm LIKE CONCAT('%', #{searchKeyword}, '%'))
+            </otherwise>
+        </choose>
+    </if>
+
+    <!-- 필터가 없을 경우에도 전체 데이터를 가져오도록 설정 -->
+    ORDER BY l.log_dt DESC;
+</select>
+
+
+</mapper>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회원 등록 팝업</title>
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<!-- 모달 -->
+	<section th:fragment="mod_user_popup">
+	<div class="modal fade" id="modUserModal" tabindex="-1" aria-labelledby="modUserModalLabel" insert>
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header" style="display: flex; flex-direction: row;">
+					<h5 class="modal-title" id="addUserModalLabel" style="width:100%;">회원 수정</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="modUserForm">
+						<!-- 검색 바 -->
+						<div class="form-group">
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+										<tr>
+											<td class="form-title-custom custom-width-20">아이디</td>
+											<td class="custom-flex-row">
+												<input type="hidden" id="id-checked-status" value="Y">
+												<input type="hidden" name="old_user_id" th:value="${userDetails.user_id}">
+												<input type="text" 
+													class="form-control dark-border custom-width-40" style="background-color: #DCDCDC;"
+													th:value="${userDetails.user_id}" name="user_id" id="user_id"
+													readonly="readonly" onchange="checkIdDuplicate()">
+												<div class="custom-center-all custom-width-50">
+													<span id="id-check-response" class="response-text-visible">
+														
+													</span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">비밀번호 초기화</td>
+											<td class="custom-flex-row">
+												<input type="password" 
+													class="form-control dark-border custom-width-40" 
+													name="user_pw" onchange="checkPassword()">
+												<div class="custom-center-all custom-width-20">	
+													비밀번호 확인
+												</div>
+												<input type="password" 
+													class="form-control dark-border custom-width-40" 
+													name="pw_check" onchange="checkPassword()">
+											</td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">이름</td>
+											<td th:text="${userDetails.user_nm}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">연락처</td>
+											<td  class="custom-flex-row">
+												<input type="hidden" id="tel-checked-status" value="Y">
+												<input type="text" 
+													class="form-control dark-border custom-width-40"
+													th:value="${userDetails.user_tel}" name="user_tel" id="user_tel"
+													onchange="checkTelDuplicate()"
+													oninput="this.value = this.value.replace(/[^0-9]/g,'')">
+												<div class="custom-center-all custom-width-50">
+													<span id="tel-check-response" class="response-text-visible">
+														※ 연락처 뒷자리로 아이디 새로 생성 됩니다
+													</span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">이메일</td>
+											<td>
+												<input type="text" 
+													class="form-control dark-border custom-width-40"
+													th:value="${userDetails.user_mail}" name="user_mail">
+											</td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">소속</td>
+											<td th:text="${userDetails.user_company}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">소속</td>
+											<td th:text="${userDetails.company_cd}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">사용자 유형</td>
+											<td th:if="${userDetails.user_type=='admin'}">
+												관리자
+												<input type="hidden" id="user_type" name="user_type" value="admin">
+											</td>
+											<td th:if="${userDetails.user_type=='operator'}">
+												운영
+												<input type="hidden" id="user_type" name="user_type" value="operator">
+											</td>
+											<td th:if="${userDetails.user_type=='supplier'}">
+												공급
+												<input type="hidden" id="user_type" name="user_type" value="supplier">
+											</td>
+											<td th:if="${userDetails.user_type=='vendor'}">
+												판매
+												<input type="hidden" id="user_type" name="user_type" value="vendor">
+											</td>
+										</tr>
+										<tr th:if="${userDetails.user_lv!=''}">
+											<td class="form-title-custom">권한 등급</td>
+											<td>
+												<select class="form-control select2" style="width:40%" name="user_lv">
+														<option value="">등급 선택</option>
+														<option value="1" th:selected="${userDetails.user_lv == '1'}">1</option>
+														<option value="2" th:selected="${userDetails.user_lv == '2'}">2</option>
+														<option value="3" th:selected="${userDetails.user_lv == '3'}">3</option>
+												</select> 
+											</td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">비밀번호 변경 기록</td>
+											<td th:text="${userDetails.pw_change_yn}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">등록 일자</td>
+											<td th:text="${userDetails.registrated_dt}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">최근 수정 일자</td>
+											<td th:text="${userDetails.modified_dt}"></td>
+										</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="custom-center-all custom-width-100">
+							<span id="send-check-response" class="response-text visibility-hide"></span>
+						</div>
+						<nav style="text-align: center; padding: 15px;">
+							<span>
+								<button type="button" class="btn btn-dark" onclick="sendModUserForm()">저장</button> 
+								<button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">취소</button> 
+							</span>
+						</nav>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	</section>
+</body>
+
+</html>

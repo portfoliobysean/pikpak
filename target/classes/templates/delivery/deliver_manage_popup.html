@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>납품등록 관리 팝업</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<!-- 모달 -->
+	<div class="modal fade" th:fragment="deliver_mng_popup" id="deliverManageModal"
+		tabindex="-1" aria-labelledby="deliverManageModalLabel" insert>
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deliverManageModalLabel">납품등록 관리</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="frm_deliver_mng">
+				<div class="modal-body">
+					<!-- 검색 바 -->
+					<div class="form-group">
+						<table class="table table-bordered" style="margin-top: 20px;">
+							<tbody>
+								<tr>
+									<td style="width: 30%;">상품코드</td>
+									<td><input type="text" readonly="readonly" id="product_cd_mng" name="product_cd"></td>
+								</tr>
+								<tr>
+									<td style="width: 30%;">상품명</td>
+									<td><input type="text" readonly="readonly" id="product_nm_mng"></td>
+								</tr>
+								<tr>
+									<td style="width: 30%;">납품수량</td>
+									<td><input type="text"  id="deliver_qty_mng" name="exreceiving_qty"></td>
+								</tr>
+								<tr>
+									<td style="width: 30%;">크기</td>
+									<td>
+										<input type="text"  id="deliver_size_mng" readonly="readonly" name="exreceiving_size">
+									</td>
+								</tr>
+								<tr>
+								<td style="width: 30%;">제조일자</td>
+									<td><div style="display: flex; align-items: center;">
+											<input type="date"  
+											name="exreceiving_nm" id="make_dt_mng" readonly="readonly">&nbsp;&nbsp;
+									</div></td>
+								</tr>
+								<tr>
+									<td style="width: 30%;">가입고 위치</td>
+									<td><input type="text" name="exreceiving_area" id="deliver_area_mng" readonly="readonly"></td>
+								</tr>
+								<tr>
+									<td style="width: 30%;">상태</td>
+									<td><select class="form-control"
+										style="width: 35%; float: left; margin-right: 5px;" id="deliver_st_mng" name="deliver_st"> <!-- 가입고 테이블 컬럼x -->
+											<option value="">상태 선택</option>
+											<option value="대기">대기</option>
+											<option value="배송">배송</option>
+									</select></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<nav style="text-align: center; padding:15px;">
+						<span>
+							<button type="button" class="btn btn-dark" id="deliver_update">수정</button>
+						</span>
+					
+					</nav>
+					
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JavaScript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+
+</body>
+</html>

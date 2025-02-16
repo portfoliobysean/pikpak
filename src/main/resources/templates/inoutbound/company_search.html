@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>매입처 회사명 찾기</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- 모달 -->
+<div class="modal fade" th:fragment="company_search_popup" id="companyModal" tabindex="-1" aria-labelledby="companyModalLabel" insert>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="companyModalLabel">매입처 회사명 찾기</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- 검색 바 -->
+                <div class="form-group">
+                    <table class="table table-bordered" style="margin-top: 20px;">
+                        <tbody>
+                            <tr>
+                                <td style="width: 20%; height: 20px; line-height: 34px;">회사코드</td>
+                                <td><input type="text" class="form-control" placeholder="회사코드" id="comp_cd"></td>
+                                <td style="width: 15%; height: 34px; line-height: 34px;">회사명</td>
+                                <td><input type="text" class="form-control" placeholder="회사명" id="comp_nm"></td>
+                                <td style="padding: 7px;">
+                                    <button type="button" class="btn btn-warning" id="mod_cp_search">조회</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 상품 목록 -->
+                <p style="font-size: 12px; height: 25px; line-height: 30px;">※매입처 목록</p>
+                <div class="table-responsive" style="height: 400px; overflow-y: auto;">
+                    <table class="table table-hover">
+                        <thead style="background-color: rgb(130, 210, 213);">
+                            <tr>
+                                <th>NO.</th>
+                                <th style="text-align: center;">회사코드</th>
+                                <th style="text-align: center;">회사명</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supplier_tbody">
+                        <!-- 
+                            <tr th:each="supplier : ${splist}">
+                                <td th:text="${sp_total - supplierStat.index}">1</td>
+                                <td style="text-align: center;"
+                                th:text="${supplier.supplier_cd}"></td>
+                                <td style="text-align: center;" 
+                                th:text="${supplier.supplier_nm}"></td>
+                            </tr>
+                         -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 페이지네이션 -->
+                <nav>
+                    <ul class="pagination custom-pagination" id="page_ul_cp">
+                        <li class="page-item page-link page-move" id="prev_cp">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        
+                        <li class="page-item page-link page-move" id="next_cp">
+                        <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JavaScript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+
+</body>
+</html>

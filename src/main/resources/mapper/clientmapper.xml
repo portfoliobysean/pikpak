@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.mapper.ClientMgmtMapper">
+	
+<insert id="insertSupplier" parameterType="HashMap">
+	INSERT INTO supplier_info(
+		
+		supplier_cd,
+		supplier_nm,
+		supplier_regno,
+		supplier_regno2,
+		rep_nm,
+		business_type,
+		item_type,
+		supplier_tel,
+		supplier_post,
+		supplier_addr,
+		supplier_addr2,
+		supplier_email,
+		supplier_initial,
+		registrated_dt
+	)VALUES(
+		
+		#{cd},
+		#{nm},
+		#{regno},
+		#{regno2},
+		#{rep_nm},
+		#{business_type},
+		#{item_type},
+		#{tel},
+		#{post},
+		#{addr},
+		#{addr2},
+		#{email},
+		#{supplier_initial},
+		now()
+	)
+</insert>
+	
+<insert id="insertVendor" parameterType="HashMap">
+	INSERT INTO vendor_info(
+	
+		vendor_cd,
+		vendor_nm,
+		vendor_regno,
+		vendor_regno2,
+		rep_nm,
+		business_type,
+		item_type,
+		vendor_tel,
+		vendor_post,
+		vendor_addr,
+		vendor_addr2,
+		vendor_email,
+		outsource_use,
+		registrated_ts
+	)VALUES(
+	
+		#{cd}, 
+		#{nm}, 
+		#{regno}, 
+		#{regno2}, 
+		#{rep_nm},
+		#{business_type},
+		#{item_type},
+		#{tel},
+		#{post},
+		#{addr},
+		#{addr2},
+		#{email},
+		'N',
+		now()
+	)
+</insert>
+	
+<select id="getAllList" resultType="hashmap">
+    SELECT 
+        supplier_cd AS code,
+        supplier_nm AS name,
+        supplier_regno AS regno,
+        supplier_regno2 AS regno2,
+        rep_nm,
+        business_type,
+        item_type,
+        supplier_tel AS tel,
+        supplier_post AS post,
+        supplier_addr AS addr,
+        supplier_addr2 AS addr2,
+        supplier_email AS email,
+        registrated_dt AS registrated,
+        'supplier' AS type
+    FROM supplier_info
+
+    UNION ALL
+
+    SELECT 
+        vendor_cd AS code,
+        vendor_nm AS name,
+        vendor_regno AS regno,
+        vendor_regno2 AS regno2,
+        rep_nm,
+        business_type,
+        item_type,
+        vendor_tel AS tel,
+        vendor_post AS post,
+        vendor_addr AS addr,
+        vendor_addr2 AS addr2,
+        vendor_email AS email,
+        registrated_ts AS registrated,
+        'vendor' AS type
+    FROM vendor_info
+
+    ORDER BY registrated DESC
+</select>
+	
+	
+<select id="selectSupplierList" resultType="hashmap">
+    SELECT 
+        supplier_cd AS code,
+        supplier_nm AS name,
+        supplier_regno AS regno,
+        supplier_regno2 AS regno2,
+        rep_nm,
+        business_type,
+        item_type,
+        supplier_tel AS tel,
+        supplier_post AS post,
+        supplier_addr AS addr,
+        supplier_addr2 AS addr2,
+        supplier_email AS email,
+        registrated_dt AS registrated,
+        'supplier' AS type
+    FROM supplier_info
+    ORDER BY registrated_dt DESC
+</select>
+
+<select id="selectVendorList" resultType="hashmap">
+    SELECT 
+        vendor_cd AS code,
+        vendor_nm AS name,
+        vendor_regno AS regno,
+        vendor_regno2 AS regno2,
+        rep_nm,
+        business_type,
+        item_type,
+        vendor_tel AS tel,
+        vendor_post AS post,
+        vendor_addr AS addr,
+        vendor_addr2 AS addr2,
+        vendor_email AS email,
+        registrated_ts AS registrated,
+        'vendor' AS type
+    FROM vendor_info
+    ORDER BY registrated_ts DESC
+</select>
+
+<select id="selectSupplierById" parameterType="String" resultType="hashmap">
+    SELECT 
+        supplier_cd AS cd,
+        supplier_nm AS nm,
+        supplier_regno AS regno,
+        supplier_regno2 AS regno2,
+        rep_nm,
+        business_type,
+        item_type,
+        supplier_tel AS tel,
+        supplier_post AS post,
+        supplier_addr AS addr,
+        supplier_addr2 AS addr2,
+        supplier_email AS email,
+        supplier_initial AS supplier_initial,
+        'supplier' AS type
+    FROM supplier_info
+    WHERE supplier_cd = #{supplierId}
+</select>
+
+<select id="selectVendorById" parameterType="String" resultType="hashmap">
+    SELECT 
+        vendor_cd AS cd,
+        vendor_nm AS nm,
+        vendor_regno AS regno,
+        vendor_regno2 AS regno2,
+        rep_nm,
+        business_type,
+        item_type,
+        vendor_tel AS tel,
+        vendor_post AS post,
+        vendor_addr AS addr,
+        vendor_addr2 AS addr2,
+        vendor_email AS email,
+        'vendor' AS type
+    FROM vendor_info
+    WHERE vendor_cd = #{vendorId}
+</select>
+
+<update id="updateSupplier" parameterType="hashmap">
+    UPDATE supplier_info
+    SET 
+        supplier_nm = #{nm},
+        supplier_regno = #{regno},
+        supplier_regno2 = #{regno2},
+        rep_nm = #{rep_nm},
+        business_type = #{business_type},
+        item_type = #{item_type},
+        supplier_tel = #{tel},
+        supplier_post = #{post},
+        supplier_addr = #{addr},
+        supplier_addr2 = #{addr2},
+        supplier_email = #{email}
+    WHERE 
+        supplier_cd = #{cd}
+        AND (supplier_nm != #{nm}
+        OR supplier_regno != #{regno}
+        OR supplier_regno2 != #{regno2}
+        OR rep_nm != #{rep_nm}
+        OR business_type != #{business_type}
+        OR item_type != #{item_type}
+        OR supplier_tel != #{tel}
+        OR supplier_post != #{post}
+        OR supplier_addr != #{addr}
+        OR supplier_addr2 != #{addr2}
+        OR supplier_email != #{email})
+</update>
+
+<update id="updateVendor" parameterType="hashmap">
+    UPDATE vendor_info
+    SET 
+        vendor_nm = #{nm},
+        vendor_regno = #{regno},
+        vendor_regno2 = #{regno2},
+        rep_nm = #{rep_nm},
+        business_type = #{business_type},
+        item_type = #{item_type},
+        vendor_tel = #{tel},
+        vendor_post = #{post},
+        vendor_addr = #{addr},
+        vendor_addr2 = #{addr2},
+        vendor_email = #{email}
+    WHERE 
+        vendor_cd = #{cd}
+        AND (vendor_nm != #{nm}
+        OR vendor_regno != #{regno}
+        OR vendor_regno2 != #{regno2}
+        OR rep_nm != #{rep_nm}
+        OR business_type != #{business_type}
+        OR item_type != #{item_type}
+        OR vendor_tel != #{tel}
+        OR vendor_post != #{post}
+        OR vendor_addr != #{addr}
+        OR vendor_addr2 != #{addr2}
+        OR vendor_email != #{email})
+</update>
+
+<select id="searchSupplierByName"  resultType="hashmap">
+    SELECT 
+        supplier_cd AS companyCode,
+        supplier_nm AS companyName,
+        supplier_regno AS businessNumber,
+        supplier_addr AS address,
+        'supplier' AS companyType  
+    FROM supplier_info
+    WHERE supplier_nm LIKE CONCAT('%', #{companyName}, '%')
+</select>
+
+<select id="searchVendorByName"  resultType="hashmap">
+    SELECT 
+        vendor_cd AS companyCode,
+        vendor_nm AS companyName,
+        vendor_regno AS businessNumber,
+        vendor_addr AS address,
+        'vendor' AS companyType  
+    FROM vendor_info
+    WHERE vendor_nm LIKE CONCAT('%', #{companyName}, '%')
+</select>
+
+<select id="selectSearchClient" resultType="hashmap">
+	SELECT 
+		*
+	FROM 
+	(
+        SELECT 
+            supplier_info.supplier_cd AS companyCode,
+            supplier_info.supplier_nm AS companyName,
+            supplier_info.supplier_regno AS businessNumber,
+            supplier_info.registrated_dt AS registrationDate,
+            supplier_info.supplier_regno2 AS corporationNumber,
+            supplier_info.rep_nm AS representativeName,
+            supplier_info.business_type AS industry,
+            supplier_info.item_type AS sector,
+            supplier_info.supplier_tel AS contact,
+            supplier_info.supplier_post AS postalCode,
+            supplier_info.supplier_addr AS address,
+            supplier_info.supplier_addr2 AS detailedAddress,
+            supplier_info.supplier_email AS email,
+            'supplier' AS clientType
+        FROM supplier_info
+        WHERE 1 = 1
+            <choose>
+            	<when test="fromDate != null and fromDate != ''">
+            		AND DATE(supplier_info.registrated_dt) BETWEEN #{fromDate} AND #{toDate}
+            	</when>
+            	<otherwise>
+            		AND DATE(supplier_info.registrated_dt) BETWEEN '1900-01-01' AND '9999-12-31'
+            	</otherwise>
+            </choose>
+            
+            <if test="companyCode != null and companyCode != ''">
+                AND supplier_info.supplier_cd LIKE CONCAT('%', #{companyCode}, '%')
+            </if>
+            
+            <if test="companyName != null and companyName != ''">
+                AND supplier_info.supplier_nm LIKE CONCAT('%', #{companyName}, '%')
+            </if>
+
+   		UNION ALL
+   
+        SELECT 
+            vendor_info.vendor_cd AS companyCode,
+            vendor_info.vendor_nm AS companyName,
+            vendor_info.vendor_regno AS businessNumber,
+            vendor_info.registrated_ts AS registrationDate,
+            vendor_info.vendor_regno2 AS corporationNumber,
+            vendor_info.rep_nm AS representativeName,
+            vendor_info.business_type AS industry,
+            vendor_info.item_type AS sector,
+            vendor_info.vendor_tel AS contact,
+            vendor_info.vendor_post AS postalCode,
+            vendor_info.vendor_addr AS address,
+            vendor_info.vendor_addr2 AS detailedAddress,
+            vendor_info.vendor_email AS email,
+            'vendor' AS clientType
+        FROM vendor_info
+        WHERE 1 = 1
+            <choose>
+            	<when test="fromDate != null and fromDate != ''">
+            		AND DATE(vendor_info.registrated_ts) BETWEEN #{fromDate} AND #{toDate}
+            	</when>
+            	<otherwise>
+            		AND DATE(vendor_info.registrated_ts) BETWEEN '1900-01-01' AND '9999-12-31'
+            	</otherwise>
+            </choose>
+
+            <if test="companyCode != null and companyCode != ''">
+                AND vendor_info.vendor_cd LIKE CONCAT('%', #{companyCode}, '%')
+            </if>
+            
+            <if test="companyName != null and companyName != ''">
+                AND vendor_info.vendor_nm LIKE CONCAT('%', #{companyName}, '%')
+            </if>
+	) tot
+		WHERE 1=1
+		<choose>
+			<when test="clientType == 'all'">
+            </when>
+            <otherwise>
+            	AND tot.clientType = #{clientType}
+            </otherwise>
+        </choose>
+    ORDER BY tot.registrationDate DESC
+</select>
+
+<select id="getLastSupplierCode" resultType="String">
+    SELECT supplier_cd 
+    FROM supplier_info 
+    ORDER BY supplier_cd DESC 
+    LIMIT 1
+</select>
+
+<select id="getLastVendorCode" resultType="String">
+    SELECT vendor_cd 
+    FROM vendor_info 
+    ORDER BY vendor_cd DESC 
+    LIMIT 1
+</select>
+
+<select id="countDupChk" resultType="int">
+	SELECT COUNT(*) 
+	FROM supplier_info 
+	WHERE supplier_initial = #{supplier_initial};
+</select>
+
+</mapper>

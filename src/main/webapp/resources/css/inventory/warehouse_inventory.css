@@ -1,0 +1,399 @@
+@charset "EUC-KR";
+
+/**********************
+* mindiit 커스텀
+***********************/
+.menu {
+    height: 30px;
+    border-bottom: 1px solid black;
+}
+.menu-item {
+    padding: 7px;
+    cursor: pointer;
+    position: relative;
+}
+.menu-item a {
+    padding: 7px;
+    cursor: pointer;
+    position: relative;
+    color: black; /* 글자 색을 검정색으로 설정 */
+    text-decoration: none; /* 링크의 기본 밑줄 제거 */    
+}
+
+/* 기본 상태에서 밑줄은 보이지 않도록 설정 */
+.menu-item a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 5px;
+    background: black;
+    position: absolute;
+    left: 0;
+    bottom: -5px; /* 밑줄 위치를 더 아래로 조정 */
+    /*transition: width 0.3s ease;*/
+}
+
+/* 선택된 항목에 더 진한 선 추가 */
+.menu-item a.active::after {
+    width: 100%; /* 클릭 시 밑줄이 전체 너비로 확장 */
+}
+
+.menu-item a:hover::after {
+    width: 100%; /* 마우스를 올렸을 때 밑줄 확장 */
+}
+
+/* 링크에 기본 밑줄 제거 */
+.menu-item a:hover {
+    text-decoration: none; /* 링크 특성의 밑줄 제거 */
+}
+
+
+
+
+
+/* 컨테이너 .warehouse 영역*/
+.warehouse-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 50px;
+    background-color: #f5f5fa;
+}
+
+.warehouse-section {
+    position: relative; /* 부모 요소에 상대 위치 부여 */
+    margin-bottom: 30px;
+}
+
+.warehouse-section h5 {
+    font-size: 20px; /* 원하는 글자 크기 설정 */
+    font-weight: bold; /* 강조 효과를 추가하려면 사용 */
+    margin-bottom: 10px; /* 제목과 테이블 사이 간격 조정 */
+    margin-top: 30px;
+}
+.left-section, .rack-numbers, .right-section, .right-info-container {
+    margin: 0 10px; /* 섹션 간 간격 조정 */
+}
+
+/* 테이블과 버튼을 가까이 두기 */
+.warehouse-section .table {
+    margin-bottom: 0; /* 테이블 아래에 불필요한 간격을 제거 */
+}
+
+.warehouse-management-header button {
+    margin-left: 10px; /* 버튼들 사이에 간격 추가 */
+}
+
+.btn-right {
+    float: right; /* 오른쪽에 배치 */
+    margin-top: 0px; /* 표와 버튼 사이에 약간의 간격 추가 */
+    
+}
+.table {
+	border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed; /* 테이블의 고정된 레이아웃 */
+}
+        table {
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+        }
+
+.table thead {
+    position: sticky; /* 테이블 헤더를 고정 */
+    top: 0;
+    background-color: #fff; /* 헤더 배경을 설정해서 스크롤 시 가독성 유지 */
+    z-index: 1;
+}
+
+.table thead th {
+    background-color: #e0e0e0; /* 연한 회색 배경 */
+    color: #333; /* 텍스트 색상 (필요시 조정) */
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* 아래쪽 테두리 */
+}
+
+.table th, .table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.table-wrapper {
+    max-height: 150px; /* 테이블 최대 높이 설정 */
+    overflow-y: auto;  /* 스크롤 가능하게 설정 */
+    margin-bottom: 10px; /* 테이블과 버튼 사이 간격 */
+}
+
+.table2{
+    max-height: 300px; /* 테이블 최대 높이 설정 */
+    overflow-y: auto;  /* 스크롤 가능하게 설정 */
+}
+
+.table2 thead {
+    position: sticky; /* 테이블 헤더를 고정 */
+    top: 0;
+    background-color: #fff; /* 헤더 배경을 설정해서 스크롤 시 가독성 유지 */
+    z-index: 1;
+}
+
+.table2 thead th {
+    background-color: #e0e0e0; /* 연한 회색 배경 */
+    color: #333; /* 텍스트 색상 (필요시 조정) */
+    padding: 7px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* 아래쪽 테두리 */
+}
+
+.table2 th, .table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+/* 창고 영역 */
+.left-section, .rack-numbers, .right-section {
+    border: 1px solid #ccc;
+    padding: 20px;
+    background-color: #fff;
+}
+
+/* 왼쪽 영역 */
+.left-section {
+    width: 20%; /* 창고 섹션 */
+    margin-right: 20px; /* 오른쪽에 여백 추가 */
+}
+
+/* 오른쪽 섹션을 수직으로 나열하여 위아래로 배치 */
+.right-section {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-evenly;
+}
+
+/* .info-section과 .selected-zone-info가 반반 나뉘도록 설정 */
+.info-section, .selected-zone-info {
+    flex-basis: 30%; /* 각 섹션이 컨테이너의 50%를 차지하도록 설정 */
+    overflow-y: auto; /* 내용이 많을 경우 스크롤 가능하도록 설정 */
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+}
+
+/* info-section에 높이 설정 */
+.info-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+/* 구역 버튼 스타일 */
+.zone {
+    background-color: #e6e6e6;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 18px;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 5px;
+}
+
+/* 구역 선택시 스타일 */
+.zone:hover {
+    background-color: #ddd;
+}
+
+.zone.selected {
+    background-color: #ff6666;
+    color: #fff;
+}
+
+/* 슬라이드 애니메이션 */
+.info-container {
+    display: none;
+    overflow: hidden;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    transition: max-height 0.5s ease-out;
+    max-height: 0;
+}
+
+.info-container.active {
+    display: block;
+    max-height: 200px; /* 높이는 콘텐츠에 따라 조절 */
+    transition: max-height 0.5s ease-in;
+}
+
+/* 기본 구역 정보 스타일 (비활성 상태) */
+.zone-info-container {
+    max-height: 0;
+    overflow: hidden; /* 슬라이드 시 내용이 넘치지 않도록 */
+    transition: max-height 0.5s ease-out; /* 높이의 애니메이션 */
+    background-color: #f9f9f9; /* 배경색 설정 (선택사항) */
+    padding: 0 15px; /* 애니메이션이 깔끔해 보이도록 패딩 추가 */
+    opacity: 0; /* 처음에는 투명하게 */
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out; /* opacity도 함께 변환 */
+}
+
+/* 활성화된 구역 정보 (아래로 슬라이드 효과) */
+.zone-info-container.active {
+    max-height: 300px; /* 충분한 높이 설정 */
+    opacity: 1; /* 보이게 설정 */
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out; /* 높이와 투명도 함께 변환 */
+}
+
+.zone-info {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* 창고별 구역 스타일링 */
+.area {
+    background-color: #e6e6e6;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+/* 랙 번호 스타일링 */
+.rack-numbers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 두 열로 나뉘도록 설정 */
+    gap: 10px; /* 각 버튼 간의 간격 */
+    justify-items: center; /* 중앙 정렬 */
+    align-items: center;
+    margin-right: 20px;
+    margin-bottom: 20px; /* 구역과 랙 번호 사이에 여백 추가 */
+    padding: 10px;
+}
+
+/* 랙 버튼 스타일 */
+.rack-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    font-size: 18px;
+    width: 50px;  /* 네모 버튼 크기 */
+    height: 100px; /* 네모 버튼 크기 */
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.rack-number:hover {
+    background-color: #e0e0e0;
+}
+
+/* 선택된 랙에 대한 스타일 */
+.rack-number.selected {
+    background-color: #ff6666;
+    color: #fff;
+}
+
+/* 랙 레이블 스타일 */
+.rack-label {
+    grid-column: span 2; /* 두 열에 걸쳐 중앙에 표시 */
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+/* 랙 상태 (P1, P2, P3 등) */
+.level {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.level::after {
+    content: attr(data-level);
+    margin-left: 10px;
+    font-weight: bold;
+    margin-top : 10px;
+}
+
+/* 랙 버튼 스타일 */
+.rack {
+	border: 1px solid #ddd;
+    background-color: #ccc;
+    padding: 10px;
+    width: 150px;
+    height: 70px;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* .rack-info의 높이를 자동 조절하여 스크롤 처리 */
+.rack-info {
+    overflow-y: auto;
+    height: 100%;
+}
+
+#rack-info-text {
+    color: red; /* 텍스트가 변경되는지 확인하기 위해 색상을 설정 */
+    display: block; /* 혹시 다른 스타일에 의해 숨겨져 있을 경우를 대비 */
+}
+
+.rack.selected {
+    background-color: #ff6666; /* 선택된 랙은 빨간색으로 강조 */
+    color: #fff;
+}
+
+/* 묶음 컨테이너 */
+.right-info-container {
+    padding: 10px;
+
+}
+
+
+/* 선택된 구역 정보 테이블 스타일 */
+.selected-zone-info table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+
+/* 선택된 구역 정보 테이블 스타일 */
+.selected-zone-info table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.selected-zone-info th, .selected-zone-info td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.selected-zone-info th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+/* 상세 보기 링크 스타일 */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .warehouse-grid {
+        grid-template-columns: 1fr; /* 모바일에서는 1열로 표시 */
+    }
+}

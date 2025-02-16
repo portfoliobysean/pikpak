@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- 만약에 template.html 사용하기 불편하시면 여기 코드 사용해서 적용가능합니다 -->
+
+	<!-- TOP -->
+	<nav th:replace="~{/shared/components.html :: top}"></nav>
+	
+	<!-- 왼쪽 SIDEBAR -->
+	<div th:replace="~{/shared/components.html :: sidebar}"></div>
+	
+	<!-- FOOTER -->
+	<footer th:replace="~{/shared/components.html :: footer}"></footer>
+</body>
+</html>

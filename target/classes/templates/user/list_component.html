@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html  lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Users List Component</title>
+</head>
+<body>
+	<!-- MAIN -->
+	<div class="main" th:fragment="main" style="height:100%;">
+		<!-- MAIN CONTENT -->
+		<div class="main-content" style="height: 100%;">
+			<div class="container-fluid">
+				<!-- MAIN DATA VIEW -->
+				<div class="panel panel-headline">
+					<div class="panel-heading">
+						<p class="panel-subtitle">홈 > 사이트 설정 > <span style="color: black;">인사관리</span></p>
+					</div>
+					<div class="panel-body">
+						<p style="border-bottom: 1px solid black; height: 30px;">회원 현황</p>
+						<section>
+							<!-- 검색 -->
+							<span style="float: right; height: 40px;">
+							<button type="button" class="btn btn-success" onclick="window.location.reload()">초기화</button>
+							<button type="button" class="btn btn-warning" onclick="applyUserSearch()">조회</button>
+							</span>
+							<p style="font-size: 12px; height: 25px; line-height: 30px;">※ 조회옵션</p>
+							<form id="searchUserForm">
+							<table class="table table-bordered">
+								<tbody>
+									<tr>
+										<td style="width: 150px; height: 34px; line-height: 34px;">사용자 유형</td>
+										<td>
+										<select class="form-control" name="userTypeSearch">
+											<option value="">유형 선택</option>
+											<option value="관리자">관리자</option>
+											<option value="운영">운영</option>
+											<option value="공급">공급</option>
+											<option value="판매">판매</option>
+										</select>
+										</td>
+										<td style="width:150px; height: 34px; line-height: 34px;">회원 아이디</td>
+										<td style="width:100%; display: flex; flex-direction: row; line-height: 34px;">
+											<input type="text" class="form-control" style="width: 100%;" name="userIdSearch">&nbsp;&nbsp;
+											<span class="input-group-btn" style="width: 100px;">
+												<button class="btn btn-default" type="button" style="float: right;" onclick="lockIdSearch()">적용</button>
+											</span>
+										</td>
+										<td style="width:150px; height: 34px; line-height: 34px;">회원 명</td>
+										<td style="width:100%; display: flex; flex-direction: row; line-height: 34px;">
+											<input type="text" class="form-control" style="width: 100%;" name="userNameSearch">&nbsp;&nbsp;
+											<span class="input-group-btn" style="width: 100px;">
+												<button class="btn btn-default" type="button" style="float: right;"	onclick="lockNameSearch()">적용</button>
+											</span>
+										</td>
+									</tr>
+									
+								</tbody>
+							</table>
+							</form>
+							<!-- 검색 끝 -->
+							
+							<!-- 리스트 -->
+							<div style="display: flex; flex-direction: row; line-height: 34px;">
+								<p style="font-size: 12px; height: 25px; line-height: 30px; width:100%;">※ 조회결과</p>
+								<span style="float: right; height: 40px;">
+								<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addUserModal">신규 등록</button>
+								</span>
+							</div>
+							
+							<div style="height: 470px; overflow-y: auto;">
+								<table class="table table-hover" style="width: 100%;" id="userDataTable">
+									<thead style="background-color: rgb(130, 210, 213); position: sticky; top:0;">
+										<tr>
+											<th style="width:10%;">아이디</th>
+											<th style="width:10%;">이름</th>
+											<th style="width:10%;">연락처</th>
+											<th style="width:20%;">이메일</th>
+											<th style="width:10%;">사용자 유형</th>
+											<th style="width:20%;">소속</th>
+											<th style="width:10%;">회사 코드</th>
+											<th style="width:10%; text-align: center;">상세보기</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:unless="${userListSize==0}" th:each="userData : ${userList}">
+											<td th:text="${userData.user_id}"></td>
+											<td th:text="${userData.user_nm}"></td>
+											<td th:text="${userData.user_tel}"></td>
+											<td th:text="${userData.user_mail}"></td>
+											<td th:if="${userData.user_type=='admin'}">관리자</td>
+											<td th:if="${userData.user_type=='operator'}">운영</td>
+											<td th:if="${userData.user_type=='supplier'}">공급</td>
+											<td th:if="${userData.user_type=='vendor'}">판매</td>
+											<td th:text="${userData.user_company}"></td>
+											<td th:text="${userData.company_cd}"></td>
+											<td class="text-button">
+												<a th:href="@{'/admin/user/view/' + ${userData.user_id}}">상세</a>
+											</td>
+										</tr>
+										<tr th:if="${userListSize==0}">
+											<td colspan="10" style="text-align: center;">등록된 회원이 없습니다.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- 리스트 끝 -->
+						</section>
+					</div>	
+				</div>
+				<!-- MAIN DATAVIEW -->
+			</div>
+		</div>
+	</div>
+	<!-- MAIN END -->
+</body>
+</html>

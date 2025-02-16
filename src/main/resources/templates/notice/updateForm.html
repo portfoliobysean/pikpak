@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 수정</title>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- 부트스트랩 CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CKEditor 5 CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+
+    <!-- Popper.js & Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-5" style="padding-bottom: 100px;">
+    <h2 class="mb-4">공지사항 수정</h2>
+
+    <!-- 글쓰기 폼 -->
+    <div class="form-group">
+        <label for="notice_sb">제목</label>
+        <input type="text" class="form-control" id="notice_sb" name="notice_sb" th:value="${notice.notice_sb}" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="operator_nm">작성자</label>
+        <input type="text" class="form-control" id="operator_nm" name="operator_nm" th:value="${notice.operator_nm}" style="width: 10%;" readonly="readonly">
+    </div>
+    
+
+    <!-- 공개 여부 선택 -->
+    <div class="form-group">
+        <label for="visibility_yn">공개 여부</label>
+			<select class="form-control" id="visibility_yn" name="visibility_yn" style="width: 10%;" required>
+			    <option value="Y" th:selected="${notice.get('visibility_yn') == 'Y'}">공개</option>
+			    <option value="N" th:selected="${notice.get('visibility_yn') == 'N'}">비공개</option>
+			</select>
+    </div>
+    
+    <!-- 내용 입력 -->
+    <div class="form-group">
+        <label for="notice_con">Rich Text Editor</label>
+        <textarea class="form-control" id="notice_con" name="notice_con" rows="4" th:text="${notice.notice_con}"></textarea>
+    </div>
+
+    <!-- 숨겨진 nidx 필드 -->
+    <input type="hidden" id="nidx" name="nidx" th:value="${notice.nidx}">
+    
+    <!-- 저장 및 취소 버튼 -->
+    <span style="float: right;">
+        <button type="button" class="btn btn-primary" id="updatenoticeBtn">저장</button>&nbsp;&nbsp;
+        <button type="button" class="btn btn-primary" onclick="window.history.back()">취소</button>
+    </span>
+</div>
+
+<!-- CKEditor 초기화 스크립트 -->
+<script>
+$(document).ready(function() {
+    let editorInstance; // CKEditor 인스턴스를 저장할 변수
+    
+    ClassicEditor
+        .create(document.querySelector('#notice_con'), {
+            ckfinder: {
+                uploadUrl: "/image/upload"  // 이미지 업로드 경로 확인
+            },
+            toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', 'undo', 'redo' ]
+        })
+        .then(editor => {
+            editorInstance = editor; // CKEditor 인스턴스를 저장
+        })
+        .catch(function(error) {
+            console.error(error);
+        });
+
+    // 저장 버튼 클릭 시 CKEditor 데이터를 폼에 포함하여 전송
+    $("#updatenoticeBtn").on("click", function() {
+        
+        // CKEditor에서 입력된 데이터 가져오기
+        var editorData = editorInstance.getData(); // editorInstance에서 getData 호출
+
+        // CKEditor의 데이터를 숨겨진 textarea에 설정
+        $("#notice_con").val(editorData);
+
+        // 데이터가 비어있는지 확인
+        if (editorData.trim() === '') {
+            alert("내용을 입력하세요.");
+            return false;
+        }
+
+        // 폼 데이터를 수집하여 전송
+        var noticeData = {
+        	nidx: parseInt($("#nidx").val(), 10),
+            notice_sb: $("#notice_sb").val(),
+            notice_con: editorData,  // 에디터의 데이터를 포함
+            visibility_yn: $("#visibility_yn").val(),
+            notice_to: $("#notice_to").val()
+        };
+        console.log("nidx:", $("#nidx").val());    
+
+        // AJAX로 서버에 전송
+        $.ajax({
+            url: "/notice/updateNotice",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify(noticeData),
+            success: function(response) {
+                console.log(response);  // 서버 응답 로그 확인
+                if (response.success_yn == "success") {
+                    alert(response.message);
+                    location.href = "/notice/list";
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error occurred: ", error);
+                console.log("XHR:", xhr.responseText);
+                console.log("Status:", status);
+            }
+        });
+    });
+});
+</script>
+
+</body>
+
+<style>
+    .ck-editor__editable_inline {
+        min-height: 300px;  /* 최소 높이를 300px로 설정 */
+    }
+</style>
+
+</html>

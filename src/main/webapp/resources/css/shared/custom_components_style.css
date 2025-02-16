@@ -1,0 +1,35 @@
+@charset "UTF-8";
+.brand-custom {
+	float:left;
+	height: 82px;
+	width: 150px;
+	text-align:center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center
+}
+
+.brand-logo {
+	width:40px;
+	height: 40px;
+}
+
+.brand-title {
+	margin-left: 10px;
+	display: flex;
+	font-size: 23px;
+	text-align: center;
+}
+
+@media screen and (max-width: 1300px) {
+	.custom-hide {
+		display: none;
+	}
+}
+
+.custom-ul-menu {
+  background: #D5D5D5;
+  padding: 20px;
+  border-radius: 10px;
+}

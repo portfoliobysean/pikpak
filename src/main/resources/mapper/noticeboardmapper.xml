@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.mapper.NoticeBoardMapper">
+
+	<insert id="insertNotice" parameterType="HashMap">
+		INSERT INTO noticeboard(
+			operator_nm,
+			operator_id,
+			notice_sb,
+			notice_con,
+			visibility_yn,
+			created_dt
+		)VALUES(
+			#{operatorNm},
+			#{userId},
+			#{notice_sb},
+			#{notice_con},
+			#{visibility_yn},
+			NOW()
+		)
+	</insert>
+	
+	<select id="selectList">
+		SELECT
+			nidx,
+			notice_sb,
+			operator_nm,
+			created_dt,
+			view_count
+		FROM noticeboard
+		ORDER BY nidx DESC
+		LIMIT #{offset}, #{size}		
+		
+	</select>
+	
+	<select id="getNoticeById" parameterType="int" resultType="hashmap">
+        SELECT 
+        	nidx, 
+        	notice_sb, 
+        	notice_con, 
+        	operator_nm,
+        	operator_id, 
+        	created_dt, 
+        	view_count
+        FROM noticeboard
+        WHERE nidx = #{nidx}
+    </select>
+
+    <!-- 조회수 증가 쿼리 -->
+    <update id="incrementViewCount" parameterType="int">
+        UPDATE noticeboard 
+        SET view_count = view_count + 1 
+        WHERE nidx = #{nidx}
+    </update>
+    
+    <select id="getTotalNoticeCount" resultType="int">
+    SELECT COUNT(*) FROM noticeboard
+	</select>
+	
+	<update id="updateNotice" parameterType="HashMap">
+		UPDATE noticeboard
+	    SET 
+	        notice_sb = #{notice_sb},
+	        notice_con = #{notice_con},
+	        visibility_yn = #{visibility_yn}
+	    WHERE 
+	        nidx = #{nidx}
+	        AND (notice_sb != #{notice_sb} OR 
+	             notice_con != #{notice_con} OR
+	             visibility_yn != #{visibility_yn})
+	</update>
+	
+	<select id="getOperatorNameByUserId" resultType="String" parameterType="String">
+    SELECT operator_nm
+    FROM login_operator
+    WHERE operator_id = #{userId}
+	</select>
+	
+	<select id="getOperatorLevelById" resultType="Integer" parameterType="String">
+   		SELECT operator_lv 
+		FROM login_operator 
+		WHERE operator_id = #{userId};
+</select>
+	
+</mapper>

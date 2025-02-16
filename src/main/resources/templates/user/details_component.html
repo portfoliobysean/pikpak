@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html  lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+<title>Users List Component</title>
+</head>
+<body>
+	<!-- MAIN -->
+	<div class="main" th:fragment="main">
+		<!-- MAIN CONTENT -->
+		<div class="main-content">
+			<div class="container-fluid">
+				<!-- MAIN DATA VIEW -->
+				<div class="panel panel-headline">
+					<div class="panel-heading">
+						<p class="panel-subtitle">홈 > 사이트 설정 > 인사관리 > <span style="color: black;">회원 상세 정보</span></p>
+					</div>
+					<div class="panel-body">
+						<p style="border-bottom: 1px solid black; height: 30px;">회원 상세 정보</p>
+						<section>
+							<!-- 검색 바 -->
+							<div class="form-group" style="display:flex; justify-content: center;">
+								<table class="table table-bordered custom-width-50" style="margin-top: 20px;">
+									<tbody>
+										<tr>
+											<td class="form-title-custom custom-width-30">아이디</td>
+											<td th:text="${userDetails.user_id}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">이름</td>
+											<td th:text="${userDetails.user_nm}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">연락처</td>
+											<td th:text="${userDetails.user_tel}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">이메일</td>
+											<td th:text="${userDetails.user_mail}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">소속</td>
+											<td th:text="${userDetails.user_company}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">회사 코드</td>
+											<td th:text="${userDetails.company_cd}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">사용자 유형</td>
+											<td th:if="${userDetails.user_type=='admin'}">관리자</td>
+											<td th:if="${userDetails.user_type=='operator'}">운영</td>
+											<td th:if="${userDetails.user_type=='supplier'}">공급</td>
+											<td th:if="${userDetails.user_type=='vendor'}">판매</td>
+										</tr>
+										<tr th:if="${userDetails.user_lv!=''}">
+											<td class="form-title-custom">권한 등급</td>
+											<td th:text="${userDetails.user_lv}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">비밀번호 변경 기록</td>
+											<td th:text="${userDetails.pw_change_yn}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">등록 일자</td>
+											<td th:text="${userDetails.registrated_dt}"></td>
+										</tr>
+										<tr>
+											<td class="form-title-custom">최근 수정 일자</td>
+											<td th:text="${userDetails.modified_dt}"></td>
+										</tr>
+										
+									</tbody>
+								</table>
+							</div>
+							<nav style="text-align: center; padding: 15px;">
+								<span>
+									<button type="button" class="btn btn-dark" id="req_enroll" data-toggle="modal" data-target="#modUserModal">수정</button> 
+									<button type="button" class="btn btn-default" id="req_enroll" onclick="location.href='/admin/users';">뒤로</button> 
+								</span>
+							</nav>
+						</section>
+					</div>	
+				</div>
+				<!-- MAIN DATAVIEW -->
+			</div>
+		</div>
+	</div>
+	<!-- MAIN END -->
+</body>
+</html>

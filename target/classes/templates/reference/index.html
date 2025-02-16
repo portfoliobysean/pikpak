@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<title>PikPak</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!-- VENDOR CSS -->
+<link rel="stylesheet" href="/resources/assets/external/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/resources/assets/external/linearicons/style.css">
+<link rel="stylesheet" href="/resources/assets/external/chartist/css/chartist-custom.css">
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<!-- GOOGLE FONTS -->
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+<!-- ICONS -->
+<link rel="apple-touch-icon" sizes="76x76" href="/resources/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/resources/assets/img/favicon.png">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- 최상단 -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="brand" style="height: 30px;">
+				<a href="index.html">
+					<span class="fa fa-paper-plane-o" style="font-size: 23px; margin-right: 5px;"></span>
+					<span style="font-size: 23px;">PikPak</span>
+				</a>
+			</div>
+			<div class="container-fluid">
+				<div class="navbar-btn">
+					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
+				</div>
+			
+				<div class="navbar-btn navbar-btn-right">
+					<span style="vertical-align: -3px;">
+					<i class="lnr lnr-user"></i> <span>관리자님 환영합니다.</span>
+				    </span>
+					<a class="btn btn-success update-pro" href=""><span>로그아웃</span></a>
+				</div>
+			</div>
+		</nav>
+		<!-- 최상단 끝 -->
+		<!-- 왼쪽 SIDEBAR -->
+		<div id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li>
+							<a href="#subPages" data-toggle="collapse" class="collapsed active">
+							<i class="lnr lnr-file-empty"></i> <span>기준정보 관리</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">거래처 관리</a></li>
+									<li><a href="" class="">품목 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages2" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-dice"></i> <span>주문 | 반품</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages2" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">주문 관리</a></li>
+									<li><a href="" class="">반품 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages3" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-inbox"></i> <span>재고</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages3" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">재고 현황</a></li>
+									<li><a href="" class="">창고 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages4" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-download"></i> <span>입고 | 출고</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages4" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">입고 관리</a></li>
+									<li><a href="" class="">출고 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages5" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-chart-bars"></i> <span>납품</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages5" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">납품 관리</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages6" data-toggle="collapse" class="collapsed">
+							<i class="lnr lnr-cog"></i> <span>사이트 설정</span> 
+							<i class="icon-submenu lnr lnr-chevron-left"></i>
+							</a>
+							<div id="subPages6" class="collapse ">
+								<ul class="nav">
+									<li><a href="" class="">재고기록 관리</a></li>
+									<li><a href="" class="">인사 관리</a></li>
+								</ul>
+							</div>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!-- 왼쪽 SIDEBAR -->
+		<!-- MAIN -->
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- MAIN DATA VIEW -->
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<p class="panel-subtitle">홈 > 재고 > <span style="color: black;">재고현황</span></p>
+						</div>
+						<div class="panel-body">
+							<p style="border-bottom: 1px solid black; height: 30px;">재고현황</p>
+							<section>
+								<span style="float: right; height: 40px;">
+								<button type="button" class="btn btn-success">초기화</button>
+								<button type="button" class="btn btn-danger">EXCEL</button>
+								<button type="button" class="btn btn-warning">조회</button>
+								</span>
+								<p style="font-size: 12px; height: 25px; line-height: 30px;">※ 조회옵션</p>
+								<table class="table table-bordered">
+									<tbody>
+										<tr>
+											<td style="width: 10%; height: 34px; line-height: 34px;">구역 코드</td>
+											<td>
+											<select class="form-control">
+												<option value="">구역코드 선택</option>
+											</select>
+											</td>
+											<td style="height: 34px; line-height: 34px;">렉번호</td>
+											<td>
+											<select class="form-control" style="width: 50%;">
+												<option value="">렉번호 선택</option>
+											</select>
+											</td>
+											<td style="width: 10%; height: 34px; line-height: 34px;">Level(단) / 열 번호</td>
+											<td>
+												<select class="form-control" style="width: 35%; float: left; margin-right: 5px;">
+													<option value="">단번호 선택</option>
+												</select>
+												<select class="form-control" style="width: 35%; float: left;">
+													<option value="">열번호 선택</option>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td style="height: 34px; line-height: 34px;">입고 날짜</td>
+											<td style="display: flex; flex-direction: row; line-height: 34px;">
+											<input type="date" class="form-control" style="width: 35%;">&nbsp;&nbsp; ~ &nbsp;&nbsp;<input type="date" class="form-control" style="width: 35%;">
+											</td>
+											<td style="width: 10%; height: 34px; line-height: 34px;">상품코드 / 상품명</td>
+											<td style="display: flex; flex-direction: row; line-height: 34px;">
+												<input type="text" class="form-control" style="width: 25%;">&nbsp;&nbsp;
+												<input type="text" class="form-control" style="width: 25%;">&nbsp;&nbsp;
+												<span class="input-group-btn"><button class="btn btn-primary" type="button">검 색</button></span>
+											</td>
+											<td style="height: 34px; line-height: 34px;">회사명</td>
+											<td style="display: flex; flex-direction: row; line-height: 34px;">
+												<input type="text" class="form-control" style="width: 25%;">&nbsp;&nbsp;
+												<input type="text" class="form-control" style="width: 25%;">&nbsp;&nbsp;
+												<span class="input-group-btn"><button class="btn btn-primary" type="button">검 색</button></span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<p style="font-size: 12px; height: 25px; line-height: 30px;">※ 조회결과</p>
+								<div class="panel-body" style="height: 400px; overflow-y: auto;">
+									<table class="table table-hover">
+										<thead style="background-color: rgb(130, 210, 213);">
+											<tr>
+												<th>
+												<input type="checkbox" style="border: 1px solid #ccc;">
+												</th>
+												<th>위치 코드</th>
+												<th>상품 코드</th>
+												<th>상품명</th>
+												<th>입고 예약 수량(단위)</th>
+												<th>출고 예약 수량(단위)</th>
+												<th style="text-align: center;">구역 내 수량(단위)</th>
+												<th>입고 날짜</th>
+												<th style="text-align: center;">출고 날짜</th>
+												<th style="text-align: center;">관리</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><input type="checkbox"></td>
+												<td>A0132</td>
+												<td>SM-12345</td>
+												<td>로봇 청소기</td>
+												<td>5EA</td>
+												<td>-</td>
+												<td style="text-align: center;">12</td>
+												<td>2024-09-01</td>
+												<td style="text-align: center;">미정</td>
+												<td style="text-align: center;">관리</td>
+											</tr>
+											<tr>
+												<td><input type="checkbox"></td>
+												<td>A0132</td>
+												<td>SM-12345</td>
+												<td>로봇 청소기</td>
+												<td>5EA</td>
+												<td>-</td>
+												<td style="text-align: center;">12</td>
+												<td>2024-09-01</td>
+												<td style="text-align: center;">미정</td>
+												<td style="text-align: center;">관리</td>
+											</tr>
+											<tr>
+												<td><input type="checkbox"></td>
+												<td>A0132</td>
+												<td>SM-12345</td>
+												<td>로봇 청소기</td>
+												<td>5EA</td>
+												<td>-</td>
+												<td style="text-align: center;">12</td>
+												<td>2024-09-01</td>
+												<td style="text-align: center;">미정</td>
+												<td style="text-align: center;">관리</td>
+											</tr>
+											<tr>
+												<td><input type="checkbox"></td>
+												<td>A0132</td>
+												<td>SM-12345</td>
+												<td>로봇 청소기</td>
+												<td>5EA</td>
+												<td>-</td>
+												<td style="text-align: center;">12</td>
+												<td>2024-09-01</td>
+												<td style="text-align: center;">미정</td>
+												<td style="text-align: center;">관리</td>
+											</tr>
+											<tr>
+												<td><input type="checkbox"></td>
+												<td>A0132</td>
+												<td>SM-12345</td>
+												<td>로봇 청소기</td>
+												<td>5EA</td>
+												<td>-</td>
+												<td style="text-align: center;">12</td>
+												<td>2024-09-01</td>
+												<td style="text-align: center;">미정</td>
+												<td style="text-align: center;">관리</td>
+											</tr>
+											<tr>
+												<td><input type="checkbox"></td>
+												<td>A0132</td>
+												<td>SM-12345</td>
+												<td>로봇 청소기</td>
+												<td>5EA</td>
+												<td>-</td>
+												<td style="text-align: center;">12</td>
+												<td>2024-09-01</td>
+												<td style="text-align: center;">미정</td>
+												<td style="text-align: center;">관리</td>
+											</tr>
+											<tr>
+												<td><input type="checkbox"></td>
+												<td>A0132</td>
+												<td>SM-12345</td>
+												<td>로봇 청소기</td>
+												<td>5EA</td>
+												<td>-</td>
+												<td style="text-align: center;">12</td>
+												<td>2024-09-01</td>
+												<td style="text-align: center;">미정</td>
+												<td style="text-align: center;">관리</td>
+											</tr>
+											<tr>
+												<td><input type="checkbox"></td>
+												<td>A0132</td>
+												<td>SM-12345</td>
+												<td>로봇 청소기</td>
+												<td>5EA</td>
+												<td>-</td>
+												<td style="text-align: center;">12</td>
+												<td>2024-09-01</td>
+												<td style="text-align: center;">미정</td>
+												<td style="text-align: center;">관리</td>
+											</tr>
+											<tr>
+												<td><input type="checkbox"></td>
+												<td>A0132</td>
+												<td>SM-12345</td>
+												<td>로봇 청소기</td>
+												<td>5EA</td>
+												<td>-</td>
+												<td style="text-align: center;">12</td>
+												<td>2024-09-01</td>
+												<td style="text-align: center;">미정</td>
+												<td style="text-align: center;">관리</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</section>
+						</div>	
+					</div>
+					<!-- MAIN DATAVIEW -->
+				</div>
+			</div>
+			<!-- MAIN -->
+		</div>
+		<div class="clearfix"></div>
+		<footer>
+			<div class="container-fluid">
+				<p class="copyright">Copyright ⓒ 2024<i class="fa fa-love"></i><a href="pikpak.com">pikpak.com</a> All rights Reserved.
+</p>
+			</div>
+		</footer>
+	</div>
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<!-- JS -->
+	<script src="/resources/assets/external/jquery/jquery.min.js"></script>
+	<script src="/resources/assets/external/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="/resources/assets/external/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="/resources/assets/external/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="/resources/assets/scripts/klorofil-common.js"></script>
+</body>
+
+</html>

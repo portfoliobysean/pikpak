@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<title>PikPak-납품관리</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!-- VENDOR CSS -->
+<link rel="stylesheet"
+	href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/linearicons/style.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/chartist/css/chartist-custom.css">
+	
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/inboundreq_main.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/pd_search.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/add_popup.css" >
+
+<!-- nav 두 개 추가 -->
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+
+<!-- deliver_main 툴팁 위한 css -->
+<link href="/resources/css/delivery/deliveryenroll_main.css" rel="stylesheet">
+
+<!-- GOOGLE FONTS -->
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
+	rel="stylesheet">
+<!-- ICONS -->
+<link rel="apple-touch-icon" sizes="76x76"
+	href="/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96"
+	href="/assets/img/favicon.png">
+
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- 최상단 -->
+		<nav th:replace="~{/shared/components.html :: top}"></nav>
+		<!-- 최상단 끝 -->
+		<!-- 왼쪽 SIDEBAR -->
+		<div th:replace="~{/shared/components.html :: sidebar}"></div>
+		<!-- 왼쪽 SIDEBAR -->
+
+		<!-- MAIN -->
+		<section
+			th:replace="~{delivery/deliveryenroll_main :: main_deliveryenroll}"></section>
+		<!-- 모달 -->	
+		<section th:replace="~{delivery/decide_delivery_popup :: decide_deliver_popup}"></section> 
+		<section
+			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		<!-- MAIN 끝-->
+
+	</div>
+	<div class="clearfix"></div>
+	<!-- footer 시작 -->
+	<footer th:replace="~{/shared/components.html :: footer}"></footer>
+	<!-- footer 끝 -->
+
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+<script>
+$(document).ready(function() {
+	// 상품코드/상품명 모달 닫힐 때
+    $('#productModal').on('hide.bs.modal', function () {
+        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+    });
+	
+	// 상품코드/상품명 모달 검색 버튼 클릭 시
+	$("#pd_search_de").on("click", function() {
+		$("#productModal").modal('show');
+
+		// 모달이 열릴 때 첫 번째 페이지 로드
+		$('#productModal').on('shown.bs.modal', function() {
+			new product_search_modal().pd_paging(1); // 페이지 1을 로드
+		});
+	});
+	
+	
+	$('#decidedeliModal').on('hide.bs.modal', function () {
+	      $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+	       
+	});
+	
+	//배송 버튼 클릭시
+	$(document).on("click", ".deliver_manage", function(event) {
+		event.preventDefault();  // 기본 동작 중단
+		
+		var deliver_cd = $(this).data("deliver-cd");
+		var product_cd = $(this).data("product-cd");
+		var product_nm = $(this).data("product-nm");
+		var product_qty = $(this).data("deliver-qty");
+		var make_dt = $(this).data("make-dt");
+		var deliver_dt = $(this).data("deliver-dt");
+		
+		/* 여기서부터 hidden 값 */
+		var request_cd =  $(this).data("request-cd");
+		var supplier_cd  = $(this).data("supplier-cd");
+		var deliver_size = $(this).data("deliver-size");
+		
+		console.log(request_cd);
+		
+		// 입력 필드에 값 설정
+		$("#deliver_cd_deli").val(deliver_cd);
+		$("#product_cd_deli").val(product_cd);
+		$("#product_nm_deli").val(product_nm);
+		$("#product_qty_deli").val(product_qty);
+		$("#make_dt_deli").val(make_dt.substring(0,10));
+		$("#deliver_dt_deli").val(deliver_dt.substring(0,10));
+		/* 여기서부터 hidden 값 */
+		$("#request_cd_deli").val(request_cd);
+		$("#supplier_cd_deli").val(supplier_cd);
+		$("#exreceiving_size_deli").val(deliver_size);
+		
+		
+		
+		// 모달 보여주기
+		$("#decidedeliModal").modal('show');
+		
+	});
+
+});
+</script>
+</body>
+<script type="module">
+import {delivery_page_move, delivery_list} from "../resources/js/deliver/deliveryenroll_main.js?v=4";
+import {product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
+/* 페이지 처음 로드 */
+document.addEventListener('DOMContentLoaded', function() {
+    // 페이지 로드 시 기본 날짜 설정
+        const today = new Date();
+        const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 10);
+
+        const formatDate = (date) => {
+            let d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        };
+
+        document.getElementById("delenroll_start_date").value = formatDate(lastWeek);
+        document.getElementById("delenroll_end_date").value = formatDate(today);
+
+	//ajax로 리스트 요청
+	new delivery_list().delivery_go_list();
+});
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+
+
+//초기화 버튼 클릭시 deli_enroll_reset
+document.querySelector("#deli_enroll_reset").addEventListener("click",function(){
+	location.reload();
+});
+
+
+//조회버튼 클릭시
+document.querySelector("#deli_enroll_search").addEventListener("click",function(){
+	new delivery_list().delivery_go_list();
+});
+
+//납품등록 배송 모달 등록 버튼
+document.querySelector("#decide_deli").addEventListener("click",function(){
+		new delivery_list().decide_delivery();
+});
+
+
+/* 납품등록 삭제 */
+//전체 체크박스
+document.querySelector("#del_all_ck").addEventListener("click",function(){
+		new delivery_list().deli_all_ckbox();
+});
+
+/*
+//개별 체크박스
+document.querySelectorAll('[name="del_each_ck"]').forEach(function(ck){
+		ck.addEventListener('click', function() {
+        	new delivery_list().deli_each_ckbox();
+		});
+});
+*/
+
+//개별 체크박스 -> 동적생성해서 이벤트 위임을 따로 해줘야함
+document.querySelector("#denroll_tbody").addEventListener("click", function(event) {
+    // 이벤트가 발생한 요소가 체크박스인지 확인
+    if (event.target.name === "del_each_ck") {
+		new delivery_list().deli_each_ckbox();
+    }
+});
+
+
+
+//삭제 버튼 클릭시
+document.querySelector("#delist_delete").addEventListener("click",function(){
+		new delivery_list().delete_delivery();
+});
+
+
+/* 페이지 이동 */
+document.querySelector("#go_delreturn").addEventListener("click",function(){
+		new delivery_page_move().go_delivery_return();
+});
+
+
+document.querySelector("#go_delenroll").addEventListener("click",function(){
+		new delivery_page_move().go_delivery_enroll();
+});
+
+document.querySelector("#go_reqstate").addEventListener("click",function(){
+		new delivery_page_move().go_inreq_state();
+});
+</script>
+</html>

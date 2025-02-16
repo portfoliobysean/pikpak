@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>출고등록 팝업</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<!-- 모달 -->
+	<div class="modal fade" th:fragment="add_out_popup" id="outboundModal"
+		tabindex="-1" aria-labelledby="outboundModalLabel" insert>
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="outboundModalLabel">출고 등록</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+						<!-- 검색 바 -->
+							<form id="frm_out_enroll">
+						<div class="form-group">
+							<span>※주문정보</span>
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+									<tr>
+										<td style="width: 30%;">주문번호</td>
+										<td><input type="text" id="order_cd_out" name="order_cd"
+											readonly="readonly"></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">상품코드</td>
+										<td><input type="text" id="product_cd_out" name="product_cd"
+											readonly="readonly"></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">상품명</td>
+										<td><input type="text" id="product_nm_out" name="product_nm"
+											readonly="readonly"></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">상품수량</td>
+										<td><input type="text" id="order_qty_out"
+											readonly="readonly"></td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">착수일자</td>
+										<td>
+											<div style="display: flex; align-items: center;">
+												<input type="date" class="form-control" style="width: 40%;"
+													id="start_dt_out" readonly="readonly">&nbsp;&nbsp;
+											</div>
+
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 30%;">납기일자</td>
+										<td>
+											<div style="display: flex; align-items: center;">
+												<input type="date" class="form-control" style="width: 40%;"
+													id="due_dt_out" readonly="readonly">&nbsp;&nbsp;
+											</div>
+
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<hr>
+							<span>※출고등록</span>
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<tbody>
+									<tr>
+										<td style="width: 20%;">출고수량</td>
+										<td>
+											<!-- 해당 회사 구역의 위치코드  --> 
+											<select class="form-control" id="location_select"
+											style="width: 30%; float: left; margin-right: 5px;">
+												<option value="">위치 선택</option>
+										    </select> 
+										<select class="form-control" id="lot_select"
+											style="width: 60%; float: left; margin-right: 5px;">
+												<option value="">로트번호/수량 선택</option>
+										</select> <input type="text" style="margin-top: 10px;"
+											id="qty_input" placeholder="출고수량"> 
+											<button type="button" id="add_button">선택</button>
+											
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<!-- 동적으로 추가되는 항목을 표시할 공간 -->
+											<div id="item_container" style="margin-top: 20px;"></div>
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 20%;">출고예정일자</td>
+										<td>
+											<div style="display: flex; align-items: center;">
+												<input type="date" class="form-control" style="width: 40%;"
+													name="expect_dt">&nbsp;&nbsp;
+											</div>
+
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 20%;">특이사항</td>
+										<td><textarea rows="2" cols="40" name="outenroll_log"></textarea></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+							</form>
+						<nav style="text-align: center; padding: 15px;">
+							<span>
+								<button type="button" class="btn btn-dark" id="out_enroll">등록</button>
+							</span>
+						</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JavaScript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+</body>
+</html>

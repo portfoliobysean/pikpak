@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-WmsPikpakApplication<pikpak>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "kr.co.pikpak.WmsPikpakApplication",
+            "projectName": "pikpak",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

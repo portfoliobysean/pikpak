@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+	href="../resources/css/order/psearch_popup.css?v=2">
+<link rel="stylesheet" href="../resources/css/order/vars.css">
+<title>팝업 예제</title>
+</head>
+<body>
+
+<nav th:fragment="psearch_popup">
+
+	<span>
+		<button class="btn btn-primary" type="button" id="ps_searchBtn">찾기</button>
+	</span>
+
+	<!-- 팝업 컨테이너 -->
+	<div class="ps_popup-container" id="ps_popup" style="display: none;">
+		<div class="ps_popup">
+			<button class="ps_close-btn" id="ps_closeBtn">&times;</button>
+			<div class="ps_popup-content">
+				<h2 class="ps_popup-title">상품 검색</h2>
+				<div class="ps_popup-divider"></div>
+				<div class="ps_popup-box">
+					<div class="ps_input-row">
+						<div class="ps_input-group">
+							<label for="ps_searchInput">상품 코드/명 :</label> <input type="text"
+								id="ps_product_cd" placeholder="상품 코드"> <input
+								type="text" id="ps_product_nm" placeholder="상품 명">
+						</div>
+					</div>
+					<div class="ps_button-group">
+						<div class="ps_reset_btn" id="ps_resetBtn">
+							<div class="divbutton" style="font-size: 12px !important;">초기화</div>
+						</div>
+						<div class="ps_search_btn" id="ps_enterBtn">
+							<div class="divbutton">검색</div>
+						</div>
+					</div>
+					<a style="font-size: 12px !important;">* 상품 클릭시 값이 적용됩니다.</a>
+					<div class="ps_box-content">
+						<div class="ps_list-container">
+							<table id="ps_table">
+								<thead>
+									<tr>
+										<th>상품코드</th>
+										<th>상품명</th>
+										<th>제조사</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="product : ${product_list}">
+										<td th:text="${product.product_cd}"></td>
+										<td th:text="${product.product_nm}"></td>
+										<td th:text="${product.supplier_nm}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ps_button-group">
+				<div class="ps_close-btn2" id="ps_closeBtn2">
+					<div class="divbutton">취소</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</nav>
+
+	<script src="../resources/js/order/psearch_popup_script.js?v=1"></script>
+</body>
+</html>

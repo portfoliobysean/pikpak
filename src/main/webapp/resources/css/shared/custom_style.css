@@ -1,0 +1,187 @@
+@charset "UTF-8";
+
+/* 팝업 창 내부 스타일링 */
+.modal-body {
+    font-size: 14px;
+}
+
+.form-title-custom {
+	align-content: center; 
+	text-align: right;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.dark-border {
+	border: 1px solid grey;
+}
+
+.form-control-sm {
+    width: 90%;
+}
+
+.form-inline input {
+    margin-right: 10px;
+}
+
+.form-check-inline {
+    margin-right: 20px;
+}
+
+.modal-footer button {
+    padding: 8px 20px;
+    border-radius: 20px;
+}
+
+/* 버튼 */
+.text-button {
+	text-align: center;
+}
+
+.text-button:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.btn-dark {
+  color: #fff;
+  background-color: #343a40;
+  border-color: #343a40;
+}
+
+.btn-dark:hover {
+  color: #fff;
+  background-color: #23272b;
+  border-color: #1d2124;
+}
+
+.btn-dark:focus, .btn-dark.focus {
+  color: #fff;
+  background-color: #23272b;
+  border-color: #1d2124;
+  box-shadow: 0 0 0 0.2rem rgba(82, 88, 93, 0.5);
+}
+
+.btn-dark.disabled, .btn-dark:disabled {
+  color: #fff;
+  background-color: #343a40;
+  border-color: #343a40;
+}
+
+.btn-dark:not(:disabled):not(.disabled):active, .btn-dark:not(:disabled):not(.disabled).active,
+.show > .btn-dark.dropdown-toggle {
+  color: #fff;
+  background-color: #1d2124;
+  border-color: #171a1d;
+}
+
+.btn-dark:not(:disabled):not(.disabled):active:focus, .btn-dark:not(:disabled):not(.disabled).active:focus,
+.show > .btn-dark.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(82, 88, 93, 0.5);
+}
+
+/* Custom Classes */
+.visibility-hide {
+	visibility: collapse;
+}
+
+.display-none {
+	display: none;
+}
+
+.response-text{
+	color: red;
+	opacity: 0;
+	transition: opacity 100ms linear;
+}
+
+.response-text-visible{
+	color: grey;
+	transition: opacity 100ms linear;
+}
+
+.custom-center-all {
+	align-content: center; 
+	text-align: center;
+}
+
+.custom-width-100 {
+	width: 100%;
+}
+
+.custom-width-60 {
+	width: 60%;
+}
+
+.custom-width-50 {
+	width: 50%;
+}
+
+.custom-width-40 {
+	width: 40%;
+}
+
+.custom-width-30 {
+	width: 30%;
+}
+
+.custom-width-20 {
+	width: 20%;
+}
+
+.custom-fixed-width-300 {
+	width: 300px;
+}
+
+.custom-fixed-width-200 {
+	width: 200px;
+}
+
+.custom-fixed-width-150 {
+	width: 150px;
+}
+
+.custom-fixed-width-100 {
+	width: 100px;
+}
+
+.custom-fixed-width-75 {
+	width: 75px;
+}
+
+.custom-fixed-width-50 {
+	width: 50px;
+}
+
+.custom-justify-between {
+	display: flex;
+	justify-content: space-between;
+	align-items:center;
+}
+
+.custom-rounded {
+	border-radius: 5px;
+}
+
+.custom-ani-bc {
+	transition: background-color 100ms linear;
+}
+
+.custom-margin-bt-10 {
+	margin-bottom: 10px;
+}
+
+.custom-flex-row {
+	display:flex; 
+	flex-direction: row;
+}
+.custom-flex-row-reverse {
+	display:flex; 
+	flex-direction: row-reverse;
+}

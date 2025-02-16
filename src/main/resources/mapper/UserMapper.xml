@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.pikpak.repo.UserRepo">
+	<!-- 회원 리스트 출력 -->
+	<select id="userListFromView" resultType="kr.co.pikpak.dto.LoginDTO">
+		select * from login_view order by user_type asc
+	</select>
+	
+	<!-- 회원 아이디 조회 -->
+	<select id="ctnFromView" resultType="Integer">
+		select count(*) as ctn from login_view where user_id = #{userId}
+	</select>
+	
+	<!-- 회원 비밀번호 확인 -->
+	<select id="ctnPwFromView" resultType="Integer">
+		select count(*) as ctn from login_view where user_id = #{userId} and user_pw = #{userPw}
+	</select>
+	
+	<!-- 회원 이메일 조회 -->
+	<select id="ctnEmailFromView" resultType="Integer">
+		select count(*) as ctn from login_view where user_id = #{userId} and user_mail = #{userMail}
+	</select>
+	
+	
+	<!-- 연락처 회원 유형 중복 체크 -->
+	<select id="ctnFromViewFilterBy" resultType="Integer">
+		select count(*) as ctn from login_view where user_tel = #{userTel} and user_type = #{userType}
+	</select>
+	
+	<!-- 회원 등록 -->
+	<insert id="addUserToTable" parameterType="kr.co.pikpak.dto.UserAddDTO">
+		insert into 
+		${target_table} 
+		values 
+		('0',
+		#{user_nm},#{user_id},#{user_pw},#{user_pw},#{user_tel},
+		#{user_mail},#{user_co},#{company_cd},#{user_type},
+		<if test="user_type == 'admin' or user_type == 'operator'">
+		#{user_lv},
+		</if>
+		now(),'N',now())
+	</insert>
+	
+	<!-- 회원 유형 조회 -->
+	<select id="userTypeFromView" resultType="String">
+		select user_type from login_view where user_id = #{userId}
+	</select>
+	
+	<!-- 회원 상세정보 조회 -->
+	<select id="userDetailsFromView" resultType="kr.co.pikpak.dto.LoginDTO">
+		select * from login_view where user_id = #{userId}
+	</select>
+	
+	<!-- 회원 등급 -->
+	<select id="userLvFromOperator" resultType="String">
+		select operator_lv from login_operator where operator_id = #{userId}
+	</select>
+	
+	<update id="modUserInTable" parameterType="kr.co.pikpak.dto.UserAddDTO">
+		update
+		${target_table}
+		set
+		${target_id} = #{user_id},
+		<if test="user_pw != ''">
+		${target_pw} = #{user_pw},
+		pw_change_yn = 'Y',
+		</if>
+		${target_tel} = #{user_tel},
+		${target_mail} = #{user_mail},
+		<if test="user_type == 'admin' or user_type == 'operator'">
+		${target_lv} = #{user_lv},
+		</if>
+		modified_dt = now()
+		where
+		${target_id} = #{old_user_id}
+	</update>
+	
+	<select id="companyListFromView" resultType="kr.co.pikpak.dto.InfoTraderSimpleDTO">
+		select * from trader_info_view
+	</select>
+	
+	<update id="resetCredInTable" parameterType="kr.co.pikpak.dto.CredChangeDTO">
+		update
+		${target_table}
+		set
+		${target_pw} = init_pw,
+		modified_dt = now()
+		where
+		${target_id} = #{user_id}
+	</update>
+	
+	<update id="modCredInTable" parameterType="kr.co.pikpak.dto.CredChangeDTO">
+		update
+		${target_table}
+		set
+		${target_pw} = #{new_user_pw},
+		modified_dt = now()
+		where
+		${target_id} = #{user_id}
+	</update>
+	
+	
+	
+</mapper>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>입고요청 메인</title>
+</head>
+<body>
+	<section class="main" th:fragment="main_recvenroll">
+		<!-- MAIN CONTENT -->
+		<div class="main-content">
+			<div class="container-fluid">
+
+				<!-- MAIN DATA VIEW -->
+				<div class="panel panel-headline">
+
+					<div class="panel-heading">
+						<p class="panel-subtitle">
+							홈 > 입고|출고 > <span style="color: black;">입고관리</span>
+						</p>
+					</div>
+					<div class="panel-body">
+						<p class="menu"
+							style="border-bottom: 1px solid black; height: 30px;">
+							<span class="menu-item" id="go_inoutreq">입고요청</span> <span
+								class="menu-item active" id="go_recvenroll">입고등록</span>
+						</p>
+						<span style="float: right; height: 40px;">
+							<button type="button" class="btn btn-success" id="recv_reset">초기화</button>
+							<button type="button" class="btn btn-warning" id="recv_search">조회</button>
+						</span>
+						<p style="font-size: 12px; height: 25px; line-height: 30px;">※
+							조회옵션</p>
+
+						<!-- 검색 옵션 테이블 시작 -->
+						<table class="table table-bordered">
+							<tbody>
+								<tr>
+									<td style="width: 10%; height: 34px; line-height: 34px;">종류</td>
+									<td style="width: 15%; line-height: 34px;"><select 
+										class="form-control" id="type_select"
+										style="width: 60%; float: left; margin-right: 5px;">
+											<option value="납품">납품</option>
+											<option value="반품">반품</option>
+									</select></td>
+									<td id="date_header" style="width: 10%; height: 34px; line-height: 34px;">가입고 일자</td>
+									<td style="width: 20%; line-height: 34px;">
+										<div style="display: flex; align-items: center;">
+											<input type="date" class="form-control" style="width: 40%;" id="recv_start_date">&nbsp;&nbsp;
+											~ &nbsp;&nbsp; <input type="date" class="form-control" id="recv_end_date"
+												style="width: 40%;">
+										</div>
+									<td style="width: 10%; height: 34px; line-height: 34px;">매입처
+										회사명</td>
+									<td style="width: 15%; line-height: 34px;">
+										<div style="display: flex; align-items: center;">
+											<input type="text" class="form-control" style="width: 40%;" id="search_cp_cd" readonly="readonly">&nbsp;&nbsp;
+											<input type="text" class="form-control" style="width: 40%;" id="search_cp_nm" readonly="readonly">&nbsp;&nbsp;
+											<button class="btn btn-primary" type="button" id="cp_search_recv">검색</button>
+										</div>
+									</td>
+									
+							
+								</tr>
+								<tr>
+								<td style="width: 10%; height: 34px; line-height: 34px;">상품코드
+										/ 명</td>
+									<td style="width: 15%; line-height: 34px;">
+										<div style="display: flex; align-items: center;">
+											<input type="text" class="form-control" style="width: 40%;" id="search_pd_cd" readonly="readonly">&nbsp;&nbsp;
+											<input type="text" class="form-control" style="width: 40%;" id="search_pd_nm" readonly="readonly">&nbsp;&nbsp;
+											<button class="btn btn-primary" type="button" id="pd_search_recv">검색</button>
+										</div>
+									</td>	
+									<td style="width: 10%; height: 34px; line-height: 34px;">상태</td>
+									<td style="width: 15%; line-height: 34px;"><select 
+										class="form-control" id="recv_st"
+										style="width: 60%; float: left; margin-right: 5px;">
+											<option value="">상태 선택</option>
+											<option value="대기">대기</option>
+											<option value="입고">입고</option>
+									</select></td>
+								</tr>
+							</tbody>
+						</table>
+						<!-- 검색 옵션 테이블 끝 -->
+						<p style="font-size: 12px; height: 25px; line-height: 30px;">※
+							조회결과</p>
+						<div class="panel-body panel-thead">
+
+							<table class="table">
+								<thead style="background-color: rgb(130, 210, 213);">
+									<tr>
+										<th style="text-align: center; width: 3%;">NO.</th>
+										<th style="text-align: center; width: 10%;">회사명</th>
+										<th style="text-align: center; width: 10%;">상품코드</th>
+										<th style="text-align: center; width: 10%;">상품명</th>
+										<th style="text-align: center; width: 6%;">상품크기</th> 
+										<th style="text-align: center; width: 5%;">종류</th>
+										<th style="text-align: center; width: 5%;">납품수량</th>
+										<th style="text-align: center; width: 5%;">반품수량</th>
+										<th style="text-align: center; width: 12%;">가입고 일자</th>										
+										<th style="text-align: center; width: 7%;">상태</th>
+										<th style="text-align: center; width: 12%;">입고등록일자</th>
+										<th style="text-align: center; width: 15%;">관리</th>
+									</tr>
+
+								</thead>
+							</table>
+						</div>
+						<div class="panel-body" style="height: 400px; overflow-y: auto;">
+							<table class="table table-hover">
+								<tbody id="rv_tbody">
+								<!-- 
+									<tr th:each="exrecv, stat : ${exrecv_list}">
+										<td
+											style="text-align: center; padding-right: 25px; width: 3%;"
+											th:text="${stat.count}"></td>
+										<td style="text-align: center; width: 9%;"
+											th:text="${exrecv.getSupplier_nm()}"></td>
+										<td style="text-align: center; width: 9%;"
+											th:text="${exrecv.getProduct_cd()}"></td>
+										<td style="text-align: center; width: 12%;"
+											th:text="${exrecv.getProduct_nm()}"></td>											
+										<td style="text-align: center; width: 7%;"
+											th:text="${exrecv.getExreceiving_size()}"></td>
+										
+										<td style="text-align: center; width: 6%;"
+											th:text="${exrecv.getExreceiving_type()}"></td>	
+										
+										<td style="text-align: center; width: 6%;"
+											th:text="${exrecv.getExreceiving_qty()}"></td>
+										<td style="text-align: center; width: 6%;"
+											th:text="${exrecv.getReturn_qty() != null ? exrecv.getReturn_qty() : ''}"></td>
+										
+										<td style="text-align: center; width: 10%;"
+											th:text="${exrecv.getProcessing_dt() != null ? exrecv.getProcessing_dt().substring(0,10) : ''}"></td>
+										
+										<td style="text-align: center; width: 10%;"
+											th:text="${exrecv.getDeparture_dt() !=null ? exrecv.getDeparture_dt().substring(0,10) : ''}"></td>
+										
+										<td style="text-align: center; width: 7%;"
+											th:text="${exrecv.getExreceiving_st()}" class="recv_state_ck"></td>	
+										<td style="text-align: center; width: 20%;">
+											<button class="btn btn-primary decide_inbound"
+												style="padding-right: 5px; padding-left: 5px; width: 40%;"
+												type="button" 
+												th:data-make-dt="${exrecv.getMake_dt()}"
+												th:data-product-cd="${exrecv.getProduct_cd()}"
+												th:data-product-nm="${exrecv.getProduct_nm()}"
+												th:data-supplier-nm="${exrecv.getSupplier_nm()}"
+												th:data-product-qty="${exrecv.getExreceiving_qty()}"
+												th:data-return-qty="${exrecv.getReturn_qty()}"
+												
+												th:data-exrecv-dt="${exrecv.getDeparture_dt()}"
+												th:data-deliver-cd="${exrecv.getDeliver_cd()}"
+												th:data-exrecv-cd="${exrecv.getExreceiving_cd()}"
+												th:data-supplier-cd="${exrecv.getSupplier_cd()}"
+												>입고</button>
+
+											<button class="btn btn-danger decide_return"
+												style="padding-right: 5px; padding-left: 5px; width: 40%;"
+												th:data-product-cd="${exrecv.getProduct_cd()}"
+												th:data-product-nm="${exrecv.getProduct_nm()}"
+												th:data-supplier-nm="${exrecv.getSupplier_nm()}"
+												th:data-product-qty="${exrecv.getExreceiving_qty()}"
+												
+												th:data-exrecv-dt="${exrecv.getDeparture_dt()}"
+												th:data-deliver-cd="${exrecv.getDeliver_cd()}"
+												th:data-exrecv-cd="${exrecv.getExreceiving_cd()}"
+												th:data-supplier-cd="${exrecv.getSupplier_cd()}"
+												type="button">반송</button>
+										</td>
+									</tr>
+									 -->
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- panel body , 이 안에 두개의 테이블이 같이 들어감-->
+				</div>
+				<!-- panel-heading -->
+			</div>
+			<!-- panel panel-headline -->
+			<!-- MAIN DATAVIEW -->
+
+		</div>
+	</section>
+</body>
+
+</html>

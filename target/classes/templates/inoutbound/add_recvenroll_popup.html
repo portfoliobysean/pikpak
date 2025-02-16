@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>가입고 등록 팝업</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+</head>
+<body>
+	<!-- 모달 -->
+	<div class="modal fade" th:fragment="add_recvenroll_popup" id="recvModal"
+		tabindex="-1" aria-labelledby="recvModalLabel" insert>
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="recvModalLabel">입고 등록</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- 검색 바 -->
+					<div class="form-group">
+						<table class="table table-bordered" style="margin-top: 20px;">
+							<tbody>
+								<tr>
+									<td style="width: 30%;">상품코드</td>
+									<td><select class="form-control"
+										style="width: 35%; float: left; margin-right: 5px;">
+											<option value="">상품코드 선택</option>
+
+									</select></td>
+								</tr>
+								<tr>
+									<td style="width: 30%;">상품명</td>
+									<td><input type="text" readonly="readonly">
+									<input type="hidden" name="supplier_cd" id="supplidr_cd_recv"></td>
+								</tr>
+								<tr>
+									<td style="width: 30%;">상품수량</td>
+									<td><input type="text"></td>
+								</tr>
+								<tr>
+
+									<td style="width: 30%;">입고 위치</td>
+									<td>
+									<select class="form-control"
+										style="width: 35%; float: left; margin-right: 5px;">
+											<option value="">크기 선택</option>
+											<option value="">1유형</option>
+											<option value="">2유형</option>
+											<option value="">3유형</option>
+									</select>
+									<select class="form-control"
+										style="width: 35%; float: left; margin-right: 5px;">
+											<option value="">위치 선택</option>
+
+									</select></td>
+								</tr>
+								<tr>
+									<td style="width: 30%;">관리자</td>
+									<td><select class="form-control"
+										style="width: 35%; float: left; margin-right: 5px;">
+											<option value="">관리자 선택</option>
+
+									</select></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<nav style="text-align: center; padding:15px;">
+						<span>
+							<button type="button" class="btn btn-dark">등록</button> <!-- 왜 안되지 -->
+						</span>
+					
+					</nav>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JavaScript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+
+</body>
+</html>

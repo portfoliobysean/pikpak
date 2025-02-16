@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<title>PikPak</title>
+	<meta charset="utf-8">
+	<meta http-equiv="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		
+		
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="/resources/assets/external/bootstrap/js/bootstrap.min.js"></script>
+	
+	<script src="/resources/assets/external/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="/resources/assets/external/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="/resources/assets/scripts/klorofil-common.js"></script>
+	
+	<!-- Bootstrap 4.6.2 CSS -->
+	<link rel="stylesheet" href="/resources/assets/external/bootstrap/css/bootstrap.min.css">
+	
+	<!-- 추가된 스타일 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<!-- 필요할 경우 하나의 아이콘 폰트만 선택 -->
+	<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chartist@0.11.4/dist/chartist.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<link rel="apple-touch-icon" sizes="76x76" href="/resources/assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/resources/assets/img/favicon.png">
+	<link rel="stylesheet" href="/resources/assets/css/main.css">
+	<link rel="stylesheet" href="/resources/assets/css/demo.css">
+	
+	<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+	<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+	
+	
+	<script src="/resources/js/product/product.js"></script>
+	<link rel="stylesheet" href="/resources/css/product/productmgmt.css">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+    <div id="wrapper">
+        <!-- TOP -->
+        <nav th:replace="~{/shared/components.html :: top}"></nav>
+        <!-- TOP END -->
+        
+        <!-- 왼쪽 SIDEBAR -->
+        <div th:replace="~{/shared/components.html :: sidebar}"></div>
+        <!-- 왼쪽 SIDEBAR END -->
+        
+        <!-- MAIN -->
+        <!-- class="main" 필수입니다 -->
+        <div class="main">
+  
+	<!-- MAIN CONTENT -->
+
+		<div class="main-content" style="padding: 0; margin: 0;">
+			
+				<!-- MAIN DATA VIEW -->
+				<div class="panel panel-headline">
+					<div class="panel-heading">
+						<p class="panel-subtitle">홈 > 기준정보관리 > <span style="color: black;">품목관리</span></p>
+					</div>
+					<div class="panel-body">
+						<p style="border-bottom: 1px solid black; height: 30px;">품목관리</p>
+						<section>
+							<span style="float: right; height: 40px;">
+								<button type="button" class="btn btn-success" id="registerProduct" data-toggle="modal" data-target="#registerProductModal">신규등록</button>
+								<button type="button" class="btn btn-danger" id="editProductBtn">수정</button>
+								<button type="button" class="btn btn-warning" id="searchProductBtn">조회</button>
+							</span>
+							<p style="font-size: 12px; height: 25px; line-height: 30px;">※ 조회옵션</p>
+								<table class="table table-bordered" style="width: 100%;">
+								    <tbody>
+								        <tr>
+								            <!-- 날짜 입력 필드 -->
+								            <td style="width: 8%; text-align: center; border: 1px solid #ddd; vertical-align: middle;">등록일자</td>
+								            <td style="border: 1px solid #ddd;">
+								                <div style="display: flex; align-items: center;">
+								                    <input type="date" class="form-control" id="fromDate" style="width: 50%; margin-right: 5px;"> ~ 
+								                    <input type="date" class="form-control" id="toDate" style="width: 50%; margin-left: 5px;">
+								                </div>
+								            </td>
+								
+								            <!-- 업체코드 및 업체명 필드 -->
+								            <td style="width: 8%; text-align: center; border: 1px solid #ddd; vertical-align: middle;">업체</td>
+								            <td style="border: 1px solid #ddd;">
+								                <div style="display: flex; align-items: center;">
+								                    <input type="text" class="form-control" style="width: 25%; margin-right: 5px;" placeholder="업체코드" id="companyCodeInput">
+								                    <input type="text" class="form-control" style="width: 50%;" placeholder="업체명" id="companyNameInput">&nbsp;&nbsp; 
+								                   <button class="btn btn-primary" type="button" id="comsearchBtn" style="margin-left: 5px; height: 36px;">
+                        							<i class="bi bi-search" ></i> <!-- 돋보기 아이콘 -->
+                   									 </button>
+								                </div>
+								            </td>
+								            
+								            
+								
+								            <!-- 구분 선택 필드 -->
+								            <td style="width: 8%; text-align: center; border: 1px solid #ddd; vertical-align: middle;">구분</td>
+								            <td style="border: 1px solid #ddd;">
+								                <div style="display: flex; align-items: center;">
+								                    <select id="productTypeFilter" class="form-control" style="width: 100px; margin-right: 5px;">
+								                        <option value="all">전체</option>
+								                        <option value="supplier_nm">제조사</option>
+								                        <option value="product_nm">상품명</option>
+								                        <option value="product_cd">상품코드</option>
+								                    </select>
+								                    <input type="text" class="form-control" style="width: 250px;" placeholder="검색어" id="searchkeyword">
+								                </div>
+								            </td>
+								        </tr>
+								    </tbody>
+								</table>
+
+
+
+							<p style="font-size: 12px; height: 25px; line-height: 30px;">※ 조회결과</p>
+							<div class="panel-body" style="height: 520px; overflow-y: auto; overflow-x: auto; white-space: nowrap; padding: 0; margin: 0;">
+								<table class="table table-hover" id="product_list">
+									<thead class="list-sty">
+										<tr>
+											<th style="background-color: rgb(130, 210, 213); width:1%;">
+												
+											</th>
+											<th class="list-sty">상품코드</th>
+											<th class="list-sty">상품명</th>
+											<th class="list-sty">제조사</th>
+											<th class="list-sty">제조사코드</th>
+											<th class="list-sty">입고가격</th>
+											<th class="list-sty">크기</th>
+											<th class="list-sty">무게</th>
+											<th class="list-sty">포장단위</th>
+											<th class="list-sty">안전재고</th>
+											<th class="list-sty">등록자</th>
+											<th class="list-sty">등록일자</th>
+											<th class="list-sty">공개유무</th>
+											<th class="list-sty">비고</th>
+											<th class="list-sty">관리</th>
+										</tr>
+									</thead>
+									<tbody>
+										
+									</tbody>
+								</table>
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="searchModalLabel">업체 검색 결과</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover" id="searchResults">
+                    <thead class="list-sty">
+                        <tr>
+                            <th>업체코드</th>
+                            <th>업체명</th>
+                            <th>사업자 등록번호</th>
+                            <th>주소</th>
+                            <th>선택</th>
+                        </tr>
+                    </thead>
+                    <tbody class="list-sty2">
+                        <!-- 검색 결과가 여기에 표시됩니다 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+	<!-- Modal for 신규등록 -->
+<div class="modal fade" id="registerProductModal" tabindex="-1" role="dialog" aria-labelledby="registerProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registerProductModalLabel">신규 상품 등록</h5>
+        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          		<span aria-hidden="true">&times;</span>
+        	</button>
+      </div>
+      
+		<div class="modal-body">
+        	<form>
+        	
+        		<div class="form-group row">
+				    <label for="companyName" class="col-sm-3 col-form-label text-right">제조사</label>
+				    <div class="col-sm-5">
+				        <div class="input-group" style="display: flex; align-items: stretch;">
+				            <input type="text" class="form-control" id="supplier_nm" name="supplier_nm" required style="height: 30px;"> <!-- 인풋 높이 설정 -->
+				            <div class="input-group-append">
+				                <button class="btn btn-primary d-flex justify-content-center align-items-center" type="button" id="comsearchBtn" style="height: 30px;"> <!-- 버튼을 인풋 높이에 맞춤 -->
+				                    <i class="bi bi-search"></i>
+				                </button>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+								
+				<div class="form-group row">
+        			<label for="representativeName" class="col-sm-3 col-form-label text-right">제조사코드</label>
+            			<div class="col-sm-4">
+              				<input type="text" class="form-control custom-input-style" id="supplier_cd" name="supplier_cd" required readonly>
+		            	</div>
+		        </div>
+		
+				<div class="form-group row">
+					<label for="corporationNumber" class="col-sm-3 col-form-label text-right">상품코드</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control custom-input-style" id="product_cd" name="product_cd" readonly>
+						</div>
+				</div>
+				
+					<div class="form-group row">
+ 			 		<label for="businessNumber" class="col-sm-3 col-form-label text-right">상품명</label>
+  						<div class="col-sm-8">
+   				 			<input type="text" class="form-control custom-input-style" id="product_nm" name="product_nm"  required>
+  						</div>
+		  		</div>
+        	
+			
+				
+				<div class="form-group row">
+				    <label for="purchase_pr" class="col-sm-3 col-form-label text-right">입고가격</label>
+				    <div class="col-sm-4" style="display: flex; align-items: center;">
+				        <input type="text" class="form-control custom-input-style" id="purchase_pr" name="purchase_pr" required style="width: 100px;">
+				        <span style="margin-left: 5px;">원</span>
+				    </div>
+				</div>
+								
+        	
+          		<div class="form-group row">
+            		<label for="industry" class="col-sm-3 col-form-label text-right">크기</label>
+            			<div class="col-sm-3">
+            				<select class="form-control custom-input-style" id="product_sz" name="product_sz" style="width: 100px; margin-right: 5px;font-size: 13px;">
+			            		<option value="L">대형</option>
+			            		<option value="M">중형</option>
+			            		<option value="S">소형</option>
+            				</select>
+            			</div>
+          		</div>
+
+          		<div class="form-group row">
+            		<label for="sector" class="col-sm-3 col-form-label text-right">무게</label>
+			            <div class="col-sm-3" style="display: flex; align-items: center;">
+			              <input type="text" class="form-control custom-input-style"  id="product_wt" name="product_wt" required>
+			              <span style="margin-left: 5px;">kg</span>
+			            </div>
+          		</div>
+
+	          	<div class="form-group row">
+	            	<label for="contact" class="col-sm-3 col-form-label text-right">포장단위</label>
+	            		<div class="col-sm-3">
+	              			<input type="text" class="form-control custom-input-style" id="packaging_unit" name="packaging_unit" required>
+	            		</div>
+	          	</div>
+
+          <div class="form-group row">
+            <label for="postalCode" class="col-sm-3 col-form-label text-right">안전재고</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control custom-input-style" id="safetyinventory_qty" name="safetyinventory_qty" required>
+            </div>
+           
+          </div>
+
+          <!-- 주소 -->
+          <div class="form-group row">
+            <label for="address" class="col-sm-3 col-form-label text-right">비고</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control custom-input-style" id="product_log" name="product_log" required>
+            </div>
+          </div>
+
+    
+
+		<div class="form-group row" id="visibilityField" style="display: none;">
+			<label for="visibility_yn" class="col-sm-3 col-form-label text-right">공개 여부</label>
+			<div class="col-sm-3">
+				<select class="form-control custom-input-style" id="visibility_yn" name="visibility_yn">
+					<option value="Y">공개</option>
+					<option value="N">비공개</option>
+				</select>
+			</div>
+		</div>
+		<div id="lastModifiedInfo" style="display: none; text-align:right;">
+		    <small id="lastModifiedDate"></small>
+		    <small id="modifiedBy" style="margin-left: 15px;"></small>
+		</div>
+	</form>
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-primary" id="registerProductBtn">등록</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+			
+        
+        <div class="clearfix"></div>
+        <!-- MAIN END -->
+        
+        <!-- FOOTER -->
+        <footer th:replace="~{/shared/components.html :: footer}"></footer>
+
+</body>
+<style>
+.input-group {
+    display: flex;
+}
+
+.input-group .form-control {
+    flex-grow: 1; /* input 필드가 버튼을 제외한 나머지 영역을 채우게 설정 */
+}
+
+.input-group .btn {
+    height: 38px; /* 버튼 높이 설정 (input과 일치) */
+    margin-left: -1px; /* input 필드와 버튼 사이의 경계선 없애기 */
+}
+
+</style>
+
+</html>

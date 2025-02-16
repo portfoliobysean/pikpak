@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<title>PikPak-납품관리</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<!-- VENDOR CSS -->
+<link rel="stylesheet"
+	href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/linearicons/style.css">
+<link rel="stylesheet"
+	href="/resources/assets/vendor/chartist/css/chartist-custom.css">
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/inboundreq_main.css">
+<link rel="stylesheet" href="/resources/css/inoutbound/pd_search.css">
+<link href="/resources/css/inoutbound/add_popup.css" rel="stylesheet">
+
+<!-- nav 두 개 추가 -->
+<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+
+<!-- deliver_main 툴팁 위한 css -->
+<link href="/resources/css/delivery/deliveryenroll_main.css" rel="stylesheet">
+
+<!-- GOOGLE FONTS -->
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700"
+	rel="stylesheet">
+<!-- ICONS -->
+<link rel="apple-touch-icon" sizes="76x76"
+	href="/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96"
+	href="/assets/img/favicon.png">
+
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- 최상단 -->
+		<nav th:replace="~{/shared/components.html :: top}"></nav>
+		<!-- 최상단 끝 -->
+		<!-- 왼쪽 SIDEBAR -->
+		<div th:replace="~{/shared/components.html :: sidebar}"></div>
+		<!-- 왼쪽 SIDEBAR -->
+
+		<!-- MAIN -->
+		<section
+			th:replace="~{delivery/returnstate_main :: main_returnstate}"></section>
+		<!-- 모달 -->	
+		
+		<section
+			th:replace="~{inoutbound/product_search :: product_search_popup}"></section>
+		
+		<!-- MAIN 끝-->
+
+	</div>
+	<div class="clearfix"></div>
+	<!-- footer 시작 -->
+	<footer th:replace="~{/shared/components.html :: footer}"></footer>
+	<!-- footer 끝 -->
+
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="../resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="../resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="../resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="../resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="../resources/assets/scripts/klorofil-common.js"></script>
+<script>
+$(document).ready(
+	function() {	
+		// 상품코드/상품명 모달 닫힐 때
+	    $('#productModal').on('hide.bs.modal', function () {
+	        $(this).find('input:not([readonly])').val(''); // readonly 제외한 입력 필드 초기화
+	    });
+		
+		// 상품코드/상품명 모달 검색 버튼 클릭 시
+		$("#pd_search_rs").on("click", function() {
+			$("#productModal").modal('show');
+
+			// 모달이 열릴 때 첫 번째 페이지 로드
+			$('#productModal').on('shown.bs.modal', function() {
+				new product_search_modal().pd_paging(1); // 페이지 1을 로드
+			});
+		});
+	
+	}
+);
+					
+</script>
+</body>
+<script type="module">
+import {delivery_page_move, delivery_list, returnstate_list} from "../resources/js/deliver/deliveryenroll_main.js?v=4";
+import {product_search_modal} from "../resources/js/inoutbound/inboundreq_main.js?v=6";
+
+/* 페이지 처음 로드 */
+	document.addEventListener('DOMContentLoaded', function() {
+		const today = new Date();
+const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 10);
+const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 10); 
+
+const formatDate = (date) => {
+    let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+};
+
+document.getElementById("return_start_dt").value = formatDate(lastWeek);
+document.getElementById("return_end_dt").value = formatDate(nextWeek); // end_dt에 7일 후 날짜 할당
+		new returnstate_list().return_list_search();
+	});	
+
+
+/* 상품 찾기 모달 */
+	window.product_search_modal = product_search_modal; //jquery에서 사용할 수 있도록
+
+	document.querySelector("#mod_pd_search").addEventListener("click",function(){
+		new product_search_modal().pd_paging(1);
+	});
+
+
+//초기화 버튼 눌렀을 때
+document.querySelector("#rtstate_reset").addEventListener("click",function(){
+		location.reload();
+});
+
+
+//조회버튼 눌렀을 때 
+document.querySelector("#rtstate_search").addEventListener("click",function(){
+		new returnstate_list().return_list_search();
+});
+
+
+
+
+/* 페이지 이동 */
+
+document.querySelector("#go_delreturn").addEventListener("click",function(){
+		new delivery_page_move().go_delivery_return();
+});
+
+
+document.querySelector("#go_delenroll").addEventListener("click",function(){
+		new delivery_page_move().go_delivery_enroll();
+});
+
+document.querySelector("#go_reqstate").addEventListener("click",function(){
+		new delivery_page_move().go_inreq_state();
+});
+</script>
+</html>

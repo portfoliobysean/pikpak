@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+<title>PikPak</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/resources/assets/external/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="/resources/assets/css/main.css">
+<link rel="stylesheet" href="/resources/assets/css/demo.css">
+<link rel="stylesheet" href="/resources/css/home/vars.css">
+<link rel="stylesheet" href="/resources/css/home/login.css">
+<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+<link rel="apple-touch-icon" sizes="76x76" href="/resources/assets/img/apple-icon.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/resources/assets/img/favicon.png">
+</head>
+
+<body>
+<div class="container-fluid">
+
+	<div class="container-fluid">
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="brand-custom">
+				<img src="/resources/assets/img/apple-icon.png" class="brand-logo">
+				<span class="brand-title">PikPak</span>
+			</div>
+		</div>
+	</div>
+		
+	<div class="page_display">
+		<form id="loginForm">
+			<div class="form-log-in">
+				<div class="input-field">
+					<div class="label">ID</div>
+					<input type="text" 
+						name="user_id" 
+						class="input" 
+						placeholder="아이디를 입력해주세요">
+				</div>
+				
+				<div class="input-field">
+					<div class="label">Password</div>
+					<input type="password" 
+						name="user_pw" 
+						class="input" 
+						placeholder="패스워드를 입력해주세요">
+				</div>
+				
+				<div class="button-area">
+					<input type="submit" class="button" value="Sign In" >
+				</div>
+				
+				<div class="message-area" id="response"></div>
+				
+				<div class="link-area">
+					<div class="link" onclick="location.href='/login/find';">비밀번호 찾기</div>
+				</div>
+			</div>
+		</form>
+		<footer th:replace="~{/shared/components.html :: footer}"></footer>
+	</div>
+</div>
+	
+</body>
+<script src="/resources/js/home/login.js"></script>
+<script src="/resources/assets/external/jquery/jquery.min.js"></script>
+<script src="/resources/assets/external/bootstrap/js/bootstrap.min.js"></script>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<title>PikPak</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/resources/assets/vendor/linearicons/style.css">
+	<link rel="stylesheet" href="/resources/assets/vendor/chartist/css/chartist-custom.css">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="/resources/assets/css/main.css">
+	<link rel="stylesheet" href="/resources/assets/css/demo.css">
+	<link rel="stylesheet" href="/resources/css/shared/custom_style.css">
+	<link rel="stylesheet" href="/resources/css/shared/custom_components_style.css">
+	<link rel="stylesheet" href="/resources/css/inventory/warehouse_inventory.css">
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="/resources/assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/resources/assets/img/favicon.png">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- 최상단 -->
+		<nav th:replace="~{/shared/components.html :: top}"></nav>
+		<!-- 최상단 끝 -->
+		<!-- 왼쪽 SIDEBAR -->
+		<div th:replace="~{/shared/components.html :: sidebar}"></div>
+		<!-- 왼쪽 SIDEBAR -->
+		<!-- MAIN -->
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<!-- MAIN DATA VIEW -->
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<p class="panel-subtitle">홈 > 재고 > <span style="color: black;">창고관리</span></p>
+						</div>
+						<div class="panel-body" >
+							<p class = "menu" style="border-bottom: 1px solid black; height: 30px;">
+								<span class="menu-item active">
+									<a href="/inventory/warehouse_inventory" onclick="selectMenu(this, 'inventory')" class="active">창고별 재고 현황</a>
+								</span>
+								<span class="menu-item">
+									<a href="/inventory/warehouse_location" onclick="selectMenu(this, 'location')">창고 위치 관리</a>
+								</span>
+								<span class="menu-item">
+									<a href="/inventory/warehouse_management" onclick="selectMenu(this, 'warehouse')">창고 관리</a>
+								</span>
+							</p>
+						</div>
+					</div>
+			<!-- MAIN -->
+			</div>
+		</div>
+		<div class="warehouse-container">
+		    <!-- 왼쪽 섹션 (창고 구역) -->
+		<div class="left-section">
+		    <div class="zone" data-id="A" onclick="selectZone('A')">A구역</div>
+		    <div class="zone-info-container" id="info-A"></div> <!-- A구역 정보가 출력될 부분 -->
+		
+		    <div class="zone" data-id="B" onclick="selectZone('B')">B구역</div>
+		    <div class="zone-info-container" id="info-B"></div> <!-- B구역 정보가 출력될 부분 -->
+		
+		    <div class="zone" data-id="C" onclick="selectZone('C')">C구역</div>
+		    <div class="zone-info-container" id="info-C"></div> <!-- C구역 정보가 출력될 부분 -->
+		
+		    <div class="zone" data-id="D" onclick="selectZone('D')">D구역</div>
+		    <div class="zone-info-container" id="info-D"></div> <!-- D구역 정보가 출력될 부분 -->
+		</div>
+
+
+	    <!-- 가운데 섹션 (랙 번호) -->
+	    <div class="rack-numbers">
+	        <span class="rack-number" data-id="01" onclick="selectRack('01')">01</span>
+	        <span class="rack-number" data-id="02" onclick="selectRack('02')">02</span>
+	        <span class="rack-number" data-id="03" onclick="selectRack('03')">03</span>
+	        <span class="rack-number" data-id="04" onclick="selectRack('04')">04</span>
+	        <span class="rack-number" data-id="05" onclick="selectRack('05')">05</span>
+	        <span class="rack-number" data-id="06" onclick="selectRack('06')">06</span>
+	        <span class="rack-number" data-id="07" onclick="selectRack('07')">07</span>
+	        <span class="rack-number" data-id="08" onclick="selectRack('08')">08</span>
+	        <!-- 아래에 "랙 번호" 텍스트 추가 -->
+	        <div class="rack-label">랙 번호</div>
+	    </div>
+
+			<!-- 오른쪽 섹션 (열 번호) -->
+			<div class="right-section">
+			    <div class="level" data-level="L4">
+			        <div class="rack" data-id="P1">1P</div>
+			        <div class="rack" data-id="P2">2P</div>
+			        <div class="rack" data-id="P3">3P</div>
+			    </div>
+			    <div class="level" data-level="L3">
+			        <div class="rack" data-id="P1">1P</div>
+			        <div class="rack" data-id="P2">2P</div>
+			        <div class="rack" data-id="P3">3P</div>
+			    </div>
+			    <div class="level" data-level="L2">
+			        <div class="rack" data-id="P1">1P</div>
+			        <div class="rack" data-id="P2">2P</div>
+			        <div class="rack" data-id="P3">3P</div>
+			    </div>
+			    <div class="level" data-level="L1">
+			        <div class="rack" data-id="P1">1P</div>
+			        <div class="rack" data-id="P2">2P</div>
+			        <div class="rack" data-id="P3">3P</div>
+			    </div>
+			</div>
+		    
+			<!-- 오른쪽 리스트 및 정보 -->
+			    <!-- 재고 리스트 섹션 -->
+			    <div class="info-section">
+			        <div class="rack-info">
+			            <p id="rack-info-text">선택된 구역 · 랙 번호 · 랙 상태의 재고 리스트</p>
+			            <div class="table2">
+			                <table border="1">
+			                    <thead>
+			                        <tr>
+			                            <th>상품 코드</th>
+			                            <th>위치 코드</th>
+			                            <th>상품명</th>
+			                            <th>상품 수량</th>
+			                        </tr>
+			                    </thead>
+								<tbody>
+								</tbody>
+			                </table>
+			            </div>
+			        </div>
+			    </div>
+		    </div>
+		</div>
+		
+		<div class="clearfix"></div>
+		<footer th:replace="~{/shared/components.html :: footer}"></footer>
+	</div>
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
+	<script src="/resources/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/resources/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="/resources/assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="/resources/assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="/resources/assets/scripts/klorofil-common.js"></script>
+	<script src="/resources/js/inventory/warehouse_inventory.js"></script>	
+</body>
+
+</html>
